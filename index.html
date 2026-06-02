@@ -3,58 +3,539 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam Countdown</title>
+    <title>MOHAMED VS MOAZ: THE FINAL LAP</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        h1 { color: #ff4757; }
-        .exam-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; font-size: 1.1em; }
-        .days { font-weight: bold; color: #2ed573; }
-        .finished { color: #ffa502; }
+        :root {
+            --bg-color: #0d0e15;
+            --card-bg: #171926;
+            --mohamed-color: #00f0ff;
+            --mohamed-glow: rgba(0, 240, 255, 0.4);
+            --moaz-color: #ff007f;
+            --moaz-glow: rgba(255, 0, 127, 0.4);
+            --text-color: #f0f1f5;
+            --countdown-color: #ff00ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            margin-bottom: 5px;
+        }
+
+        .vs {
+            font-style: italic;
+            background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            padding: 0 10px;
+        }
+
+        /* COUNTDOWN BANNER */
+        .countdown-banner {
+            background: linear-gradient(135deg, #1f1135, #0b061f);
+            border: 2px dashed var(--countdown-color);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 30px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .countdown-banner h3 {
+            font-size: 1.2rem;
+            color: #00ffcc;
+            font-family: sans-serif;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        #timer {
+            font-size: 2.2rem;
+            color: #fff;
+            text-shadow: 0 0 10px var(--countdown-color);
+        }
+
+        /* LEADERBOARD */
+        .leaderboard {
+            background: var(--card-bg);
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .leaderboard h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .board-flex {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 2.5rem;
+        }
+
+        .score-box {
+            padding: 10px 20px;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+
+        .score-box.mohamed {
+            border: 2px solid var(--mohamed-color);
+            box-shadow: 0 0 15px var(--mohamed-glow);
+            color: var(--mohamed-color);
+        }
+
+        .score-box.moaz {
+            border: 2px solid var(--moaz-color);
+            box-shadow: 0 0 15px var(--moaz-glow);
+            color: var(--moaz-color);
+        }
+
+        .day-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button.day-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        button.day-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+        }
+
+        /* ARENA COLUMNS */
+        .arena {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+            flex-wrap: wrap;
+        }
+
+        .player-column {
+            flex: 1;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
+        .player-column.moaz { border-top: 8px solid var(--moaz-color); }
+
+        .player-column h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .mohamed h2 { color: var(--mohamed-color); }
+        .moaz h2 { color: var(--moaz-color); }
+
+        /* INPUT FORMS */
+        .todo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .todo-form input {
+            background: #25283d;
+            border: 2px solid #444;
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        .todo-form input:focus {
+            outline: none;
+            border-color: #888;
+        }
+
+        .time-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-inputs input {
+            flex: 1;
+        }
+
+        .todo-form button {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .mohamed .todo-form button { background: var(--mohamed-color); }
+        .moaz .todo-form button { background: var(--moaz-color); }
+
+        /* LISTS */
+        .todo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .todo-item {
+            background: #202231;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #555;
+            transition: all 0.3s;
+        }
+
+        .todo-item.checked {
+            opacity: 0.5;
+            text-decoration: line-through;
+            border-left-color: #2ecc71 !important;
+        }
+
+        .mohamed .todo-item { border-left-color: var(--mohamed-color); }
+        .moaz .todo-item { border-left-color: var(--moaz-color); }
+
+        .todo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        .todo-text {
+            font-size: 1.1rem;
+            font-family: 'Impact', sans-serif;
+        }
+
+        .todo-time-tag {
+            font-size: 0.8rem;
+            color: #aaa;
+            background: #2c2f48;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .todo-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-btn {
+            background: #2ecc71;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Days left for your exams</h1>
-        <div id="countdown-list"></div>
-    </div>
+
+    <header>
+        <h1>Mohamed <span class="vs">VS</span> Moaz</h1>
+        <p style="font-family: sans-serif; color: #888; font-weight: bold;">HIGH SCHOOL FINAL MONTH CRUNCH TIME</p>
+    </header>
+
+    <!-- EXAM COUNTDOWN TICKER -->
+    <section class="countdown-banner">
+        <h3 id="exam-title">LOADING NEXT TARGET...</h3>
+        <div id="timer">00d : 00h : 00m : 00s</div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section class="leaderboard">
+        <h2>🔥 THE LEADERBOARD 🔥</h2>
+        <div class="board-flex">
+            <div class="score-box mohamed">
+                <div>MOHAMED</div>
+                <div id="score-mohamed">0</div>
+            </div>
+            <div style="font-size: 1.5rem; color: #555;">PTS</div>
+            <div class="score-box moaz">
+                <div>MOAZ</div>
+                <div id="score-moaz">0</div>
+            </div>
+        </div>
+        
+        <div class="day-controls">
+            <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+        </div>
+    </section>
+
+    <!-- THE ARENA -->
+    <main class="arena">
+        
+        <!-- MOHAMED'S COLUMN -->
+        <div class="player-column mohamed">
+            <h2>Mohamed</h2>
+            <div class="todo-form">
+                <input type="text" id="input-mohamed-task" placeholder="What task are we crushing?">
+                <div class="time-inputs">
+                    <input type="number" id="input-mohamed-est" placeholder="Est. Mins" min="1">
+                    <input type="number" id="input-mohamed-act" placeholder="Act. Mins" min="1">
+                </div>
+                <button onclick="addTodo('mohamed')">ADD TO LIST</button>
+            </div>
+            <ul class="todo-list" id="list-mohamed"></ul>
+        </div>
+
+        <!-- MOAZ'S COLUMN -->
+        <div class="player-column moaz">
+            <h2>Moaz</h2>
+            <div class="todo-form">
+                <input type="text" id="input-moaz-task" placeholder="What task are we crushing?">
+                <div class="time-inputs">
+                    <input type="number" id="input-moaz-est" placeholder="Est. Mins" min="1">
+                    <input type="number" id="input-moaz-act" placeholder="Act. Mins" min="1">
+                </div>
+                <button onclick="addTodo('moaz')">ADD TO LIST</button>
+            </div>
+            <ul class="todo-list" id="list-moaz"></ul>
+        </div>
+
+    </main>
 
     <script>
+        // Set explicitly to 9:00 AM on the day of the exam
         const exams = [
-            { name: "Religion & Wadaneya", date: "2026-06-21" },
-            { name: "De", date: "2026-06-23" },
-            { name: "Ar", date: "2026-06-28" },
-            { name: "Chem", date: "2026-07-02" },
-            { name: "Eng", date: "2026-07-05" },
-            { name: "Phy", date: "2026-07-09" },
-            { name: "Bio", date: "2026-07-16" }
+            { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
+            { name: "Economics & Statistics", date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
+            { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
+            { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
+            { name: "Physics", date: new Date("2026-07-09T09:00:00").getTime() },
+            { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
-        const listDiv = document.getElementById('countdown-list');
-        const today = new Date();
-        today.setHours(0,0,0,0);
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let nextExam = null;
 
-        exams.forEach(exam => {
-            const examDate = new Date(exam.date);
-            const diffTime = examDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            let statusText = "";
-            if (diffDays > 0) {
-                statusText = `<span class="days">${diffDays} days left</span>`;
-            } else if (diffDays === 0) {
-                statusText = `<span class="days" style="color:#ff4757">TODAY! 🚀</span>`;
-            } else {
-                statusText = `<span class="finished">Finished 🎉</span>`;
+            for (let exam of exams) {
+                if (exam.date > now) {
+                    nextExam = exam;
+                    break;
+                }
             }
 
-            listDiv.innerHTML += `
-                <div class="exam-row">
-                    <span>${exam.name}</span>
-                    ${statusText}
-                </div>
-            `;
-        });
+            const titleEl = document.getElementById("exam-title");
+            const timerEl = document.getElementById("timer");
+
+            if (!nextExam) {
+                titleEl.innerText = "🎉 FREEDOM! ALL EXAMS ARE COMPLETED! 🎉";
+                timerEl.innerText = "00d : 00h : 00m : 00s";
+                return;
+            }
+
+            titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
+
+            const distance = nextExam.date - now;
+            
+            // Explicitly map out whole remainders to avoid off-by-one roundings
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Padding with single zeroes for that sleek UI finish
+            const dDisplay = days < 10 ? '0' + days : days;
+            const hDisplay = hours < 10 ? '0' + hours : hours;
+            const mDisplay = minutes < 10 ? '0' + minutes : minutes;
+            const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+            timerEl.innerText = `${dDisplay}d : ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+
+        let state = JSON.parse(localStorage.getItem('hustleState')) || {
+            scores: { mohamed: 0, moaz: 0 },
+            todos: { mohamed: [], moaz: [] }
+        };
+
+        function saveState() {
+            localStorage.setItem('hustleState', JSON.stringify(state));
+            updateDOM();
+        }
+
+        function addTodo(player) {
+            const taskInput = document.getElementById(`input-${player}-task`);
+            const estInput = document.getElementById(`input-${player}-est`);
+            const actInput = document.getElementById(`input-${player}-act`);
+
+            if (!taskInput.value.trim() || !estInput.value || !actInput.value) {
+                alert("Fill out everything! Don't cheat the system!");
+                return;
+            }
+
+            const newTodo = {
+                id: Date.now(),
+                task: taskInput.value.trim(),
+                est: parseInt(estInput.value),
+                act: parseInt(actInput.value),
+                checked: false
+            };
+
+            state.todos[player].push(newTodo);
+            
+            taskInput.value = '';
+            estInput.value = '';
+            actInput.value = '';
+            
+            saveState();
+        }
+
+        function toggleTodo(player, id) {
+            const todo = state.todos[player].find(t => t.id === id);
+            if (todo) {
+                todo.checked = !todo.checked;
+                saveState();
+            }
+        }
+
+        function deleteTodo(player, id) {
+            state.todos[player] = state.todos[player].filter(t => t.id !== id);
+            saveState();
+        }
+
+        function endTheDay() {
+            if (!confirm("Are you sure the day is over? Points will be allocated/deducted now!")) return;
+
+            ['mohamed', 'moaz'].forEach(player => {
+                const totalTasks = state.todos[player].length;
+                
+                if (totalTasks === 0) {
+                    state.scores[player] -= 1;
+                    return;
+                }
+
+                const allChecked = state.todos[player].every(t => t.checked);
+
+                if (allChecked) {
+                    let pointsGained = 1; 
+                    
+                    const beatEstimates = state.todos[player].every(t => t.act < t.est);
+                    if (beatEstimates) {
+                        pointsGained += 1;
+                        alert(`💥 BONUS! ${player.toUpperCase()} beat all estimated times! +2 Points total!`);
+                    } else {
+                        alert(`👍 Day complete for ${player.toUpperCase()}! +1 Point.`);
+                    }
+                    
+                    state.scores[player] += pointsGained;
+                } else {
+                    state.scores[player] -= 1;
+                    alert(`❌ ${player.toUpperCase()} missed some tasks. -1 Point.`);
+                }
+
+                state.todos[player] = [];
+            });
+
+            saveState();
+        }
+
+        function updateDOM() {
+            document.getElementById('score-mohamed').innerText = state.scores.mohamed;
+            document.getElementById('score-moaz').innerText = state.scores.moaz;
+
+            ['mohamed', 'moaz'].forEach(player => {
+                const listEl = document.getElementById(`list-${player}`);
+                listEl.innerHTML = '';
+
+                state.todos[player].forEach(todo => {
+                    const li = document.createElement('li');
+                    li.className = `todo-item ${todo.checked ? 'checked' : ''}`;
+                    
+                    li.innerHTML = `
+                        <div class="todo-info">
+                            <span class="todo-text">${todo.task}</span>
+                            <span class="todo-time-tag">⏱️ Est: ${todo.est}m | Act: ${todo.act}m</span>
+                        </div>
+                        <div class="todo-actions">
+                            <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
+                                ${todo.checked ? '↩️' : '✅'}
+                            </button>
+                            <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
+                        </div>
+                    `;
+                    listEl.appendChild(li);
+                });
+            });
+        }
+
+        updateCountdown();
+        updateDOM();
     </script>
 </body>
 </html>
