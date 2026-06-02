@@ -212,16 +212,10 @@
             color: #bbb;
             border: 1px solid #333;
         }
-        .stats-bar strong {
-            color: #fff;
-        }
+        .stats-bar strong { color: #fff; }
 
-        /* INPUT FORMS (MORNING STUDY PLANNER) */
-        .todo-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
+        /* INPUT FORMS */
+        .todo-form { display: flex; gap: 10px; margin-bottom: 25px; }
         .todo-form input.task-name { flex: 2; }
         .todo-form input.task-est { flex: 1; }
 
@@ -278,7 +272,6 @@
             margin-top: 4px;
         }
 
-        /* END OF DAY ACTUAL TIME BOX INSIDE CARD */
         .actual-input-box {
             background: #11131c;
             border: 1px solid #555;
@@ -324,7 +317,6 @@
         <p style="font-family: sans-serif; color: #888; font-weight: bold;">HIGH SCHOOL FINAL MONTH CRUNCH TIME</p>
     </header>
 
-    <!-- EXAM TICKER DISPLAY -->
     <section class="countdown-banner">
         <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
         <div id="timer">00d : 00h : 00m : 00s</div>
@@ -332,7 +324,6 @@
         <div class="extended-exams" id="extended-exams-panel"></div>
     </section>
 
-    <!-- LIVE LEADERBOARD CONTAINER -->
     <section class="leaderboard">
         <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
         <div class="board-flex">
@@ -351,10 +342,7 @@
         </div>
     </section>
 
-    <!-- MAIN INTERACTIVE ARENA -->
     <main class="arena">
-        
-        <!-- MOHAMED -->
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
             <div class="stats-bar" id="stats-mohamed">
@@ -369,7 +357,6 @@
             <ul class="todo-list" id="list-mohamed"></ul>
         </div>
 
-        <!-- MOAZ -->
         <div class="player-column moaz">
             <h2>Moaz</h2>
             <div class="stats-bar" id="stats-moaz">
@@ -383,15 +370,35 @@
             </div>
             <ul class="todo-list" id="list-moaz"></ul>
         </div>
-
     </main>
 
     <button class="nuke-btn" onclick="nukeData()">⚠️ Reset All Data</button>
 
-    <script>
+    <!-- FIREBASE CLOUD LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Your Exact Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDv8JBa9MtaTbCzNQ66HbAxB7YPBi_pGfQ",
+            authDomain: "exam-3abc3.firebaseapp.com",
+            databaseURL: "https://exam-3abc3-default-rtdb.firebaseio.com",
+            projectId: "exam-3abc3",
+            storageBucket: "exam-3abc3.firebasestorage.app",
+            messagingSenderId: "93565862046",
+            appId: "1:93565862046:web:a905f5044a9d19957dbb8f",
+            measurementId: "G-DZ0BPSF553"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const stateRef = ref(db, 'hustleState');
+
+        // CORRECTED EXAM ARRAY
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
-            { name: "Economics & Statistics", date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "German", date: new Date("2026-06-23T09:00:00").getTime() },
             { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
             { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
             { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
@@ -399,7 +406,7 @@
             { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
-        function updateCountdown() {
+        window.updateCountdown = function() {
             const now = new Date().getTime();
             let nextExam = null;
             let otherExams = [];
@@ -440,37 +447,39 @@
                 const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
                 return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
             }).join('');
-        }
+        };
 
-        function toggleExamsPanel() {
+        window.toggleExamsPanel = function() {
             const panel = document.getElementById("extended-exams-panel");
             panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
-        }
+        };
+        setInterval(window.updateCountdown, 1000);
+        window.updateCountdown();
 
-        setInterval(updateCountdown, 1000);
+        // --- GLOBAL STATE & CLOUD SYNC ---
+        let localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
 
-        let state;
-        try {
-            state = JSON.parse(localStorage.getItem('hustleState'));
-            if (!state || !state.todos || !Array.isArray(state.todos.mohamed) || !Array.isArray(state.todos.moaz)) throw new Error();
-        } catch (e) {
-            state = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
-            localStorage.setItem('hustleState', JSON.stringify(state));
-        }
-
-        function saveState() {
-            localStorage.setItem('hustleState', JSON.stringify(state));
-            updateDOM();
-        }
-
-        function nukeData() {
-            if(confirm("Reset entire scoreboards and wipe current tasks?")) {
-                localStorage.removeItem('hustleState');
-                location.reload();
+        onValue(stateRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                localState = {
+                    scores: data.scores || { mohamed: 0, moaz: 0 },
+                    todos: {
+                        mohamed: data.todos?.mohamed || [],
+                        moaz: data.todos?.moaz || []
+                    }
+                };
+            } else {
+                set(stateRef, localState);
             }
+            updateDOM();
+        });
+
+        function saveToCloud() {
+            set(stateRef, localState);
         }
 
-        function addTodo(player) {
+        window.addTodo = function(player) {
             const nameInput = document.getElementById(`input-${player}-task`);
             const estInput = document.getElementById(`input-${player}-est`);
 
@@ -487,51 +496,51 @@
                 checked: false
             };
 
-            state.todos[player].push(newTodo);
+            localState.todos[player].push(newTodo);
             nameInput.value = '';
             estInput.value = '';
-            saveState();
-        }
+            saveToCloud();
+        };
 
-        function toggleTodo(player, id) {
-            const todo = state.todos[player].find(t => t.id === id);
+        window.toggleTodo = function(player, id) {
+            const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
                 todo.checked = !todo.checked;
-                saveState();
+                saveToCloud();
             }
-        }
+        };
 
-        function deleteTodo(player, id) {
-            state.todos[player] = state.todos[player].filter(t => t.id !== id);
-            saveState();
-        }
+        window.deleteTodo = function(player, id) {
+            localState.todos[player] = localState.todos[player].filter(t => t.id !== id);
+            saveToCloud();
+        };
 
-        function updateActualTime(player, id, inputVal) {
-            const todo = state.todos[player].find(t => t.id === id);
+        window.updateActualTime = function(player, id, inputVal) {
+            const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
                 todo.act = parseInt(inputVal) || 0;
-                localStorage.setItem('hustleState', JSON.stringify(state));
+                saveToCloud(); 
             }
-        }
+        };
 
-        function endTheDay() {
-            if (!confirm("Are you ready to submit your actual times and process daily tallies?")) return;
+        window.endTheDay = function() {
+            if (!confirm("Are you ready to submit actual times and process daily tallies for BOTH players?")) return;
 
             ['mohamed', 'moaz'].forEach(player => {
-                const totalTasks = state.todos[player].length;
+                const totalTasks = localState.todos[player].length;
                 if (totalTasks === 0) {
-                    state.scores[player] -= 1; 
+                    localState.scores[player] -= 1; 
                     return;
                 }
 
-                const allChecked = state.todos[player].every(t => t.checked);
+                const allChecked = localState.todos[player].every(t => t.checked);
                 
                 if (allChecked) {
                     let totalEst = 0;
                     let totalAct = 0;
                     let missedActualLogs = false;
 
-                    state.todos[player].forEach(t => {
+                    localState.todos[player].forEach(t => {
                         totalEst += t.est;
                         totalAct += t.act;
                         if (t.act <= 0) missedActualLogs = true;
@@ -549,28 +558,35 @@
                     } else {
                         alert(`👍 Task completed cleanly for ${player.toUpperCase()}! (+1 Point)`);
                     }
-                    state.scores[player] += pointsGained;
+                    localState.scores[player] += pointsGained;
                 } else {
-                    state.scores[player] -= 1;
+                    localState.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} missed tracking targets. (-1 Point)`);
                 }
 
-                state.todos[player] = []; 
+                localState.todos[player] = []; 
             });
 
-            saveState();
-        }
+            saveToCloud();
+        };
+
+        window.nukeData = function() {
+            if(confirm("DANGER: WIPE EVERYTHING IN THE CLOUD FOREVER?")) {
+                localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
+                saveToCloud();
+            }
+        };
 
         function updateDOM() {
-            document.getElementById('score-mohamed').innerText = state.scores.mohamed;
-            document.getElementById('score-moaz').innerText = state.scores.moaz;
+            let activeElementId = document.activeElement ? document.activeElement.id : null;
+
+            document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
+            document.getElementById('score-moaz').innerText = localState.scores.moaz;
 
             ['mohamed', 'moaz'].forEach(player => {
-                
-                // --- UPDATE STATS BAR ---
-                let totalTasks = state.todos[player].length;
+                let totalTasks = localState.todos[player].length;
                 let totalEstMins = 0;
-                state.todos[player].forEach(t => totalEstMins += t.est);
+                localState.todos[player].forEach(t => totalEstMins += t.est);
                 
                 let hours = Math.floor(totalEstMins / 60);
                 let mins = totalEstMins % 60;
@@ -582,15 +598,16 @@
                         <span>Est Time: <strong>${hours}h ${mins}m</strong></span>
                     `;
                 }
-                // ------------------------
 
                 const listEl = document.getElementById(`list-${player}`);
                 if (!listEl) return;
                 listEl.innerHTML = '';
 
-                state.todos[player].forEach(todo => {
+                localState.todos[player].forEach(todo => {
                     const li = document.createElement('li');
                     li.className = `todo-item ${todo.checked ? 'checked' : ''}`;
+                    const inputId = `act-input-${todo.id}`;
+                    
                     li.innerHTML = `
                         <div class="todo-info">
                             <span class="todo-text">${todo.task}</span>
@@ -598,6 +615,7 @@
                                 <span>⏱️ Est: <strong>${todo.est}m</strong></span>
                                 <span>| Night Actual:</span>
                                 <input type="number" 
+                                       id="${inputId}"
                                        class="actual-input-box" 
                                        placeholder="Mins" 
                                        value="${todo.act || ''}" 
@@ -614,10 +632,12 @@
                     listEl.appendChild(li);
                 });
             });
-        }
 
-        updateCountdown();
-        updateDOM();
+            if (activeElementId) {
+                let focusedEl = document.getElementById(activeElementId);
+                if (focusedEl) focusedEl.focus();
+            }
+        }
     </script>
 </body>
 </html>
