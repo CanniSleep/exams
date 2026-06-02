@@ -195,9 +195,26 @@
         .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
         .player-column.moaz { border-top: 8px solid var(--moaz-color); }
 
-        .player-column h2 { font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; }
+        .player-column h2 { font-size: 2.2rem; margin-bottom: 5px; text-transform: uppercase; }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: #11131c;
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            color: #bbb;
+            border: 1px solid #333;
+        }
+        .stats-bar strong {
+            color: #fff;
+        }
 
         /* INPUT FORMS (MORNING STUDY PLANNER) */
         .todo-form {
@@ -340,6 +357,10 @@
         <!-- MOHAMED -->
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
+            <div class="stats-bar" id="stats-mohamed">
+                <span>Total Tasks: <strong>0</strong></span>
+                <span>Est Time: <strong>0h 0m</strong></span>
+            </div>
             <div class="todo-form">
                 <input type="text" id="input-mohamed-task" class="task-name" placeholder="Morning: Add today's task...">
                 <input type="number" id="input-mohamed-est" class="task-est" placeholder="Est. Mins" min="1">
@@ -351,6 +372,10 @@
         <!-- MOAZ -->
         <div class="player-column moaz">
             <h2>Moaz</h2>
+            <div class="stats-bar" id="stats-moaz">
+                <span>Total Tasks: <strong>0</strong></span>
+                <span>Est Time: <strong>0h 0m</strong></span>
+            </div>
             <div class="todo-form">
                 <input type="text" id="input-moaz-task" class="task-name" placeholder="Morning: Add today's task...">
                 <input type="number" id="input-moaz-est" class="task-est" placeholder="Est. Mins" min="1">
@@ -366,7 +391,7 @@
     <script>
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
-            { name: "Economics & Statistics", date: new Date("2026-06-23").getTime() },
+            { name: "Economics & Statistics", date: new Date("2026-06-23T09:00:00").getTime() },
             { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
             { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
             { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
@@ -410,7 +435,6 @@
 
             timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
 
-            // Build out the dynamic sub-panel with remaining days only
             extendedPanel.innerHTML = otherExams.map(exam => {
                 const diffMs = exam.date - now;
                 const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
@@ -425,7 +449,6 @@
 
         setInterval(updateCountdown, 1000);
 
-        // Core App Storage Configuration
         let state;
         try {
             state = JSON.parse(localStorage.getItem('hustleState'));
@@ -460,7 +483,7 @@
                 id: Date.now() + Math.floor(Math.random() * 100),
                 task: nameInput.value.trim(),
                 est: parseInt(estInput.value),
-                act: 0, // Left completely unassigned in morning session
+                act: 0, 
                 checked: false
             };
 
@@ -483,12 +506,10 @@
             saveState();
         }
 
-        // Live capture value of actual runtime inputs before final night execution
         function updateActualTime(player, id, inputVal) {
             const todo = state.todos[player].find(t => t.id === id);
             if (todo) {
                 todo.act = parseInt(inputVal) || 0;
-                // Save silently without rebuilding DOM to preserve focus/typing state
                 localStorage.setItem('hustleState', JSON.stringify(state));
             }
         }
@@ -499,7 +520,7 @@
             ['mohamed', 'moaz'].forEach(player => {
                 const totalTasks = state.todos[player].length;
                 if (totalTasks === 0) {
-                    state.scores[player] -= 1; // Unplanned daily loss
+                    state.scores[player] -= 1; 
                     return;
                 }
 
@@ -523,18 +544,18 @@
 
                     let pointsGained = 1;
                     if (totalAct < totalEst) {
-                        pointsGained += 1; // Confirms speedy delivery threshold
+                        pointsGained += 1;
                         alert(`💥 CLOCK BEATEN! ${player.toUpperCase()} outpaced estimates! (+2 Total Points)`);
                     } else {
                         alert(`👍 Task completed cleanly for ${player.toUpperCase()}! (+1 Point)`);
                     }
                     state.scores[player] += pointsGained;
                 } else {
-                    state.scores[player] -= 1; // Direct standard penalty deduct
+                    state.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} missed tracking targets. (-1 Point)`);
                 }
 
-                state.todos[player] = []; // Fresh layout container prepared for morning session
+                state.todos[player] = []; 
             });
 
             saveState();
@@ -545,6 +566,24 @@
             document.getElementById('score-moaz').innerText = state.scores.moaz;
 
             ['mohamed', 'moaz'].forEach(player => {
+                
+                // --- UPDATE STATS BAR ---
+                let totalTasks = state.todos[player].length;
+                let totalEstMins = 0;
+                state.todos[player].forEach(t => totalEstMins += t.est);
+                
+                let hours = Math.floor(totalEstMins / 60);
+                let mins = totalEstMins % 60;
+
+                const statsEl = document.getElementById(`stats-${player}`);
+                if (statsEl) {
+                    statsEl.innerHTML = `
+                        <span>Total Tasks: <strong>${totalTasks}</strong></span>
+                        <span>Est Time: <strong>${hours}h ${mins}m</strong></span>
+                    `;
+                }
+                // ------------------------
+
                 const listEl = document.getElementById(`list-${player}`);
                 if (!listEl) return;
                 listEl.innerHTML = '';
