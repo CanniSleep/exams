@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Countdown</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h1 { color: #ff4757; }
+        .exam-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; font-size: 1.1em; }
+        .days { font-weight: bold; color: #2ed573; }
+        .finished { color: #ffa502; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Days left for your exams</h1>
+        <div id="countdown-list"></div>
+    </div>
+
+    <script>
+        const exams = [
+            { name: "Religion & Wadaneya", date: "2026-06-21" },
+            { name: "De", date: "2026-06-23" },
+            { name: "Ar", date: "2026-06-28" },
+            { name: "Chem", date: "2026-07-02" },
+            { name: "Eng", date: "2026-07-05" },
+            { name: "Phy", date: "2026-07-09" },
+            { name: "Bio", date: "2026-07-16" }
+        ];
+
+        const listDiv = document.getElementById('countdown-list');
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        exams.forEach(exam => {
+            const examDate = new Date(exam.date);
+            const diffTime = examDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let statusText = "";
+            if (diffDays > 0) {
+                statusText = `<span class="days">${diffDays} days left</span>`;
+            } else if (diffDays === 0) {
+                statusText = `<span class="days" style="color:#ff4757">TODAY! 🚀</span>`;
+            } else {
+                statusText = `<span class="finished">Finished 🎉</span>`;
+            }
+
+            listDiv.innerHTML += `
+                <div class="exam-row">
+                    <span>${exam.name}</span>
+                    ${statusText}
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
