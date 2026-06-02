@@ -6,14 +6,14 @@
     <title>MOHAMED VS MOAZ: THE FINAL LAP</title>
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-bg: #1f2833;
-            --mohamed-color: #45f3ff;
-            --mohamed-glow: rgba(69, 243, 255, 0.4);
+            --bg-color: #0d0e15;
+            --card-bg: #171926;
+            --mohamed-color: #00f0ff;
+            --mohamed-glow: rgba(0, 240, 255, 0.4);
             --moaz-color: #ff007f;
             --moaz-glow: rgba(255, 0, 127, 0.4);
-            --text-color: #c5c6c7;
-            --heading-color: #66fcf1;
+            --text-color: #f0f1f5;
+            --countdown-color: #ff00ff;
         }
 
         * {
@@ -41,12 +41,13 @@
 
         h1 {
             font-size: 3.5rem;
-            color: #fff;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            margin-bottom: 5px;
         }
 
         .vs {
+            font-style: italic;
             background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -54,367 +55,506 @@
             padding: 0 10px;
         }
 
-        /* COUNTDOWN PANEL */
-        .countdown-panel {
-            background: #141824;
-            border: 2px solid var(--heading-color);
+        /* COUNTDOWN BANNER */
+        .countdown-banner {
+            background: linear-gradient(135deg, #1f1135, #0b061f);
+            border: 2px dashed var(--countdown-color);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
             border-radius: 12px;
-            padding: 15px;
+            padding: 15px 30px;
             width: 100%;
             max-width: 900px;
             margin-bottom: 25px;
             text-align: center;
         }
 
-        #main-timer-title {
-            color: #fff;
-            font-size: 1.4rem;
+        .countdown-banner h3 {
+            font-size: 1.2rem;
+            color: #00ffcc;
+            font-family: sans-serif;
+            text-transform: uppercase;
             margin-bottom: 5px;
         }
 
-        #main-timer {
-            font-size: 2.5rem;
-            color: var(--heading-color);
-            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
-            margin-bottom: 10px;
+        #timer {
+            font-size: 2.2rem;
+            color: #fff;
+            text-shadow: 0 0 10px var(--countdown-color);
         }
-
-        .expand-btn {
-            background: transparent;
-            border: 1px solid var(--text-color);
-            color: var(--text-color);
-            padding: 5px 15px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: sans-serif;
-            font-size: 0.8rem;
-        }
-
-        .other-exams {
-            display: none;
-            margin-top: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            border-top: 1px dashed #333;
-            padding-top: 15px;
-        }
-
-        .exam-mini-card {
-            background: #0b0c10;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: sans-serif;
-            font-size: 0.9rem;
-        }
-        .exam-mini-card h4 { font-family: 'Impact', sans-serif; color: #fff; }
 
         /* LEADERBOARD */
         .leaderboard {
             background: var(--card-bg);
+            border: 3px solid #333;
             border-radius: 15px;
             padding: 20px;
             width: 100%;
             max-width: 900px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         .leaderboard h2 {
-            font-size: 2.2rem;
-            color: #fff;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
         }
 
-        .scores-display {
+        .board-flex {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .score-card {
-            padding: 10px 25px;
+        .score-box {
+            padding: 15px 30px;
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .score-box.mohamed {
+            border: 2px solid var(--mohamed-color);
+            box-shadow: 0 0 15px var(--mohamed-glow);
+            color: var(--mohamed-color);
+        }
+
+        .score-box.moaz {
+            border: 2px solid var(--moaz-color);
+            box-shadow: 0 0 15px var(--moaz-glow);
+            color: var(--moaz-color);
+        }
+
+        .day-controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        button.day-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            cursor: pointer;
             border-radius: 8px;
-            background: #0b0c10;
+            transition: transform 0.2s;
         }
-        .score-card.mohamed { border: 2px solid var(--mohamed-color); color: var(--mohamed-color); }
-        .score-card.moaz { border: 2px solid var(--moaz-color); color: var(--moaz-color); }
 
-        /* THE ARENA Grid Layout */
+        button.day-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+        }
+
+        /* THE ARENA COLUMNS */
         .arena {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: 30px;
             width: 100%;
-            max-width: 900px;
+            max-width: 1100px;
+            flex-wrap: wrap;
         }
 
-        @media (max-width: 768px) {
-            .arena { grid-template-columns: 1fr; }
-        }
-
-        .player-box {
+        .player-column {
+            flex: 1;
+            min-width: 320px;
             background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
         }
 
-        .player-box.mohamed { border-top: 6px solid var(--mohamed-color); }
-        .player-box.moaz { border-top: 6px solid var(--moaz-color); }
+        .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
+        .player-column.moaz { border-top: 8px solid var(--moaz-color); }
 
-        .player-box h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
+        .player-column h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
 
-        .section-title {
-            font-family: sans-serif;
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+        /* FORMS */
+        .todo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
-        /* INPUT BLOCK */
-        .task-input-group {
-            background: #141824;
+        .todo-form input {
+            background: #25283d;
+            border: 2px solid #444;
+            color: white;
             padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .task-input-group label {
-            font-family: sans-serif;
-            font-size: 0.85rem;
-            display: block;
-            margin-bottom: 4px;
-            color: #aaa;
-        }
-
-        .task-input-group input {
-            width: 100%;
-            background: #0b0c10;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            font-family: sans-serif;
-            font-weight: bold;
-        }
-
-        .add-task-btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .mohamed .add-task-btn { background: var(--mohamed-color); color: #000; }
-        .moaz .add-task-btn { background: var(--moaz-color); color: #fff; }
-
-        /* LIST DISPLAY */
-        .tasks-container {
-            flex-grow: 1;
-            margin-bottom: 20px;
-        }
-
-        .task-row {
-            background: #141824;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .task-main-info {
-            font-family: sans-serif;
-            font-weight: bold;
-        }
-
-        .task-title-text {
-            display: block;
-            font-family: 'Impact', sans-serif;
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .est-badge {
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .status-toggle-btn {
-            background: #2b2b2b;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
             font-size: 1rem;
-        }
-        .status-toggle-btn.fail { background: #e74c3c; color: white; }
-        .status-toggle-btn.pass { background: #2ecc71; color: white; }
-
-        /* DAY END CALCULATIONS AREA */
-        .day-evaluation-box {
-            background: #141824;
-            border: 2px dashed #ffcc00;
-            padding: 20px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 900px;
-            margin-top: 35px;
-            text-align: center;
-        }
-
-        .day-evaluation-box h3 {
-            font-size: 1.8rem;
-            color: #ffcc00;
-            margin-bottom: 15px;
-        }
-
-        .total-inputs-flex {
-            display: flex;
-            justify-content: space-around;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .actual-hours-card {
-            background: #0b0c10;
-            padding: 15px;
-            border-radius: 8px;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .actual-hours-card h5 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-        }
-        .actual-hours-card label {
+            border-radius: 6px;
             font-family: sans-serif;
-            font-size: 0.8rem;
-            color: #aaa;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .actual-hours-card input {
-            background: #1f2833;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 8px;
-            border-radius: 4px;
-            width: 80px;
-            text-align: center;
-            font-size: 1.1rem;
+            font-weight: bold;
         }
 
-        .call-day-btn {
-            background: #ffcc00;
+        .time-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-inputs input {
+            flex: 1;
+        }
+
+        .todo-form button {
             color: #000;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            border-radius: 6px;
+            padding: 12px;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: 0.2s;
-        }
-        .call-day-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
-        }
-
-        /* DAY SUMMARY POPUP BANNER */
-        .battle-report {
-            display: none;
-            background: #0b0c10;
-            border: 3px solid #fff;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 900px;
-            margin-top: 25px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .winner-banner {
-            background: #2ecc71;
-            color: #000;
-            padding: 10px;
-            font-size: 2rem;
             border-radius: 6px;
-            margin-bottom: 15px;
         }
 
-        .report-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            font-family: sans-serif;
-            text-align: left;
+        .mohamed .todo-form button { background: var(--mohamed-color); }
+        .moaz .todo-form button { background: var(--moaz-color); }
+
+        /* TODO LIST RENDERING */
+        .todo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .report-col {
-            background: #141824;
+        .todo-item {
+            background: #202231;
             padding: 15px;
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #555;
         }
-        .report-col h4 { font-family: 'Impact', sans-serif; font-size: 1.5rem; margin-bottom: 10px; }
-        .outcome-badge {
+
+        .todo-item.checked {
+            opacity: 0.4;
+            text-decoration: line-through;
+            border-left-color: #2ecc71 !important;
+        }
+
+        .mohamed .todo-item { border-left-color: var(--mohamed-color); }
+        .moaz .todo-item { border-left-color: var(--moaz-color); }
+
+        .todo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        .todo-text {
+            font-size: 1.1rem;
             font-family: 'Impact', sans-serif;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-top: 8px;
         }
-        .outcome-badge.win { background: #2ecc71; color: #000; }
-        .outcome-badge.lose { background: #e74c3c; color: #fff; }
+
+        .todo-time-tag {
+            font-size: 0.8rem;
+            color: #aaa;
+            background: #2c2f48;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .todo-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-btn, .delete-btn {
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-btn { background: #2ecc71; }
+        .delete-btn { background: #e74c3c; }
+        
+        .nuke-btn {
+            margin-top: 50px;
+            background: transparent;
+            color: #444;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-size: 0.8rem;
+        }
+        .nuke-btn:hover { color: #e74c3c; border-color: #e74c3c; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Mohamed <span class="vs">VS</span> Moaz</h1>
+        <p style="font-family: sans-serif; color: #888; font-weight: bold;">HIGH SCHOOL FINAL MONTH CRUNCH TIME</p>
     </header>
 
-    <section class="countdown-panel">
-        <h3 id="main-timer-title">LOADING PRIMARY TARGET...</h3>
-        <div id="main-timer">00d : 00h : 00m : 00s</div>
-        <button class="expand-btn" onclick="toggleExamsView()">📂 View All Exams Countdown</button>
-        
-        <div class="other-exams" id="other-exams-box">
-            </div>
+    <section class="countdown-banner">
+        <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
+        <div id="timer">00d : 00h : 00m : 00s</div>
     </section>
 
     <section class="leaderboard">
         <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
-        <div class="scores-display">
-            <div class="score-card mohamed">
+        <div class="board-flex">
+            <div class="score-box mohamed">
                 <div>MOHAMED</div>
                 <div id="score-mohamed">0</div>
             </div>
-            <div style="font-size: 1.5rem; color: #444;">VS</div>
-            <div class="score-card moaz">
+            <div style="font-size: 1.5rem; color: #555;">VS</div>
+            <div class="score-box moaz">
                 <div>MOAZ</div>
                 <div id="score-moaz">0</div>
             </div>
         </div>
+        <div class="day-controls">
+            <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+        </div>
     </section>
 
     <main class="arena">
-
-        <div class="player-box mohamed">
+        
+        <div class="player-column mohamed">
             <h2>Mohamed</h2>
-            <div class="section-title">What will
+            <div class="todo-form">
+                <input type="text" id="input-mohamed-task" placeholder="Task name...">
+                <div class="time-inputs">
+                    <input type="number" id="input-mohamed-est" placeholder="Est. Mins" min="1">
+                    <input type="number" id="input-mohamed-act" placeholder="Act. Mins" min="1">
+                </div>
+                <button onclick="addTodo('mohamed')">ADD TASK</button>
+            </div>
+            <ul class="todo-list" id="list-mohamed"></ul>
+        </div>
+
+        <div class="player-column moaz">
+            <h2>Moaz</h2>
+            <div class="todo-form">
+                <input type="text" id="input-moaz-task" placeholder="Task name...">
+                <div class="time-inputs">
+                    <input type="number" id="input-moaz-est" placeholder="Est. Mins" min="1">
+                    <input type="number" id="input-moaz-act" placeholder="Act. Mins" min="1">
+                </div>
+                <button onclick="addTodo('moaz')">ADD TASK</button>
+            </div>
+            <ul class="todo-list" id="list-moaz"></ul>
+        </div>
+
+    </main>
+
+    <button class="nuke-btn" onclick="nukeData()">⚠️ Reset All Data</button>
+
+    <script>
+        // ------------------------------------
+        // 1. COUNTDOWN LOGIC
+        // ------------------------------------
+        const exams = [
+            { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
+            { name: "Economics & Statistics", date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
+            { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
+            { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
+            { name: "Physics", date: new Date("2026-07-09T09:00:00").getTime() },
+            { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
+        ];
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let nextExam = null;
+
+            for (let exam of exams) {
+                if (exam.date > now) {
+                    nextExam = exam;
+                    break;
+                }
+            }
+
+            const titleEl = document.getElementById("exam-title");
+            const timerEl = document.getElementById("timer");
+
+            if (!nextExam) {
+                titleEl.innerText = "🎉 FREEDOM! ALL EXAMS ARE COMPLETED! 🎉";
+                timerEl.innerText = "00d : 00h : 00m : 00s";
+                return;
+            }
+
+            titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
+
+            const distance = nextExam.date - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const dDisplay = days < 10 ? '0' + days : days;
+            const hDisplay = hours < 10 ? '0' + hours : hours;
+            const mDisplay = minutes < 10 ? '0' + minutes : minutes;
+            const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+            timerEl.innerText = `${dDisplay}d : ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+
+        // ------------------------------------
+        // 2. STATE MANAGEMENT & AUTO-HEALER
+        // ------------------------------------
+        let state;
+        try {
+            state = JSON.parse(localStorage.getItem('hustleState'));
+            
+            // The "State Healer" - Checks if data is corrupt or from an old version
+            if (!state || !state.todos || !Array.isArray(state.todos.mohamed) || !Array.isArray(state.todos.moaz)) {
+                console.log("Old/Corrupt data detected. Healing state...");
+                throw new Error("Invalid structure");
+            }
+        } catch (e) {
+            // If anything is wrong, rebuild a fresh database
+            state = {
+                scores: { mohamed: 0, moaz: 0 },
+                todos: { mohamed: [], moaz: [] }
+            };
+            localStorage.setItem('hustleState', JSON.stringify(state));
+        }
+
+        function saveState() {
+            localStorage.setItem('hustleState', JSON.stringify(state));
+            updateDOM();
+        }
+
+        function nukeData() {
+            if(confirm("Are you sure? This will delete all tasks and reset the score to 0-0!")) {
+                localStorage.removeItem('hustleState');
+                location.reload();
+            }
+        }
+
+        // ------------------------------------
+        // 3. GAME LOGIC
+        // ------------------------------------
+        function addTodo(player) {
+            const taskInput = document.getElementById(`input-${player}-task`);
+            const estInput = document.getElementById(`input-${player}-est`);
+            const actInput = document.getElementById(`input-${player}-act`);
+
+            if (!taskInput || !taskInput.value.trim() || !estInput.value || !actInput.value) {
+                alert("Fill out everything! Don't cheat the system!");
+                return;
+            }
+
+            const newTodo = {
+                id: Date.now() + Math.floor(Math.random() * 1000), // foolproof unique ID
+                task: taskInput.value.trim(),
+                est: parseInt(estInput.value),
+                act: parseInt(actInput.value),
+                checked: false
+            };
+
+            state.todos[player].push(newTodo);
+            taskInput.value = '';
+            estInput.value = '';
+            actInput.value = '';
+            saveState();
+        }
+
+        function toggleTodo(player, id) {
+            const todo = state.todos[player].find(t => t.id === id);
+            if (todo) {
+                todo.checked = !todo.checked;
+                saveState();
+            }
+        }
+
+        function deleteTodo(player, id) {
+            state.todos[player] = state.todos[player].filter(t => t.id !== id);
+            saveState();
+        }
+
+        function endTheDay() {
+            if (!confirm("Are you sure the day is over? Points will be allocated/deducted now!")) return;
+
+            ['mohamed', 'moaz'].forEach(player => {
+                const totalTasks = state.todos[player].length;
+                if (totalTasks === 0) {
+                    state.scores[player] -= 1;
+                    return;
+                }
+
+                const allChecked = state.todos[player].every(t => t.checked);
+                if (allChecked) {
+                    let pointsGained = 1; 
+                    const beatEstimates = state.todos[player].every(t => t.act < t.est);
+                    if (beatEstimates) {
+                        pointsGained += 1;
+                        alert(`💥 BONUS! ${player.toUpperCase()} beat all estimated times! +2 Points total!`);
+                    } else {
+                        alert(`👍 Day complete for ${player.toUpperCase()}! +1 Point.`);
+                    }
+                    state.scores[player] += pointsGained;
+                } else {
+                    state.scores[player] -= 1;
+                    alert(`❌ ${player.toUpperCase()} missed some tasks. -1 Point.`);
+                }
+                
+                // Clear the board for the next day
+                state.todos[player] = [];
+            });
+
+            saveState();
+        }
+
+        // ------------------------------------
+        // 4. RENDERING THE UI
+        // ------------------------------------
+        function updateDOM() {
+            document.getElementById('score-mohamed').innerText = state.scores.mohamed;
+            document.getElementById('score-moaz').innerText = state.scores.moaz;
+
+            ['mohamed', 'moaz'].forEach(player => {
+                const listEl = document.getElementById(`list-${player}`);
+                if (!listEl) return;
+                listEl.innerHTML = '';
+
+                state.todos[player].forEach(todo => {
+                    const li = document.createElement('li');
+                    li.className = `todo-item ${todo.checked ? 'checked' : ''}`;
+                    li.innerHTML = `
+                        <div class="todo-info">
+                            <span class="todo-text">${todo.task}</span>
+                            <span class="todo-time-tag">⏱️ Est: ${todo.est}m | Act: ${todo.act}m</span>
+                        </div>
+                        <div class="todo-actions">
+                            <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
+                                ${todo.checked ? '↩️' : '✅'}
+                            </button>
+                            <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
+                        </div>
+                    `;
+                    listEl.appendChild(li);
+                });
+            });
+        }
+
+        // Boot up!
+        updateCountdown();
+        updateDOM();
+    </script>
+</body>
+</html>
