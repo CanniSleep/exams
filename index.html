@@ -61,7 +61,7 @@
             border: 2px dashed var(--countdown-color);
             box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
             border-radius: 12px;
-            padding: 15px 30px;
+            padding: 20px;
             width: 100%;
             max-width: 900px;
             margin-bottom: 25px;
@@ -80,6 +80,47 @@
             font-size: 2.2rem;
             color: #fff;
             text-shadow: 0 0 10px var(--countdown-color);
+            margin-bottom: 15px;
+        }
+
+        .see-all-btn {
+            background: transparent;
+            border: 1px solid var(--countdown-color);
+            color: #fff;
+            padding: 8px 16px;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .see-all-btn:hover {
+            background: var(--countdown-color);
+            box-shadow: 0 0 10px var(--countdown-color);
+        }
+
+        .extended-exams {
+            display: none;
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-family: sans-serif;
+            text-align: left;
+        }
+
+        .exam-row {
+            background: #221736;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            border-left: 3px solid #00ffcc;
+            display: flex;
+            justify-content: space-between;
         }
 
         /* LEADERBOARD */
@@ -117,23 +158,10 @@
             min-width: 200px;
         }
 
-        .score-box.mohamed {
-            border: 2px solid var(--mohamed-color);
-            box-shadow: 0 0 15px var(--mohamed-glow);
-            color: var(--mohamed-color);
-        }
+        .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); box-shadow: 0 0 15px var(--mohamed-glow); }
+        .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); box-shadow: 0 0 15px var(--moaz-glow); }
 
-        .score-box.moaz {
-            border: 2px solid var(--moaz-color);
-            box-shadow: 0 0 15px var(--moaz-glow);
-            color: var(--moaz-color);
-        }
-
-        .day-controls {
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-        }
+        .day-controls { margin-top: 25px; }
 
         button.day-btn {
             background: #ffcc00;
@@ -145,13 +173,9 @@
             border-radius: 8px;
             transition: transform 0.2s;
         }
+        button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
 
-        button.day-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
-        }
-
-        /* THE ARENA COLUMNS */
+        /* THE ARENA */
         .arena {
             display: flex;
             gap: 30px;
@@ -168,25 +192,21 @@
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-
         .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
         .player-column.moaz { border-top: 8px solid var(--moaz-color); }
 
-        .player-column h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+        .player-column h2 { font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
 
-        /* FORMS */
+        /* INPUT FORMS (MORNING STUDY PLANNER) */
         .todo-form {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 25px;
         }
+        .todo-form input.task-name { flex: 2; }
+        .todo-form input.task-est { flex: 1; }
 
         .todo-form input {
             background: #25283d;
@@ -198,35 +218,19 @@
             font-family: sans-serif;
             font-weight: bold;
         }
-
-        .time-inputs {
-            display: flex;
-            gap: 10px;
-        }
-
-        .time-inputs input {
-            flex: 1;
-        }
-
         .todo-form button {
             color: #000;
             border: none;
-            padding: 12px;
+            padding: 12px 20px;
             font-size: 1.1rem;
             cursor: pointer;
             border-radius: 6px;
         }
-
         .mohamed .todo-form button { background: var(--mohamed-color); }
         .moaz .todo-form button { background: var(--moaz-color); }
 
         /* TODO LIST RENDERING */
-        .todo-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .todo-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 
         .todo-item {
             background: #202231;
@@ -236,53 +240,51 @@
             align-items: center;
             justify-content: space-between;
             border-left: 4px solid #555;
+            gap: 10px;
         }
-
-        .todo-item.checked {
-            opacity: 0.4;
-            text-decoration: line-through;
-            border-left-color: #2ecc71 !important;
-        }
+        .todo-item.checked { border-left-color: #2ecc71 !important; }
+        .todo-item.checked .todo-text { opacity: 0.4; text-decoration: line-through; }
 
         .mohamed .todo-item { border-left-color: var(--mohamed-color); }
         .moaz .todo-item { border-left-color: var(--moaz-color); }
 
-        .todo-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-family: sans-serif;
-            font-weight: bold;
-        }
-
-        .todo-text {
-            font-size: 1.1rem;
-            font-family: 'Impact', sans-serif;
-        }
-
-        .todo-time-tag {
-            font-size: 0.8rem;
-            color: #aaa;
-            background: #2c2f48;
-            padding: 2px 6px;
-            border-radius: 4px;
-            width: fit-content;
-        }
-
-        .todo-actions {
+        .todo-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
+        .todo-text { font-size: 1.2rem; font-family: 'Impact', sans-serif; transition: all 0.2s; }
+        
+        .time-tracking-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-family: sans-serif;
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 4px;
         }
+
+        /* END OF DAY ACTUAL TIME BOX INSIDE CARD */
+        .actual-input-box {
+            background: #11131c;
+            border: 1px solid #555;
+            color: #fff;
+            width: 75px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: sans-serif;
+            text-align: center;
+        }
+        .actual-input-box:focus { border-color: #ffd700; outline: none; }
+
+        .todo-actions { display: flex; align-items: center; gap: 8px; }
 
         .checkbox-btn, .delete-btn {
             border: none;
             color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 10px 14px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 1.1rem;
         }
-
         .checkbox-btn { background: #2ecc71; }
         .delete-btn { background: #e74c3c; }
         
@@ -296,7 +298,6 @@
             font-family: sans-serif;
             font-size: 0.8rem;
         }
-        .nuke-btn:hover { color: #e74c3c; border-color: #e74c3c; }
     </style>
 </head>
 <body>
@@ -306,11 +307,15 @@
         <p style="font-family: sans-serif; color: #888; font-weight: bold;">HIGH SCHOOL FINAL MONTH CRUNCH TIME</p>
     </header>
 
+    <!-- EXAM TICKER DISPLAY -->
     <section class="countdown-banner">
         <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
         <div id="timer">00d : 00h : 00m : 00s</div>
+        <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
+        <div class="extended-exams" id="extended-exams-panel"></div>
     </section>
 
+    <!-- LIVE LEADERBOARD CONTAINER -->
     <section class="leaderboard">
         <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
         <div class="board-flex">
@@ -329,30 +334,27 @@
         </div>
     </section>
 
+    <!-- MAIN INTERACTIVE ARENA -->
     <main class="arena">
         
+        <!-- MOHAMED -->
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
             <div class="todo-form">
-                <input type="text" id="input-mohamed-task" placeholder="Task name...">
-                <div class="time-inputs">
-                    <input type="number" id="input-mohamed-est" placeholder="Est. Mins" min="1">
-                    <input type="number" id="input-mohamed-act" placeholder="Act. Mins" min="1">
-                </div>
-                <button onclick="addTodo('mohamed')">ADD TASK</button>
+                <input type="text" id="input-mohamed-task" class="task-name" placeholder="Morning: Add today's task...">
+                <input type="number" id="input-mohamed-est" class="task-est" placeholder="Est. Mins" min="1">
+                <button onclick="addTodo('mohamed')">ADD</button>
             </div>
             <ul class="todo-list" id="list-mohamed"></ul>
         </div>
 
+        <!-- MOAZ -->
         <div class="player-column moaz">
             <h2>Moaz</h2>
             <div class="todo-form">
-                <input type="text" id="input-moaz-task" placeholder="Task name...">
-                <div class="time-inputs">
-                    <input type="number" id="input-moaz-est" placeholder="Est. Mins" min="1">
-                    <input type="number" id="input-moaz-act" placeholder="Act. Mins" min="1">
-                </div>
-                <button onclick="addTodo('moaz')">ADD TASK</button>
+                <input type="text" id="input-moaz-task" class="task-name" placeholder="Morning: Add today's task...">
+                <input type="number" id="input-moaz-est" class="task-est" placeholder="Est. Mins" min="1">
+                <button onclick="addTodo('moaz')">ADD</button>
             </div>
             <ul class="todo-list" id="list-moaz"></ul>
         </div>
@@ -362,12 +364,9 @@
     <button class="nuke-btn" onclick="nukeData()">⚠️ Reset All Data</button>
 
     <script>
-        // ------------------------------------
-        // 1. COUNTDOWN LOGIC
-        // ------------------------------------
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
-            { name: "Economics & Statistics", date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "Economics & Statistics", date: new Date("2026-06-23").getTime() },
             { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
             { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
             { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
@@ -378,20 +377,26 @@
         function updateCountdown() {
             const now = new Date().getTime();
             let nextExam = null;
+            let otherExams = [];
 
             for (let exam of exams) {
                 if (exam.date > now) {
-                    nextExam = exam;
-                    break;
+                    if (!nextExam) {
+                        nextExam = exam;
+                    } else {
+                        otherExams.push(exam);
+                    }
                 }
             }
 
             const titleEl = document.getElementById("exam-title");
             const timerEl = document.getElementById("timer");
+            const extendedPanel = document.getElementById("extended-exams-panel");
 
             if (!nextExam) {
                 titleEl.innerText = "🎉 FREEDOM! ALL EXAMS ARE COMPLETED! 🎉";
                 timerEl.innerText = "00d : 00h : 00m : 00s";
+                extendedPanel.innerHTML = "";
                 return;
             }
 
@@ -403,34 +408,30 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            const dDisplay = days < 10 ? '0' + days : days;
-            const hDisplay = hours < 10 ? '0' + hours : hours;
-            const mDisplay = minutes < 10 ? '0' + minutes : minutes;
-            const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+            timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
 
-            timerEl.innerText = `${dDisplay}d : ${hDisplay}h : ${mDisplay}m : ${sDisplay}s`;
+            // Build out the dynamic sub-panel with remaining days only
+            extendedPanel.innerHTML = otherExams.map(exam => {
+                const diffMs = exam.date - now;
+                const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
+            }).join('');
+        }
+
+        function toggleExamsPanel() {
+            const panel = document.getElementById("extended-exams-panel");
+            panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
         }
 
         setInterval(updateCountdown, 1000);
 
-        // ------------------------------------
-        // 2. STATE MANAGEMENT & AUTO-HEALER
-        // ------------------------------------
+        // Core App Storage Configuration
         let state;
         try {
             state = JSON.parse(localStorage.getItem('hustleState'));
-            
-            // The "State Healer" - Checks if data is corrupt or from an old version
-            if (!state || !state.todos || !Array.isArray(state.todos.mohamed) || !Array.isArray(state.todos.moaz)) {
-                console.log("Old/Corrupt data detected. Healing state...");
-                throw new Error("Invalid structure");
-            }
+            if (!state || !state.todos || !Array.isArray(state.todos.mohamed) || !Array.isArray(state.todos.moaz)) throw new Error();
         } catch (e) {
-            // If anything is wrong, rebuild a fresh database
-            state = {
-                scores: { mohamed: 0, moaz: 0 },
-                todos: { mohamed: [], moaz: [] }
-            };
+            state = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
             localStorage.setItem('hustleState', JSON.stringify(state));
         }
 
@@ -440,37 +441,32 @@
         }
 
         function nukeData() {
-            if(confirm("Are you sure? This will delete all tasks and reset the score to 0-0!")) {
+            if(confirm("Reset entire scoreboards and wipe current tasks?")) {
                 localStorage.removeItem('hustleState');
                 location.reload();
             }
         }
 
-        // ------------------------------------
-        // 3. GAME LOGIC
-        // ------------------------------------
         function addTodo(player) {
-            const taskInput = document.getElementById(`input-${player}-task`);
+            const nameInput = document.getElementById(`input-${player}-task`);
             const estInput = document.getElementById(`input-${player}-est`);
-            const actInput = document.getElementById(`input-${player}-act`);
 
-            if (!taskInput || !taskInput.value.trim() || !estInput.value || !actInput.value) {
-                alert("Fill out everything! Don't cheat the system!");
+            if (!nameInput.value.trim() || !estInput.value) {
+                alert("Enter the Task name and an Estimated study duration!");
                 return;
             }
 
             const newTodo = {
-                id: Date.now() + Math.floor(Math.random() * 1000), // foolproof unique ID
-                task: taskInput.value.trim(),
+                id: Date.now() + Math.floor(Math.random() * 100),
+                task: nameInput.value.trim(),
                 est: parseInt(estInput.value),
-                act: parseInt(actInput.value),
+                act: 0, // Left completely unassigned in morning session
                 checked: false
             };
 
             state.todos[player].push(newTodo);
-            taskInput.value = '';
+            nameInput.value = '';
             estInput.value = '';
-            actInput.value = '';
             saveState();
         }
 
@@ -487,42 +483,63 @@
             saveState();
         }
 
+        // Live capture value of actual runtime inputs before final night execution
+        function updateActualTime(player, id, inputVal) {
+            const todo = state.todos[player].find(t => t.id === id);
+            if (todo) {
+                todo.act = parseInt(inputVal) || 0;
+                // Save silently without rebuilding DOM to preserve focus/typing state
+                localStorage.setItem('hustleState', JSON.stringify(state));
+            }
+        }
+
         function endTheDay() {
-            if (!confirm("Are you sure the day is over? Points will be allocated/deducted now!")) return;
+            if (!confirm("Are you ready to submit your actual times and process daily tallies?")) return;
 
             ['mohamed', 'moaz'].forEach(player => {
                 const totalTasks = state.todos[player].length;
                 if (totalTasks === 0) {
-                    state.scores[player] -= 1;
+                    state.scores[player] -= 1; // Unplanned daily loss
                     return;
                 }
 
                 const allChecked = state.todos[player].every(t => t.checked);
+                
                 if (allChecked) {
-                    let pointsGained = 1; 
-                    const beatEstimates = state.todos[player].every(t => t.act < t.est);
-                    if (beatEstimates) {
-                        pointsGained += 1;
-                        alert(`💥 BONUS! ${player.toUpperCase()} beat all estimated times! +2 Points total!`);
+                    let totalEst = 0;
+                    let totalAct = 0;
+                    let missedActualLogs = false;
+
+                    state.todos[player].forEach(t => {
+                        totalEst += t.est;
+                        totalAct += t.act;
+                        if (t.act <= 0) missedActualLogs = true;
+                    });
+
+                    if (missedActualLogs) {
+                        alert(`⚠️ ${player.toUpperCase()} left an Actual Mins field blank or 0! Please fill them to finish processing.`);
+                        return;
+                    }
+
+                    let pointsGained = 1;
+                    if (totalAct < totalEst) {
+                        pointsGained += 1; // Confirms speedy delivery threshold
+                        alert(`💥 CLOCK BEATEN! ${player.toUpperCase()} outpaced estimates! (+2 Total Points)`);
                     } else {
-                        alert(`👍 Day complete for ${player.toUpperCase()}! +1 Point.`);
+                        alert(`👍 Task completed cleanly for ${player.toUpperCase()}! (+1 Point)`);
                     }
                     state.scores[player] += pointsGained;
                 } else {
-                    state.scores[player] -= 1;
-                    alert(`❌ ${player.toUpperCase()} missed some tasks. -1 Point.`);
+                    state.scores[player] -= 1; // Direct standard penalty deduct
+                    alert(`❌ ${player.toUpperCase()} missed tracking targets. (-1 Point)`);
                 }
-                
-                // Clear the board for the next day
-                state.todos[player] = [];
+
+                state.todos[player] = []; // Fresh layout container prepared for morning session
             });
 
             saveState();
         }
 
-        // ------------------------------------
-        // 4. RENDERING THE UI
-        // ------------------------------------
         function updateDOM() {
             document.getElementById('score-mohamed').innerText = state.scores.mohamed;
             document.getElementById('score-moaz').innerText = state.scores.moaz;
@@ -538,7 +555,15 @@
                     li.innerHTML = `
                         <div class="todo-info">
                             <span class="todo-text">${todo.task}</span>
-                            <span class="todo-time-tag">⏱️ Est: ${todo.est}m | Act: ${todo.act}m</span>
+                            <div class="time-tracking-row">
+                                <span>⏱️ Est: <strong>${todo.est}m</strong></span>
+                                <span>| Night Actual:</span>
+                                <input type="number" 
+                                       class="actual-input-box" 
+                                       placeholder="Mins" 
+                                       value="${todo.act || ''}" 
+                                       oninput="updateActualTime('${player}', ${todo.id}, this.value)">
+                            </div>
                         </div>
                         <div class="todo-actions">
                             <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
@@ -552,7 +577,6 @@
             });
         }
 
-        // Boot up!
         updateCountdown();
         updateDOM();
     </script>
