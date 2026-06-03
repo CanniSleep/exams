@@ -14,314 +14,132 @@
             --moaz-glow: rgba(255, 0, 127, 0.4);
             --text-color: #f0f1f5;
             --countdown-color: #ff00ff;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            letter-spacing: 1px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Impact', 'Arial Black', sans-serif; letter-spacing: 1px; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            background-color: var(--bg-color); color: var(--text-color);
+            padding: 20px; padding-bottom: 120px; /* Space for stopwatch */
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            margin-bottom: 5px;
-        }
+        header { text-align: center; margin-bottom: 20px; }
+        h1 { font-size: 3.5rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 5px; }
 
         .vs {
-            font-style: italic;
-            background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-            padding: 0 10px;
+            font-style: italic; background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 10px;
         }
 
-        /* COUNTDOWN BANNER */
-        .countdown-banner {
+        /* BANNER & LEADERBOARD */
+        .countdown-banner, .leaderboard {
             background: linear-gradient(135deg, #1f1135, #0b061f);
-            border: 2px dashed var(--countdown-color);
-            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 25px;
-            text-align: center;
+            border: 2px dashed var(--countdown-color); border-radius: 12px;
+            padding: 20px; width: 100%; max-width: 900px; margin-bottom: 25px; text-align: center;
         }
+        .leaderboard { border: 3px solid #333; background: var(--card-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .leaderboard h2 { font-size: 2rem; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
 
-        .countdown-banner h3 {
-            font-size: 1.2rem;
-            color: #00ffcc;
-            font-family: sans-serif;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
+        #timer { font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px var(--countdown-color); margin-bottom: 15px; }
 
-        #timer {
-            font-size: 2.2rem;
-            color: #fff;
-            text-shadow: 0 0 10px var(--countdown-color);
-            margin-bottom: 15px;
-        }
-
-        .see-all-btn {
-            background: transparent;
-            border: 1px solid var(--countdown-color);
-            color: #fff;
-            padding: 8px 16px;
-            font-family: sans-serif;
-            font-size: 0.9rem;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .see-all-btn:hover {
-            background: var(--countdown-color);
-            box-shadow: 0 0 10px var(--countdown-color);
-        }
-
-        .extended-exams {
-            display: none;
-            margin-top: 15px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            padding: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            font-family: sans-serif;
-            text-align: left;
-        }
-
-        .exam-row {
-            background: #221736;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            border-left: 3px solid #00ffcc;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* LEADERBOARD */
-        .leaderboard {
-            background: var(--card-bg);
-            border: 3px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .leaderboard h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-        }
-
-        .board-flex {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            font-size: 2.5rem;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .score-box {
-            padding: 15px 30px;
-            border-radius: 10px;
-            min-width: 200px;
-        }
-
+        .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; flex-wrap: wrap; gap: 15px; }
+        .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
         .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); box-shadow: 0 0 15px var(--mohamed-glow); }
         .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); box-shadow: 0 0 15px var(--moaz-glow); }
 
-        .day-controls { margin-top: 25px; }
-
-        button.day-btn {
-            background: #ffcc00;
-            color: #000;
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: transform 0.2s;
-        }
+        button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; margin-top: 25px; transition: transform 0.2s; }
         button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
 
-        /* THE ARENA */
-        .arena {
-            display: flex;
-            gap: 30px;
-            width: 100%;
-            max-width: 1100px;
-            flex-wrap: wrap;
-        }
-
-        .player-column {
-            flex: 1;
-            min-width: 320px;
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
+        /* ARENA & COLUMNS */
+        .arena { display: flex; gap: 30px; width: 100%; max-width: 1100px; flex-wrap: wrap; margin-bottom: 40px; }
+        .player-column { flex: 1; min-width: 320px; background: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
         .player-column.moaz { border-top: 8px solid var(--moaz-color); }
 
-        .player-column h2 { font-size: 2.2rem; margin-bottom: 5px; text-transform: uppercase; }
+        .player-column h2 { font-size: 2.2rem; margin-bottom: 15px; text-transform: uppercase; }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
 
-        /* STATS BAR */
-        .stats-bar {
-            background: #11131c;
-            padding: 8px 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-family: sans-serif;
-            font-size: 0.9rem;
-            color: #bbb;
-            border: 1px solid #333;
-        }
-        .stats-bar strong { color: #fff; }
-
-        /* INPUT FORMS */
+        /* INPUTS & FORMS */
         .todo-form { display: flex; gap: 10px; margin-bottom: 25px; }
-        .todo-form input.task-name { flex: 2; }
-        .todo-form input.task-est { flex: 1; }
-
-        .todo-form input {
-            background: #25283d;
-            border: 2px solid #444;
-            color: white;
-            padding: 12px;
-            font-size: 1rem;
-            border-radius: 6px;
-            font-family: sans-serif;
-            font-weight: bold;
+        .todo-form input.task-name { flex: 2; min-width: 150px; }
+        .todo-form input.task-est { flex: 1; min-width: 80px; }
+        
+        input, select {
+            background: #25283d; border: 2px solid #444; color: white; padding: 12px; font-size: 1rem; border-radius: 6px; font-family: sans-serif; font-weight: bold;
         }
-        .todo-form button {
-            color: #000;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 6px;
+        input:focus, select:focus { outline: none; border-color: #888; }
+        
+        /* FIXED BUTTON SHRINK ISSUE */
+        .todo-form button, .add-btn {
+            color: #000; border: none; padding: 12px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 6px;
+            flex-shrink: 0; /* Prevents button from being soaked/squished */
+            white-space: nowrap;
         }
-        .mohamed .todo-form button { background: var(--mohamed-color); }
-        .moaz .todo-form button { background: var(--moaz-color); }
+        .mohamed .todo-form button, .mohamed .add-btn { background: var(--mohamed-color); }
+        .moaz .todo-form button, .moaz .add-btn { background: var(--moaz-color); }
 
-        /* TODO LIST RENDERING */
-        .todo-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-
-        .todo-item {
-            background: #202231;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-left: 4px solid #555;
-            gap: 10px;
-        }
-        .todo-item.checked { border-left-color: #2ecc71 !important; }
-        .todo-item.checked .todo-text { opacity: 0.4; text-decoration: line-through; }
-
+        /* TASK LISTS */
+        .todo-list, .weakpoint-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .todo-item { background: #202231; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-left: 4px solid #555; }
         .mohamed .todo-item { border-left-color: var(--mohamed-color); }
         .moaz .todo-item { border-left-color: var(--moaz-color); }
 
-        .todo-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
-        .todo-text { font-size: 1.2rem; font-family: 'Impact', sans-serif; transition: all 0.2s; }
-        
-        .time-tracking-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-family: sans-serif;
-            font-size: 0.85rem;
-            color: #aaa;
-            margin-top: 4px;
-        }
+        .todo-item.checked { border-left-color: var(--success-color) !important; }
+        .todo-item.checked .todo-text { opacity: 0.4; text-decoration: line-through; }
 
-        .actual-input-box {
-            background: #11131c;
-            border: 1px solid #555;
-            color: #fff;
-            width: 75px;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-family: sans-serif;
-            text-align: center;
-        }
-        .actual-input-box:focus { border-color: #ffd700; outline: none; }
+        .todo-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
+        .todo-text { font-size: 1.2rem; }
+        
+        .time-tracking-row { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 0.85rem; color: #aaa; flex-wrap: wrap; }
+        .actual-input-box { background: #11131c; border: 1px solid #555; color: #fff; width: 70px; padding: 4px 6px; border-radius: 4px; text-align: center; font-family: sans-serif; }
+        
+        /* QUALITY BADGE */
+        .quality-badge { background: #ffd700; color: #000; padding: 2px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
 
         .todo-actions { display: flex; align-items: center; gap: 8px; }
+        .checkbox-btn, .delete-btn { border: none; color: white; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; }
+        .checkbox-btn { background: var(--success-color); }
+        .delete-btn { background: var(--danger-color); }
 
-        .checkbox-btn, .delete-btn {
-            border: none;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .checkbox-btn { background: #2ecc71; }
-        .delete-btn { background: #e74c3c; }
+        /* WEAKPOINTS SECTION */
+        .weakpoints-header { width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px; font-size: 2.5rem; color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); }
         
-        .nuke-btn {
-            margin-top: 50px;
-            background: transparent;
-            color: #444;
-            border: 1px solid #333;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-family: sans-serif;
-            font-size: 0.8rem;
+        .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .wp-input-group select { flex: 1; }
+        .wp-input-group input { flex: 2; }
+
+        .wp-item { background: #1a0f14; border: 1px solid #444; border-left: 5px solid #ff3366; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .wp-subject { font-family: sans-serif; font-size: 0.8rem; color: #ff3366; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
+        .wp-text { font-size: 1.1rem; }
+        
+        /* STOPWATCH (FLOATING) */
+        .stopwatch-widget {
+            position: fixed; bottom: 20px; right: 20px; background: rgba(15, 17, 26, 0.95); border: 2px solid #555;
+            padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 1000; text-align: center; backdrop-filter: blur(5px);
         }
+        .stopwatch-widget h3 { font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
+        .sw-time { font-size: 2.5rem; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+        .sw-controls button { background: #333; color: white; border: none; padding: 8px 15px; margin: 0 3px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+        .sw-controls button:hover { background: #555; }
+        .sw-controls button.play { background: #2ecc71; color: #000; }
+        .sw-controls button.pause { background: #f1c40f; color: #000; }
+        .sw-controls button.reset { background: #e74c3c; }
+
     </style>
 </head>
 <body>
 
     <header>
         <h1>Mohamed <span class="vs">VS</span> Moaz</h1>
-        <p style="font-family: sans-serif; color: #888; font-weight: bold;">HIGH SCHOOL FINAL MONTH CRUNCH TIME</p>
     </header>
 
     <section class="countdown-banner">
         <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
         <div id="timer">00d : 00h : 00m : 00s</div>
-        <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
-        <div class="extended-exams" id="extended-exams-panel"></div>
     </section>
 
     <section class="leaderboard">
@@ -337,49 +155,82 @@
                 <div id="score-moaz">0</div>
             </div>
         </div>
-        <div class="day-controls">
-            <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
-        </div>
+        <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
     </section>
 
     <main class="arena">
+        <!-- MOHAMED COLUMN -->
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
-            <div class="stats-bar" id="stats-mohamed">
-                <span>Total Tasks: <strong>0</strong></span>
-                <span>Est Time: <strong>0h 0m</strong></span>
-            </div>
             <div class="todo-form">
-                <input type="text" id="input-mohamed-task" class="task-name" placeholder="Morning: Add today's task...">
-                <input type="number" id="input-mohamed-est" class="task-est" placeholder="Est. Mins" min="1">
+                <input type="text" id="input-mohamed-task" class="task-name" placeholder="Add task...">
+                <input type="number" step="0.5" id="input-mohamed-est" class="task-est" placeholder="Est. Hrs" min="0">
                 <button onclick="addTodo('mohamed')">ADD</button>
             </div>
             <ul class="todo-list" id="list-mohamed"></ul>
         </div>
 
+        <!-- MOAZ COLUMN -->
         <div class="player-column moaz">
             <h2>Moaz</h2>
-            <div class="stats-bar" id="stats-moaz">
-                <span>Total Tasks: <strong>0</strong></span>
-                <span>Est Time: <strong>0h 0m</strong></span>
-            </div>
             <div class="todo-form">
-                <input type="text" id="input-moaz-task" class="task-name" placeholder="Morning: Add today's task...">
-                <input type="number" id="input-moaz-est" class="task-est" placeholder="Est. Mins" min="1">
+                <input type="text" id="input-moaz-task" class="task-name" placeholder="Add task...">
+                <input type="number" step="0.5" id="input-moaz-est" class="task-est" placeholder="Est. Hrs" min="0">
                 <button onclick="addTodo('moaz')">ADD</button>
             </div>
             <ul class="todo-list" id="list-moaz"></ul>
         </div>
     </main>
 
-    <button class="nuke-btn" onclick="nukeData()">⚠️ Reset All Data</button>
+    <h2 class="weakpoints-header">🎯 WEAKPOINT ANNIHILATION ZONE</h2>
+    <main class="arena">
+        <!-- MOHAMED WEAKPOINTS -->
+        <div class="player-column mohamed">
+            <div class="wp-input-group">
+                <select id="wp-subj-mohamed">
+                    <option value="Arabic">Arabic</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+                <input type="text" id="wp-text-mohamed" placeholder="Identify weakpoint...">
+                <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
+            </div>
+            <ul class="weakpoint-list" id="wp-list-mohamed"></ul>
+        </div>
+
+        <!-- MOAZ WEAKPOINTS -->
+        <div class="player-column moaz">
+            <div class="wp-input-group">
+                <select id="wp-subj-moaz">
+                    <option value="Arabic">Arabic</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+                <input type="text" id="wp-text-moaz" placeholder="Identify weakpoint...">
+                <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
+            </div>
+            <ul class="weakpoint-list" id="wp-list-moaz"></ul>
+        </div>
+    </main>
+
+    <!-- LOCAL STOPWATCH WIDGET -->
+    <div class="stopwatch-widget">
+        <h3>⏱️ Personal Focus Timer</h3>
+        <div class="sw-time" id="sw-display">00:00:00</div>
+        <div class="sw-controls">
+            <button class="play" onclick="startTimer()">▶️</button>
+            <button class="pause" onclick="pauseTimer()">⏸️</button>
+            <button class="reset" onclick="resetTimer()">🔄</button>
+        </div>
+    </div>
 
     <!-- FIREBASE CLOUD LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Your Exact Config
         const firebaseConfig = {
             apiKey: "AIzaSyDv8JBa9MtaTbCzNQ66HbAxB7YPBi_pGfQ",
             authDomain: "exam-3abc3.firebaseapp.com",
@@ -395,7 +246,7 @@
         const db = getDatabase(app);
         const stateRef = ref(db, 'hustleState');
 
-        // CORRECTED EXAM ARRAY
+        // EXAMS COUNTDOWN
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
             { name: "German", date: new Date("2026-06-23T09:00:00").getTime() },
@@ -406,106 +257,81 @@
             { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
-        window.updateCountdown = function() {
+        setInterval(() => {
             const now = new Date().getTime();
-            let nextExam = null;
-            let otherExams = [];
-
-            for (let exam of exams) {
-                if (exam.date > now) {
-                    if (!nextExam) {
-                        nextExam = exam;
-                    } else {
-                        otherExams.push(exam);
-                    }
-                }
+            let nextExam = exams.find(e => e.date > now);
+            
+            if (nextExam) {
+                document.getElementById("exam-title").innerText = `NEXT TARGET: ${nextExam.name}`;
+                const d = nextExam.date - now;
+                const days = Math.floor(d / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((d % (1000 * 60)) / 1000);
+                document.getElementById("timer").innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
+            } else {
+                document.getElementById("exam-title").innerText = "ALL EXAMS COMPLETED!";
+                document.getElementById("timer").innerText = "00d : 00h : 00m : 00s";
             }
-
-            const titleEl = document.getElementById("exam-title");
-            const timerEl = document.getElementById("timer");
-            const extendedPanel = document.getElementById("extended-exams-panel");
-
-            if (!nextExam) {
-                titleEl.innerText = "🎉 FREEDOM! ALL EXAMS ARE COMPLETED! 🎉";
-                timerEl.innerText = "00d : 00h : 00m : 00s";
-                extendedPanel.innerHTML = "";
-                return;
-            }
-
-            titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
-
-            const distance = nextExam.date - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
-
-            extendedPanel.innerHTML = otherExams.map(exam => {
-                const diffMs = exam.date - now;
-                const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-                return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
-            }).join('');
-        };
-
-        window.toggleExamsPanel = function() {
-            const panel = document.getElementById("extended-exams-panel");
-            panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
-        };
-        setInterval(window.updateCountdown, 1000);
-        window.updateCountdown();
+        }, 1000);
 
         // --- GLOBAL STATE & CLOUD SYNC ---
-        let localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
+        let localState = { 
+            scores: { mohamed: 0, moaz: 0 }, 
+            todos: { mohamed: [], moaz: [] },
+            weakpoints: { mohamed: [], moaz: [] }
+        };
 
         onValue(stateRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 localState = {
                     scores: data.scores || { mohamed: 0, moaz: 0 },
-                    todos: {
-                        mohamed: data.todos?.mohamed || [],
-                        moaz: data.todos?.moaz || []
-                    }
+                    todos: { mohamed: data.todos?.mohamed || [], moaz: data.todos?.moaz || [] },
+                    weakpoints: { mohamed: data.weakpoints?.mohamed || [], moaz: data.weakpoints?.moaz || [] }
                 };
-            } else {
-                set(stateRef, localState);
             }
             updateDOM();
         });
 
-        function saveToCloud() {
-            set(stateRef, localState);
-        }
+        function saveToCloud() { set(stateRef, localState); }
 
+        // --- TODO LOGIC ---
         window.addTodo = function(player) {
             const nameInput = document.getElementById(`input-${player}-task`);
             const estInput = document.getElementById(`input-${player}-est`);
 
-            if (!nameInput.value.trim() || !estInput.value) {
-                alert("Enter the Task name and an Estimated study duration!");
-                return;
-            }
+            if (!nameInput.value.trim() || !estInput.value) return alert("Enter task and estimated hours!");
 
-            const newTodo = {
-                id: Date.now() + Math.floor(Math.random() * 100),
+            localState.todos[player].push({
+                id: Date.now(),
                 task: nameInput.value.trim(),
-                est: parseInt(estInput.value),
-                act: 0, 
-                checked: false
-            };
-
-            localState.todos[player].push(newTodo);
-            nameInput.value = '';
-            estInput.value = '';
+                est: parseFloat(estInput.value),
+                act: '', 
+                checked: false,
+                quality: 0
+            });
+            nameInput.value = ''; estInput.value = '';
             saveToCloud();
         };
 
         window.toggleTodo = function(player, id) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
-                todo.checked = !todo.checked;
+                if (!todo.checked) {
+                    // Completing task - Ask for quality
+                    let q = prompt("On a scale from 1-10, How good did you study that? (1 = Trash, 10 = Perfect)");
+                    let score = parseInt(q);
+                    if (isNaN(score) || score < 1) score = 1;
+                    if (score > 10) score = 10;
+                    
+                    todo.quality = score;
+                    todo.checked = true;
+                } else {
+                    // Unchecking task
+                    todo.checked = false;
+                    todo.quality = 0;
+                }
                 saveToCloud();
             }
         };
@@ -515,128 +341,171 @@
             saveToCloud();
         };
 
+        // FIXED: Using onblur to prevent cursor jumping
         window.updateActualTime = function(player, id, inputVal) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
-                todo.act = parseInt(inputVal) || 0;
+                todo.act = parseFloat(inputVal) || 0;
                 saveToCloud(); 
             }
         };
 
+        // --- WEAKPOINTS LOGIC ---
+        window.addWeakpoint = function(player) {
+            const subj = document.getElementById(`wp-subj-${player}`).value;
+            const textInput = document.getElementById(`wp-text-${player}`);
+            
+            if (!textInput.value.trim()) return alert("Enter a weakpoint!");
+
+            localState.weakpoints[player].push({
+                id: Date.now(),
+                subject: subj,
+                text: textInput.value.trim()
+            });
+            textInput.value = '';
+            saveToCloud();
+        };
+
+        window.eliminateWeakpoint = function(player, id) {
+            if(confirm("Did you actually study and eliminate this weakpoint? (+1 Point!)")) {
+                localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id);
+                localState.scores[player] += 1;
+                saveToCloud();
+            }
+        };
+
+        // --- END OF DAY LOGIC ---
         window.endTheDay = function() {
-            if (!confirm("Are you ready to submit actual times and process daily tallies for BOTH players?")) return;
+            if (!confirm("Process daily tallies for BOTH players?")) return;
 
             ['mohamed', 'moaz'].forEach(player => {
-                const totalTasks = localState.todos[player].length;
-                if (totalTasks === 0) {
-                    localState.scores[player] -= 1; 
-                    return;
-                }
+                const tasks = localState.todos[player];
+                const totalTasks = tasks.length;
+                
+                if (totalTasks === 0) return; // Do nothing if no tasks
 
-                const allChecked = localState.todos[player].every(t => t.checked);
+                const allChecked = tasks.every(t => t.checked);
                 
                 if (allChecked) {
-                    let totalEst = 0;
-                    let totalAct = 0;
-                    let missedActualLogs = false;
+                    // Calculate Average Quality
+                    let totalQuality = 0;
+                    tasks.forEach(t => totalQuality += t.quality);
+                    let avgQuality = totalQuality / totalTasks;
 
-                    localState.todos[player].forEach(t => {
-                        totalEst += t.est;
-                        totalAct += t.act;
-                        if (t.act <= 0) missedActualLogs = true;
-                    });
-
-                    if (missedActualLogs) {
-                        alert(`⚠️ ${player.toUpperCase()} left an Actual Mins field blank or 0! Please fill them to finish processing.`);
-                        return;
-                    }
-
-                    let pointsGained = 1;
-                    if (totalAct < totalEst) {
+                    let pointsGained = 1; // Base point for finishing
+                    
+                    // Bonus point for high quality
+                    if (avgQuality >= 9) {
                         pointsGained += 1;
-                        alert(`💥 CLOCK BEATEN! ${player.toUpperCase()} outpaced estimates! (+2 Total Points)`);
-                    } else {
-                        alert(`👍 Task completed cleanly for ${player.toUpperCase()}! (+1 Point)`);
+                        alert(`🔥 ${player.toUpperCase()} hit an average study quality of ${avgQuality.toFixed(1)}/10! (+1 Bonus Point)`);
                     }
+
                     localState.scores[player] += pointsGained;
+                    alert(`✅ ${player.toUpperCase()} completed all tasks. (+${pointsGained} Total Points)`);
                 } else {
+                    // THE ONLY CONDITION TO LOSE POINTS
                     localState.scores[player] -= 1;
-                    alert(`❌ ${player.toUpperCase()} missed tracking targets. (-1 Point)`);
+                    alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
 
+                // Wipe tasks for the next day
                 localState.todos[player] = []; 
             });
 
             saveToCloud();
         };
 
-        window.nukeData = function() {
-            if(confirm("DANGER: WIPE EVERYTHING IN THE CLOUD FOREVER?")) {
-                localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] } };
-                saveToCloud();
-            }
-        };
-
+        // --- DOM RENDERER ---
         function updateDOM() {
-            let activeElementId = document.activeElement ? document.activeElement.id : null;
-
             document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
             document.getElementById('score-moaz').innerText = localState.scores.moaz;
 
             ['mohamed', 'moaz'].forEach(player => {
-                let totalTasks = localState.todos[player].length;
-                let totalEstMins = 0;
-                localState.todos[player].forEach(t => totalEstMins += t.est);
-                
-                let hours = Math.floor(totalEstMins / 60);
-                let mins = totalEstMins % 60;
-
-                const statsEl = document.getElementById(`stats-${player}`);
-                if (statsEl) {
-                    statsEl.innerHTML = `
-                        <span>Total Tasks: <strong>${totalTasks}</strong></span>
-                        <span>Est Time: <strong>${hours}h ${mins}m</strong></span>
-                    `;
+                // Render Todos
+                const listEl = document.getElementById(`list-${player}`);
+                if (listEl) {
+                    listEl.innerHTML = '';
+                    localState.todos[player].forEach(todo => {
+                        const qualityBadge = todo.checked ? `<span class="quality-badge">⭐ ${todo.quality}/10</span>` : '';
+                        
+                        listEl.innerHTML += `
+                            <li class="todo-item ${todo.checked ? 'checked' : ''}">
+                                <div class="todo-info">
+                                    <div style="display:flex; align-items:center;">
+                                        <span class="todo-text">${todo.task}</span>
+                                        ${qualityBadge}
+                                    </div>
+                                    <div class="time-tracking-row">
+                                        <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
+                                        <span>| Actual Hrs:</span>
+                                        <!-- Changed oninput to onblur to fix cursor bug -->
+                                        <input type="number" step="0.5"
+                                            class="actual-input-box" 
+                                            placeholder="Hrs" 
+                                            value="${todo.act}" 
+                                            onblur="updateActualTime('${player}', ${todo.id}, this.value)">
+                                    </div>
+                                </div>
+                                <div class="todo-actions">
+                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
+                                        ${todo.checked ? '↩️' : '✅'}
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
+                                </div>
+                            </li>
+                        `;
+                    });
                 }
 
-                const listEl = document.getElementById(`list-${player}`);
-                if (!listEl) return;
-                listEl.innerHTML = '';
-
-                localState.todos[player].forEach(todo => {
-                    const li = document.createElement('li');
-                    li.className = `todo-item ${todo.checked ? 'checked' : ''}`;
-                    const inputId = `act-input-${todo.id}`;
-                    
-                    li.innerHTML = `
-                        <div class="todo-info">
-                            <span class="todo-text">${todo.task}</span>
-                            <div class="time-tracking-row">
-                                <span>⏱️ Est: <strong>${todo.est}m</strong></span>
-                                <span>| Night Actual:</span>
-                                <input type="number" 
-                                       id="${inputId}"
-                                       class="actual-input-box" 
-                                       placeholder="Mins" 
-                                       value="${todo.act || ''}" 
-                                       oninput="updateActualTime('${player}', ${todo.id}, this.value)">
-                            </div>
-                        </div>
-                        <div class="todo-actions">
-                            <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
-                                ${todo.checked ? '↩️' : '✅'}
-                            </button>
-                            <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
-                        </div>
-                    `;
-                    listEl.appendChild(li);
-                });
+                // Render Weakpoints
+                const wpListEl = document.getElementById(`wp-list-${player}`);
+                if (wpListEl) {
+                    wpListEl.innerHTML = '';
+                    localState.weakpoints[player].forEach(wp => {
+                        wpListEl.innerHTML += `
+                            <li class="wp-item">
+                                <div>
+                                    <div class="wp-subject">${wp.subject}</div>
+                                    <div class="wp-text">${wp.text}</div>
+                                </div>
+                                <button class="checkbox-btn" onclick="eliminateWeakpoint('${player}', ${wp.id})">💥 Fix</button>
+                            </li>
+                        `;
+                    });
+                }
             });
+        }
+    </script>
 
-            if (activeElementId) {
-                let focusedEl = document.getElementById(activeElementId);
-                if (focusedEl) focusedEl.focus();
+    <!-- LOCAL STOPWATCH SCRIPT -->
+    <script>
+        let swTimer;
+        let swSeconds = 0;
+        let isRunning = false;
+
+        function updateSWDisplay() {
+            const h = Math.floor(swSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((swSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (swSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                swTimer = setInterval(() => { swSeconds++; updateSWDisplay(); }, 1000);
             }
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(swTimer);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            swSeconds = 0;
+            updateSWDisplay();
         }
     </script>
 </body>
