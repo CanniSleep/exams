@@ -22,7 +22,7 @@
 
         body {
             background-color: var(--bg-color); color: var(--text-color);
-            padding: 20px; padding-bottom: 120px; /* Space for stopwatch */
+            padding: 20px; padding-bottom: 120px;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
@@ -43,7 +43,26 @@
         .leaderboard { border: 3px solid #333; background: var(--card-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .leaderboard h2 { font-size: 2rem; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
 
+        .countdown-banner h3 { font-size: 1.2rem; color: #00ffcc; font-family: sans-serif; text-transform: uppercase; margin-bottom: 5px; }
         #timer { font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px var(--countdown-color); margin-bottom: 15px; }
+
+        /* RE-ADDED EXAMS PANEL CSS */
+        .see-all-btn {
+            background: transparent; border: 1px solid var(--countdown-color); color: #fff;
+            padding: 8px 16px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold;
+            border-radius: 20px; cursor: pointer; transition: all 0.3s;
+        }
+        .see-all-btn:hover { background: var(--countdown-color); box-shadow: 0 0 10px var(--countdown-color); }
+        
+        .extended-exams {
+            display: none; margin-top: 15px; background: rgba(0, 0, 0, 0.4); border-radius: 8px;
+            padding: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;
+            font-family: sans-serif; text-align: left;
+        }
+        .exam-row {
+            background: #221736; padding: 8px 12px; border-radius: 5px; font-size: 0.9rem;
+            border-left: 3px solid #00ffcc; display: flex; justify-content: space-between;
+        }
 
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; flex-wrap: wrap; gap: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
@@ -73,11 +92,9 @@
         }
         input:focus, select:focus { outline: none; border-color: #888; }
         
-        /* FIXED BUTTON SHRINK ISSUE */
         .todo-form button, .add-btn {
             color: #000; border: none; padding: 12px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 6px;
-            flex-shrink: 0; /* Prevents button from being soaked/squished */
-            white-space: nowrap;
+            flex-shrink: 0; white-space: nowrap;
         }
         .mohamed .todo-form button, .mohamed .add-btn { background: var(--mohamed-color); }
         .moaz .todo-form button, .moaz .add-btn { background: var(--moaz-color); }
@@ -97,7 +114,6 @@
         .time-tracking-row { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 0.85rem; color: #aaa; flex-wrap: wrap; }
         .actual-input-box { background: #11131c; border: 1px solid #555; color: #fff; width: 70px; padding: 4px 6px; border-radius: 4px; text-align: center; font-family: sans-serif; }
         
-        /* QUALITY BADGE */
         .quality-badge { background: #ffd700; color: #000; padding: 2px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
 
         .todo-actions { display: flex; align-items: center; gap: 8px; }
@@ -107,7 +123,6 @@
 
         /* WEAKPOINTS SECTION */
         .weakpoints-header { width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px; font-size: 2.5rem; color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); }
-        
         .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
         .wp-input-group select { flex: 1; }
         .wp-input-group input { flex: 2; }
@@ -116,7 +131,7 @@
         .wp-subject { font-family: sans-serif; font-size: 0.8rem; color: #ff3366; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
         .wp-text { font-size: 1.1rem; }
         
-        /* STOPWATCH (FLOATING) */
+        /* STOPWATCH */
         .stopwatch-widget {
             position: fixed; bottom: 20px; right: 20px; background: rgba(15, 17, 26, 0.95); border: 2px solid #555;
             padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 1000; text-align: center; backdrop-filter: blur(5px);
@@ -140,6 +155,9 @@
     <section class="countdown-banner">
         <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
         <div id="timer">00d : 00h : 00m : 00s</div>
+        
+        <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
+        <div class="extended-exams" id="extended-exams-panel"></div>
     </section>
 
     <section class="leaderboard">
@@ -159,7 +177,6 @@
     </section>
 
     <main class="arena">
-        <!-- MOHAMED COLUMN -->
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
             <div class="todo-form">
@@ -170,7 +187,6 @@
             <ul class="todo-list" id="list-mohamed"></ul>
         </div>
 
-        <!-- MOAZ COLUMN -->
         <div class="player-column moaz">
             <h2>Moaz</h2>
             <div class="todo-form">
@@ -184,7 +200,6 @@
 
     <h2 class="weakpoints-header">🎯 WEAKPOINT ANNIHILATION ZONE</h2>
     <main class="arena">
-        <!-- MOHAMED WEAKPOINTS -->
         <div class="player-column mohamed">
             <div class="wp-input-group">
                 <select id="wp-subj-mohamed">
@@ -199,7 +214,6 @@
             <ul class="weakpoint-list" id="wp-list-mohamed"></ul>
         </div>
 
-        <!-- MOAZ WEAKPOINTS -->
         <div class="player-column moaz">
             <div class="wp-input-group">
                 <select id="wp-subj-moaz">
@@ -215,7 +229,6 @@
         </div>
     </main>
 
-    <!-- LOCAL STOPWATCH WIDGET -->
     <div class="stopwatch-widget">
         <h3>⏱️ Personal Focus Timer</h3>
         <div class="sw-time" id="sw-display">00:00:00</div>
@@ -226,7 +239,6 @@
         </div>
     </div>
 
-    <!-- FIREBASE CLOUD LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -246,7 +258,6 @@
         const db = getDatabase(app);
         const stateRef = ref(db, 'hustleState');
 
-        // EXAMS COUNTDOWN
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
             { name: "German", date: new Date("2026-06-23T09:00:00").getTime() },
@@ -257,25 +268,51 @@
             { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
+        // RE-ADDED TOGGLE EXAMS FUNCTION
+        window.toggleExamsPanel = function() {
+            const panel = document.getElementById("extended-exams-panel");
+            panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
+        };
+
         setInterval(() => {
             const now = new Date().getTime();
-            let nextExam = exams.find(e => e.date > now);
+            let nextExam = null;
+            let otherExams = [];
+
+            for (let exam of exams) {
+                if (exam.date > now) {
+                    if (!nextExam) nextExam = exam;
+                    else otherExams.push(exam);
+                }
+            }
             
+            const titleEl = document.getElementById("exam-title");
+            const timerEl = document.getElementById("timer");
+            const extendedPanel = document.getElementById("extended-exams-panel");
+
             if (nextExam) {
-                document.getElementById("exam-title").innerText = `NEXT TARGET: ${nextExam.name}`;
+                titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
                 const d = nextExam.date - now;
                 const days = Math.floor(d / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((d % (1000 * 60)) / 1000);
-                document.getElementById("timer").innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
+                timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
+                
+                // POPULATE EXTENDED PANEL
+                extendedPanel.innerHTML = otherExams.map(exam => {
+                    const diffMs = exam.date - now;
+                    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                    return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
+                }).join('');
+
             } else {
-                document.getElementById("exam-title").innerText = "ALL EXAMS COMPLETED!";
-                document.getElementById("timer").innerText = "00d : 00h : 00m : 00s";
+                titleEl.innerText = "ALL EXAMS COMPLETED!";
+                timerEl.innerText = "00d : 00h : 00m : 00s";
+                extendedPanel.innerHTML = "";
             }
         }, 1000);
 
-        // --- GLOBAL STATE & CLOUD SYNC ---
         let localState = { 
             scores: { mohamed: 0, moaz: 0 }, 
             todos: { mohamed: [], moaz: [] },
@@ -296,7 +333,6 @@
 
         function saveToCloud() { set(stateRef, localState); }
 
-        // --- TODO LOGIC ---
         window.addTodo = function(player) {
             const nameInput = document.getElementById(`input-${player}-task`);
             const estInput = document.getElementById(`input-${player}-est`);
@@ -319,7 +355,6 @@
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
                 if (!todo.checked) {
-                    // Completing task - Ask for quality
                     let q = prompt("On a scale from 1-10, How good did you study that? (1 = Trash, 10 = Perfect)");
                     let score = parseInt(q);
                     if (isNaN(score) || score < 1) score = 1;
@@ -328,7 +363,6 @@
                     todo.quality = score;
                     todo.checked = true;
                 } else {
-                    // Unchecking task
                     todo.checked = false;
                     todo.quality = 0;
                 }
@@ -341,27 +375,19 @@
             saveToCloud();
         };
 
-        // FIXED: Using onblur to prevent cursor jumping
         window.updateActualTime = function(player, id, inputVal) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
-                todo.act = parseFloat(inputVal) || 0;
+                todo.act = inputVal === '' ? '' : parseFloat(inputVal);
                 saveToCloud(); 
             }
         };
 
-        // --- WEAKPOINTS LOGIC ---
         window.addWeakpoint = function(player) {
             const subj = document.getElementById(`wp-subj-${player}`).value;
             const textInput = document.getElementById(`wp-text-${player}`);
-            
             if (!textInput.value.trim()) return alert("Enter a weakpoint!");
-
-            localState.weakpoints[player].push({
-                id: Date.now(),
-                subject: subj,
-                text: textInput.value.trim()
-            });
+            localState.weakpoints[player].push({ id: Date.now(), subject: subj, text: textInput.value.trim() });
             textInput.value = '';
             saveToCloud();
         };
@@ -374,7 +400,7 @@
             }
         };
 
-        // --- END OF DAY LOGIC ---
+        // --- UPDATED END OF DAY SCORING LOGIC ---
         window.endTheDay = function() {
             if (!confirm("Process daily tallies for BOTH players?")) return;
 
@@ -382,28 +408,52 @@
                 const tasks = localState.todos[player];
                 const totalTasks = tasks.length;
                 
-                if (totalTasks === 0) return; // Do nothing if no tasks
+                if (totalTasks === 0) return;
 
                 const allChecked = tasks.every(t => t.checked);
                 
                 if (allChecked) {
-                    // Calculate Average Quality
-                    let totalQuality = 0;
-                    tasks.forEach(t => totalQuality += t.quality);
-                    let avgQuality = totalQuality / totalTasks;
+                    // Anti-Cheat: Make sure Actual hours are filled out
+                    const missedActuals = tasks.some(t => t.act === '' || t.act <= 0);
+                    if (missedActuals) {
+                        alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0! You must enter real times before ending the day.`);
+                        return; // Stops the function so they don't lose tasks or points
+                    }
 
+                    let totalEst = 0;
+                    let totalAct = 0;
+                    let totalQuality = 0;
+
+                    tasks.forEach(t => {
+                        totalEst += t.est;
+                        totalAct += t.act;
+                        totalQuality += t.quality;
+                    });
+
+                    let avgQuality = totalQuality / totalTasks;
                     let pointsGained = 1; // Base point for finishing
-                    
-                    // Bonus point for high quality
+                    let bonusMessages = [];
+
+                    // BONUS 1: Quality Check
                     if (avgQuality >= 9) {
                         pointsGained += 1;
-                        alert(`🔥 ${player.toUpperCase()} hit an average study quality of ${avgQuality.toFixed(1)}/10! (+1 Bonus Point)`);
+                        bonusMessages.push(`⭐ Quality Master (Avg ${avgQuality.toFixed(1)}/10) -> +1 Point`);
+                    }
+
+                    // BONUS 2: Speed / Beating the Clock Check
+                    if (totalAct < totalEst) {
+                        pointsGained += 1;
+                        bonusMessages.push(`⚡ Speed Demon (${totalAct}h actual < ${totalEst}h est) -> +1 Point`);
                     }
 
                     localState.scores[player] += pointsGained;
-                    alert(`✅ ${player.toUpperCase()} completed all tasks. (+${pointsGained} Total Points)`);
+                    
+                    let finalAlert = `✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n`;
+                    if (bonusMessages.length > 0) finalAlert += bonusMessages.join("\n");
+                    alert(finalAlert);
+
                 } else {
-                    // THE ONLY CONDITION TO LOSE POINTS
+                    // THE ONLY WAY TO LOSE POINTS
                     localState.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
@@ -415,13 +465,11 @@
             saveToCloud();
         };
 
-        // --- DOM RENDERER ---
         function updateDOM() {
             document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
             document.getElementById('score-moaz').innerText = localState.scores.moaz;
 
             ['mohamed', 'moaz'].forEach(player => {
-                // Render Todos
                 const listEl = document.getElementById(`list-${player}`);
                 if (listEl) {
                     listEl.innerHTML = '';
@@ -438,7 +486,6 @@
                                     <div class="time-tracking-row">
                                         <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
                                         <span>| Actual Hrs:</span>
-                                        <!-- Changed oninput to onblur to fix cursor bug -->
                                         <input type="number" step="0.5"
                                             class="actual-input-box" 
                                             placeholder="Hrs" 
@@ -457,7 +504,6 @@
                     });
                 }
 
-                // Render Weakpoints
                 const wpListEl = document.getElementById(`wp-list-${player}`);
                 if (wpListEl) {
                     wpListEl.innerHTML = '';
@@ -477,7 +523,6 @@
         }
     </script>
 
-    <!-- LOCAL STOPWATCH SCRIPT -->
     <script>
         let swTimer;
         let swSeconds = 0;
