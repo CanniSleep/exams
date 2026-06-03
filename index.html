@@ -46,7 +46,6 @@
         .countdown-banner h3 { font-size: 1.2rem; color: #00ffcc; font-family: sans-serif; text-transform: uppercase; margin-bottom: 5px; }
         #timer { font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px var(--countdown-color); margin-bottom: 15px; }
 
-        /* RE-ADDED EXAMS PANEL CSS */
         .see-all-btn {
             background: transparent; border: 1px solid var(--countdown-color); color: #fff;
             padding: 8px 16px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold;
@@ -69,8 +68,18 @@
         .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); box-shadow: 0 0 15px var(--mohamed-glow); }
         .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); box-shadow: 0 0 15px var(--moaz-glow); }
 
-        button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; margin-top: 25px; transition: transform 0.2s; }
+        .leaderboard-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        
+        button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; transition: transform 0.2s; }
         button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
+
+        /* RESET BUTTON CSS */
+        button.reset-data-btn {
+            background: transparent; color: var(--danger-color); border: 2px solid var(--danger-color);
+            padding: 8px 20px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: sans-serif;
+            font-weight: bold; transition: all 0.2s; margin-top: 10px;
+        }
+        button.reset-data-btn:hover { background: var(--danger-color); color: #fff; box-shadow: 0 0 10px rgba(231, 76, 60, 0.6); }
 
         /* ARENA & COLUMNS */
         .arena { display: flex; gap: 30px; width: 100%; max-width: 1100px; flex-wrap: wrap; margin-bottom: 40px; }
@@ -173,7 +182,11 @@
                 <div id="score-moaz">0</div>
             </div>
         </div>
-        <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+        
+        <div class="leaderboard-actions">
+            <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+            <button class="reset-data-btn" onclick="resetAllData()">⚠️ Reset All Data to Zero ⚠️</button>
+        </div>
     </section>
 
     <main class="arena">
@@ -229,6 +242,7 @@
         </div>
     </main>
 
+    <!-- LOCAL STOPWATCH WIDGET -->
     <div class="stopwatch-widget">
         <h3>⏱️ Personal Focus Timer</h3>
         <div class="sw-time" id="sw-display">00:00:00</div>
@@ -239,6 +253,7 @@
         </div>
     </div>
 
+    <!-- FIREBASE CLOUD LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -268,7 +283,6 @@
             { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
-        // RE-ADDED TOGGLE EXAMS FUNCTION
         window.toggleExamsPanel = function() {
             const panel = document.getElementById("extended-exams-panel");
             panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
@@ -299,17 +313,23 @@
                 const seconds = Math.floor((d % (1000 * 60)) / 1000);
                 timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
                 
-                // POPULATE EXTENDED PANEL
-                extendedPanel.innerHTML = otherExams.map(exam => {
+                // BUG FIX: Generate HTML first, then only update if it's different!
+                const newExtendedHTML = otherExams.map(exam => {
                     const diffMs = exam.date - now;
                     const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
                     return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
                 }).join('');
 
+                if (extendedPanel.innerHTML !== newExtendedHTML) {
+                    extendedPanel.innerHTML = newExtendedHTML;
+                }
+
             } else {
                 titleEl.innerText = "ALL EXAMS COMPLETED!";
                 timerEl.innerText = "00d : 00h : 00m : 00s";
-                extendedPanel.innerHTML = "";
+                if (extendedPanel.innerHTML !== "") {
+                    extendedPanel.innerHTML = "";
+                }
             }
         }, 1000);
 
@@ -332,6 +352,20 @@
         });
 
         function saveToCloud() { set(stateRef, localState); }
+
+        window.resetAllData = function() {
+            if(confirm("🚨 WARNING: Are you 100% sure you want to WIPE EVERYTHING? Scores, tasks, weakpoints - all back to zero. This cannot be undone!")) {
+                if(confirm("Double checking: WIPE ALL DATA for Mohamed and Moaz?")) {
+                    localState = { 
+                        scores: { mohamed: 0, moaz: 0 }, 
+                        todos: { mohamed: [], moaz: [] },
+                        weakpoints: { mohamed: [], moaz: [] }
+                    };
+                    saveToCloud();
+                    alert("Database completely nuked. Starting fresh!");
+                }
+            }
+        };
 
         window.addTodo = function(player) {
             const nameInput = document.getElementById(`input-${player}-task`);
@@ -400,7 +434,6 @@
             }
         };
 
-        // --- UPDATED END OF DAY SCORING LOGIC ---
         window.endTheDay = function() {
             if (!confirm("Process daily tallies for BOTH players?")) return;
 
@@ -413,11 +446,10 @@
                 const allChecked = tasks.every(t => t.checked);
                 
                 if (allChecked) {
-                    // Anti-Cheat: Make sure Actual hours are filled out
                     const missedActuals = tasks.some(t => t.act === '' || t.act <= 0);
                     if (missedActuals) {
                         alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0! You must enter real times before ending the day.`);
-                        return; // Stops the function so they don't lose tasks or points
+                        return; 
                     }
 
                     let totalEst = 0;
@@ -431,16 +463,14 @@
                     });
 
                     let avgQuality = totalQuality / totalTasks;
-                    let pointsGained = 1; // Base point for finishing
+                    let pointsGained = 1; 
                     let bonusMessages = [];
 
-                    // BONUS 1: Quality Check
                     if (avgQuality >= 9) {
                         pointsGained += 1;
                         bonusMessages.push(`⭐ Quality Master (Avg ${avgQuality.toFixed(1)}/10) -> +1 Point`);
                     }
 
-                    // BONUS 2: Speed / Beating the Clock Check
                     if (totalAct < totalEst) {
                         pointsGained += 1;
                         bonusMessages.push(`⚡ Speed Demon (${totalAct}h actual < ${totalEst}h est) -> +1 Point`);
@@ -453,12 +483,10 @@
                     alert(finalAlert);
 
                 } else {
-                    // THE ONLY WAY TO LOSE POINTS
                     localState.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
 
-                // Wipe tasks for the next day
                 localState.todos[player] = []; 
             });
 
@@ -523,6 +551,7 @@
         }
     </script>
 
+    <!-- LOCAL STOPWATCH SCRIPT -->
     <script>
         let swTimer;
         let swSeconds = 0;
