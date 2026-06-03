@@ -73,7 +73,6 @@
         button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; transition: transform 0.2s; }
         button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
 
-        /* RESET BUTTON CSS */
         button.reset-data-btn {
             background: transparent; color: var(--danger-color); border: 2px solid var(--danger-color);
             padding: 8px 20px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: sans-serif;
@@ -123,7 +122,7 @@
         .time-tracking-row { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 0.85rem; color: #aaa; flex-wrap: wrap; }
         .actual-input-box { background: #11131c; border: 1px solid #555; color: #fff; width: 70px; padding: 4px 6px; border-radius: 4px; text-align: center; font-family: sans-serif; }
         
-        .quality-badge { background: #ffd700; color: #000; padding: 2px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+        .quality-badge { color: #000; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; font-family: sans-serif; }
 
         .todo-actions { display: flex; align-items: center; gap: 8px; }
         .checkbox-btn, .delete-btn { border: none; color: white; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; }
@@ -242,7 +241,6 @@
         </div>
     </main>
 
-    <!-- LOCAL STOPWATCH WIDGET -->
     <div class="stopwatch-widget">
         <h3>⏱️ Personal Focus Timer</h3>
         <div class="sw-time" id="sw-display">00:00:00</div>
@@ -253,7 +251,6 @@
         </div>
     </div>
 
-    <!-- FIREBASE CLOUD LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -313,7 +310,6 @@
                 const seconds = Math.floor((d % (1000 * 60)) / 1000);
                 timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
                 
-                // BUG FIX: Generate HTML first, then only update if it's different!
                 const newExtendedHTML = otherExams.map(exam => {
                     const diffMs = exam.date - now;
                     const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
@@ -379,26 +375,26 @@
                 est: parseFloat(estInput.value),
                 act: '', 
                 checked: false,
-                quality: 0
+                quality: ''
             });
             nameInput.value = ''; estInput.value = '';
             saveToCloud();
         };
 
+        // --- UPDATED CHOICE PROMPT LOGIC ---
         window.toggleTodo = function(player, id) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
                 if (!todo.checked) {
-                    let q = prompt("On a scale from 1-10, How good did you study that? (1 = Trash, 10 = Perfect)");
-                    let score = parseInt(q);
-                    if (isNaN(score) || score < 1) score = 1;
-                    if (score > 10) score = 10;
+                    let choice = prompt("ذاكرت ولا كروت؟ 🤔\n\n1 - ذاكرت (بجد وعملت اللي عليا)\n2 - كروت (تأدية واجب وخلاص)");
+                    if (choice === null) return; 
                     
-                    todo.quality = score;
+                    let selection = (choice.trim() === "1") ? "ذاكرت" : "كروت";
+                    todo.quality = selection;
                     todo.checked = true;
                 } else {
                     todo.checked = false;
-                    todo.quality = 0;
+                    todo.quality = '';
                 }
                 saveToCloud();
             }
@@ -434,6 +430,7 @@
             }
         };
 
+        // --- CALCULATE POINTS WITH NEUTRAL QUALITY SCALE ---
         window.endTheDay = function() {
             if (!confirm("Process daily tallies for BOTH players?")) return;
 
@@ -454,22 +451,14 @@
 
                     let totalEst = 0;
                     let totalAct = 0;
-                    let totalQuality = 0;
 
                     tasks.forEach(t => {
                         totalEst += t.est;
                         totalAct += t.act;
-                        totalQuality += t.quality;
                     });
 
-                    let avgQuality = totalQuality / totalTasks;
                     let pointsGained = 1; 
                     let bonusMessages = [];
-
-                    if (avgQuality >= 9) {
-                        pointsGained += 1;
-                        bonusMessages.push(`⭐ Quality Master (Avg ${avgQuality.toFixed(1)}/10) -> +1 Point`);
-                    }
 
                     if (totalAct < totalEst) {
                         pointsGained += 1;
@@ -502,14 +491,20 @@
                 if (listEl) {
                     listEl.innerHTML = '';
                     localState.todos[player].forEach(todo => {
-                        const qualityBadge = todo.checked ? `<span class="quality-badge">⭐ ${todo.quality}/10</span>` : '';
+                        // Color-coded badge markers based on selection
+                        let badgeHTML = '';
+                        if (todo.checked && todo.quality) {
+                            let bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
+                            let glow = todo.quality === "ذاكرت" ? "rgba(46, 204, 113, 0.4)" : "rgba(243, 156, 18, 0.4)";
+                            badgeHTML = `<span class="quality-badge" style="background:${bg}; box-shadow: 0 0 8px ${glow};">${todo.quality}</span>`;
+                        }
                         
                         listEl.innerHTML += `
                             <li class="todo-item ${todo.checked ? 'checked' : ''}">
                                 <div class="todo-info">
                                     <div style="display:flex; align-items:center;">
                                         <span class="todo-text">${todo.task}</span>
-                                        ${qualityBadge}
+                                        ${badgeHTML}
                                     </div>
                                     <div class="time-tracking-row">
                                         <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
@@ -551,7 +546,6 @@
         }
     </script>
 
-    <!-- LOCAL STOPWATCH SCRIPT -->
     <script>
         let swTimer;
         let swSeconds = 0;
