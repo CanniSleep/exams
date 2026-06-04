@@ -120,11 +120,13 @@
 
         /* HALL OF QUESTIONS STYLES */
         .hoq-header { font-size: 2.5rem; color: var(--hoq-color); text-shadow: 0 0 15px rgba(155, 89, 182, 0.5); margin-bottom: 20px; }
-        .hoq-upload-card { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 100%; max-width: 700px; border: 2px dashed var(--hoq-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .hoq-upload-card { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 100%; max-width: 700px; border: 2px dashed var(--hoq-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; position: relative; }
         .hoq-upload-card input[type="file"] { background: #111; padding: 10px; }
         .hoq-upload-card textarea { resize: vertical; min-height: 80px; }
         .hoq-upload-card button { background: var(--hoq-color); color: #fff; border: none; padding: 12px; font-size: 1.2rem; cursor: pointer; border-radius: 6px; font-family: sans-serif; font-weight: bold; }
         
+        .paste-indicator { background: #2ecc71; color: #000; padding: 5px 10px; border-radius: 4px; font-family: sans-serif; font-size: 0.8rem; font-weight: bold; position: absolute; top: -10px; right: 20px; display: none; }
+
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
         .hoq-card { background: #202231; border-radius: 10px; padding: 15px; border: 1px solid #444; display: flex; flex-direction: column; gap: 10px; }
         .hoq-card img { width: 100%; height: auto; border-radius: 6px; background: #000; }
@@ -135,12 +137,16 @@
         .widgets-container { position: fixed; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 1000; pointer-events: none; }
         .widgets-container > * { pointer-events: auto; }
 
+        /* LEFT SIDE WIDGETS STACK */
+        .left-widgets { display: flex; flex-direction: column; align-items: flex-start; gap: 15px; pointer-events: none; }
+        .left-widgets > * { pointer-events: auto; }
+
         /* WIDGET: Notepad */
         .notepad-wrapper { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
         .notepad-icon { background: #f1c40f; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid #d4ac0d; transition: transform 0.2s; }
         .notepad-icon:hover { transform: scale(1.1); }
         .notepad-panel { background: #fcf3cf; border-radius: 12px; width: 280px; height: 350px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; flex-direction: column; border: 1px solid #d4ac0d; position: relative; }
-        .notepad-panel::before { content: ''; position: absolute; top: -10px; left: 20px; width: 100px; height: 20px; background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .notepad-panel::before { content: ''; position: absolute; bottom: -10px; left: 20px; width: 20px; height: 20px; background: #fcf3cf; transform: rotate(45deg); border-right: 1px solid #d4ac0d; border-bottom: 1px solid #d4ac0d; }
         .notepad-panel h3 { color: #b7950b; font-family: sans-serif; font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
         .notepad-panel textarea { flex-grow: 1; background: transparent; border: none; outline: none; color: #333; font-family: 'Comic Sans MS', sans-serif, Arial; font-size: 1rem; resize: none; font-weight: normal; }
 
@@ -260,6 +266,8 @@
         <h2 class="hoq-header">🏛️ HALL OF QUESTIONS 🏛️</h2>
         
         <div class="hoq-upload-card">
+            <div class="paste-indicator" id="paste-indicator">📸 Image Ready!</div>
+            <p style="font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Select an image OR just hit <strong>Ctrl+V</strong> anywhere to paste a screenshot.</p>
             <input type="file" id="hoq-file" accept="image/*">
             <textarea id="hoq-answer-input" placeholder="Type the solution/answer here... (It will be hidden behind a spoiler button)"></textarea>
             <button onclick="uploadQuestion()">UPLOAD TO HALL</button>
@@ -274,25 +282,31 @@
     <!-- ================= FLOATING BOTTOM WIDGETS ================= -->
     <div class="widgets-container">
         
-        <!-- NOTEPAD WIDGET -->
-        <div class="notepad-wrapper">
-            <div class="notepad-panel" id="notepad-panel">
-                <h3>Scratchpad</h3>
-                <textarea id="notepad-text" placeholder="Write quick notes, formulas, or rants here..."></textarea>
+        <!-- LEFT SIDE STACK (Bot above Note) -->
+        <div class="left-widgets">
+            
+            <!-- VID TO MODEL ANSWER BOT -->
+            <div class="vidbot-wrapper">
+                <div class="vidbot-header">🤖 Vid -> Answer Key Bot</div>
+                <div class="vidbot-input-group">
+                    <input type="text" id="vidbot-url" placeholder="Paste YouTube Exam Link...">
+                    <button onclick="scanVideo()">SCAN</button>
+                </div>
+                <div class="vidbot-console" id="vidbot-console"></div>
             </div>
-            <div class="notepad-icon" onclick="toggleNotepad()">📝</div>
+
+            <!-- NOTEPAD WIDGET -->
+            <div class="notepad-wrapper">
+                <div class="notepad-panel" id="notepad-panel">
+                    <h3>Scratchpad</h3>
+                    <textarea id="notepad-text" placeholder="Write quick notes, formulas, or rants here..."></textarea>
+                </div>
+                <div class="notepad-icon" onclick="toggleNotepad()">📝</div>
+            </div>
+
         </div>
 
-        <!-- VID TO MODEL ANSWER BOT -->
-        <div class="vidbot-wrapper">
-            <div class="vidbot-header">🤖 Vid -> Answer Key Bot</div>
-            <div class="vidbot-input-group">
-                <input type="text" id="vidbot-url" placeholder="Paste YouTube Exam Link...">
-                <button onclick="scanVideo()">SCAN</button>
-            </div>
-            <div class="vidbot-console" id="vidbot-console"></div>
-        </div>
-
+        <!-- RIGHT SIDE -->
         <!-- STOPWATCH WIDGET -->
         <div class="stopwatch-widget">
             <h3>⏱️ Focus Timer</h3>
@@ -318,6 +332,31 @@
             document.getElementById('tab-arena').classList.toggle('active', view === 'arena');
             document.getElementById('tab-hoq').classList.toggle('active', view === 'hoq');
         }
+    </script>
+
+    <!-- CLIPBOARD PASTE LOGIC -->
+    <script>
+        document.addEventListener('paste', function(e) {
+            const fileInput = document.getElementById('hoq-file');
+            const pasteIndicator = document.getElementById('paste-indicator');
+            
+            if (e.clipboardData && e.clipboardData.files.length > 0) {
+                const file = e.clipboardData.files[0];
+                if (file.type.startsWith('image/')) {
+                    // Update the file input with the pasted image
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    
+                    // Show a quick visual confirmation
+                    pasteIndicator.style.display = 'block';
+                    setTimeout(() => { pasteIndicator.style.display = 'none'; }, 3000);
+                    
+                    // If user is not currently in HoQ view, maybe auto-switch them?
+                    // toggleView('hoq'); // Uncomment if you want paste to force open the HoQ tab
+                }
+            }
+        });
     </script>
 
     <!-- NOTEPAD LOGIC -->
