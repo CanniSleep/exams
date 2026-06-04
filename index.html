@@ -249,6 +249,7 @@
         </div>
     </main>
 
+    <!-- ROBUST STOPWATCH WIDGET -->
     <div class="stopwatch-widget">
         <h3>⏱️ Personal Focus Timer</h3>
         <div class="sw-time" id="sw-display">00:00:00</div>
@@ -358,7 +359,7 @@
         function saveToCloud() { set(stateRef, localState); }
 
         window.resetAllData = function() {
-            if(confirm("🚨 WARNING: Are you 100% sure you want to WIPE EVERYTHING? Scores, tasks, weakpoints - all back to zero. This cannot be undone!")) {
+            if(confirm("🚨 WARNING: Are you 100% sure you want to WIPE EVERYTHING? Scores, tasks, weakpoints - all back to zero.")) {
                 if(confirm("Double checking: WIPE ALL DATA for Mohamed and Moaz?")) {
                     localState = { 
                         scores: { mohamed: 0, moaz: 0 }, 
@@ -395,7 +396,6 @@
                 if (!todo.checked) {
                     let choice = prompt("ذاكرت ولا كروت؟ 🤔\n\n1 - ذاكرت (بجد وعملت اللي عليا)\n2 - كروت (تأدية واجب وخلاص)");
                     if (choice === null) return; 
-                    
                     let selection = (choice.trim() === "1") ? "ذاكرت" : "كروت";
                     todo.quality = selection;
                     todo.checked = true;
@@ -442,49 +442,27 @@
 
             ['mohamed', 'moaz'].forEach(player => {
                 const tasks = localState.todos[player];
-                const totalTasks = tasks.length;
-                
-                if (totalTasks === 0) return;
+                if (tasks.length === 0) return;
 
                 const allChecked = tasks.every(t => t.checked);
-                
                 if (allChecked) {
                     const missedActuals = tasks.some(t => t.act === '' || t.act <= 0);
                     if (missedActuals) {
-                        alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0! You must enter real times before ending the day.`);
+                        alert(`⚠️ ${player.toUpperCase()} missed an Actual Time!`);
                         return; 
                     }
 
-                    let totalEst = 0;
-                    let totalAct = 0;
+                    let totalEst = tasks.reduce((s, t) => s + t.est, 0);
+                    let totalAct = tasks.reduce((s, t) => s + t.act, 0);
+                    let points = 1; 
 
-                    tasks.forEach(t => {
-                        totalEst += t.est;
-                        totalAct += t.act;
-                    });
-
-                    let pointsGained = 1; 
-                    let bonusMessages = [];
-
-                    if (totalAct < totalEst) {
-                        pointsGained += 1;
-                        bonusMessages.push(`⚡ Speed Demon (${totalAct}h actual < ${totalEst}h est) -> +1 Point`);
-                    }
-
-                    localState.scores[player] += pointsGained;
-                    
-                    let finalAlert = `✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n`;
-                    if (bonusMessages.length > 0) finalAlert += bonusMessages.join("\n");
-                    alert(finalAlert);
-
+                    if (totalAct < totalEst) points += 1;
+                    localState.scores[player] += points;
                 } else {
                     localState.scores[player] -= 1;
-                    alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
-
                 localState.todos[player] = []; 
             });
-
             saveToCloud();
         };
 
@@ -493,103 +471,86 @@
             document.getElementById('score-moaz').innerText = localState.scores.moaz;
 
             ['mohamed', 'moaz'].forEach(player => {
-                const listEl = document.getElementById(`list-${player}`);
-                const statsEl = document.getElementById(`stats-${player}`);
-                
-                // Calculate live totals for the counter row
                 const currentTasks = localState.todos[player];
-                const totalTasksNum = currentTasks.length;
-                const totalEstHours = currentTasks.reduce((sum, item) => sum + (parseFloat(item.est) || 0), 0);
+                const statsEl = document.getElementById(`stats-${player}`);
+                const totalEst = currentTasks.reduce((s, i) => s + (parseFloat(i.est) || 0), 0);
 
-                // Update the counter text
-                if (statsEl) {
-                    statsEl.innerHTML = `Tasks: <strong>${totalTasksNum}</strong> | Total Est: <strong>${totalEstHours} Hrs</strong>`;
-                }
+                if (statsEl) statsEl.innerHTML = `Tasks: <strong>${currentTasks.length}</strong> | Total Est: <strong>${totalEst} Hrs</strong>`;
 
+                const listEl = document.getElementById(`list-${player}`);
                 if (listEl) {
                     listEl.innerHTML = '';
                     currentTasks.forEach(todo => {
-                        let badgeHTML = '';
+                        let badge = '';
                         if (todo.checked && todo.quality) {
                             let bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
-                            let glow = todo.quality === "ذاكرت" ? "rgba(46, 204, 113, 0.4)" : "rgba(243, 156, 18, 0.4)";
-                            badgeHTML = `<span class="quality-badge" style="background:${bg}; box-shadow: 0 0 8px ${glow};">${todo.quality}</span>`;
+                            badge = `<span class="quality-badge" style="background:${bg};">${todo.quality}</span>`;
                         }
-                        
                         listEl.innerHTML += `
                             <li class="todo-item ${todo.checked ? 'checked' : ''}">
                                 <div class="todo-info">
-                                    <div style="display:flex; align-items:center;">
-                                        <span class="todo-text">${todo.task}</span>
-                                        ${badgeHTML}
-                                    </div>
+                                    <div style="display:flex; align-items:center;"><span class="todo-text">${todo.task}</span>${badge}</div>
                                     <div class="time-tracking-row">
                                         <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
-                                        <span>| Actual Hrs:</span>
-                                        <input type="number" step="0.5"
-                                            class="actual-input-box" 
-                                            placeholder="Hrs" 
-                                            value="${todo.act}" 
-                                            onblur="updateActualTime('${player}', ${todo.id}, this.value)">
+                                        <input type="number" step="0.5" class="actual-input-box" value="${todo.act}" onblur="updateActualTime('${player}', ${todo.id}, this.value)">
                                     </div>
                                 </div>
                                 <div class="todo-actions">
-                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
-                                        ${todo.checked ? '↩️' : '✅'}
-                                    </button>
+                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">${todo.checked ? '↩️' : '✅'}</button>
                                     <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
                                 </div>
-                            </li>
-                        `;
+                            </li>`;
                     });
                 }
-
                 const wpListEl = document.getElementById(`wp-list-${player}`);
                 if (wpListEl) {
                     wpListEl.innerHTML = '';
                     localState.weakpoints[player].forEach(wp => {
-                        wpListEl.innerHTML += `
-                            <li class="wp-item">
-                                <div>
-                                    <div class="wp-subject">${wp.subject}</div>
-                                    <div class="wp-text">${wp.text}</div>
-                                </div>
-                                <button class="checkbox-btn" onclick="eliminateWeakpoint('${player}', ${wp.id})">💥 Fix</button>
-                            </li>
-                        `;
+                        wpListEl.innerHTML += `<li class="wp-item"><div><div class="wp-subject">${wp.subject}</div><div class="wp-text">${wp.text}</div></div><button class="checkbox-btn" onclick="eliminateWeakpoint('${player}', ${wp.id})">💥 Fix</button></li>`;
                     });
                 }
             });
         }
     </script>
 
+    <!-- ROBUST TIMESTAMP-BASED STOPWATCH -->
     <script>
-        let swTimer;
-        let swSeconds = 0;
+        let swInterval;
+        let startTime;
+        let accumulatedTime = 0; // ms
         let isRunning = false;
 
         function updateSWDisplay() {
-            const h = Math.floor(swSeconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((swSeconds % 3600) / 60).toString().padStart(2, '0');
-            const s = (swSeconds % 60).toString().padStart(2, '0');
+            let totalMs = accumulatedTime;
+            if (isRunning) totalMs += Date.now() - startTime;
+            
+            const totalSec = Math.floor(totalMs / 1000);
+            const h = Math.floor(totalSec / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSec % 3600) / 60).toString().padStart(2, '0');
+            const s = (totalSec % 60).toString().padStart(2, '0');
             document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
         }
 
         function startTimer() {
             if (!isRunning) {
                 isRunning = true;
-                swTimer = setInterval(() => { swSeconds++; updateSWDisplay(); }, 1000);
+                startTime = Date.now();
+                swInterval = setInterval(updateSWDisplay, 1000);
             }
         }
 
         function pauseTimer() {
-            isRunning = false;
-            clearInterval(swTimer);
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(swInterval);
+                accumulatedTime += Date.now() - startTime;
+                updateSWDisplay();
+            }
         }
 
         function resetTimer() {
             pauseTimer();
-            swSeconds = 0;
+            accumulatedTime = 0;
             updateSWDisplay();
         }
     </script>
