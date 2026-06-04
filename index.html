@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +63,20 @@
         }
         .qotd-container h3 { color: #f1c40f; font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; }
         .qotd-content { display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: sans-serif; }
-        .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
+        /* FIXED: Bigger, better QOTD image */
+        .qotd-content .qotd-question-img {
+            max-width: 100%;
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 2px solid #f1c40f;
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+            background: #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qotd-content .qotd-question-img:hover { transform: scale(1.01); }
 
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; flex-wrap: wrap; gap: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
@@ -118,30 +132,178 @@
         .wp-item { background: #1a0f14; border: 1px solid #444; border-left: 5px solid #ff3366; }
         .wp-subject { font-family: sans-serif; font-size: 0.8rem; color: #ff3366; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
 
+        /* ======================= */
         /* HALL OF QUESTIONS STYLES */
+        /* ======================= */
         .hoq-header { font-size: 2.5rem; color: var(--hoq-color); text-shadow: 0 0 15px rgba(155, 89, 182, 0.5); margin-bottom: 20px; }
-        .hoq-upload-card { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 100%; max-width: 700px; border: 2px dashed var(--hoq-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; position: relative; }
-        .hoq-upload-card input[type="file"] { background: #111; padding: 10px; }
-        .hoq-upload-card textarea { resize: vertical; min-height: 80px; }
-        .hoq-upload-card button { background: var(--hoq-color); color: #fff; border: none; padding: 12px; font-size: 1.2rem; cursor: pointer; border-radius: 6px; font-family: sans-serif; font-weight: bold; }
         
-        .paste-indicator { background: #2ecc71; color: #000; padding: 5px 10px; border-radius: 4px; font-family: sans-serif; font-size: 0.8rem; font-weight: bold; position: absolute; top: -10px; right: 20px; display: none; }
+        /* NEW: Redesigned upload card with dual image fields */
+        .hoq-upload-card {
+            background: var(--card-bg); padding: 25px; border-radius: 12px;
+            width: 100%; max-width: 750px; border: 2px dashed var(--hoq-color);
+            margin-bottom: 30px; display: flex; flex-direction: column; gap: 18px;
+            position: relative;
+        }
+        .hoq-upload-card h3 {
+            color: var(--hoq-color); font-size: 1.2rem; text-align: center;
+            font-family: sans-serif; text-transform: uppercase; letter-spacing: 2px;
+        }
+        
+        /* Image input field (question or answer) */
+        .hoq-img-field {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .hoq-img-field label {
+            font-family: sans-serif; font-size: 0.85rem; color: #aaa;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+        .hoq-img-drop-zone {
+            background: #11131c; border: 2px dashed #444; border-radius: 8px;
+            padding: 20px; text-align: center; cursor: pointer; transition: all 0.25s;
+            position: relative; min-height: 90px; display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 8px;
+        }
+        .hoq-img-drop-zone:hover, .hoq-img-drop-zone.drag-over { border-color: var(--hoq-color); background: #1a1030; }
+        .hoq-img-drop-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        .hoq-img-drop-zone .drop-hint {
+            font-family: sans-serif; font-size: 0.85rem; color: #666; pointer-events: none;
+        }
+        .hoq-img-drop-zone .drop-icon { font-size: 1.8rem; pointer-events: none; }
+        .hoq-img-preview {
+            max-width: 100%; max-height: 200px; border-radius: 6px; object-fit: contain;
+            display: none; pointer-events: none;
+        }
+        .hoq-img-drop-zone.has-image .drop-icon,
+        .hoq-img-drop-zone.has-image .drop-hint { display: none; }
+        .hoq-img-drop-zone.has-image .hoq-img-preview { display: block; }
+        .hoq-clear-img {
+            background: var(--danger-color); color: #fff; border: none; padding: 4px 10px;
+            border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-family: sans-serif;
+            font-weight: bold; display: none; align-self: flex-start;
+        }
+        .hoq-img-field.has-image .hoq-clear-img { display: inline-block; }
 
+        /* Text answer field */
+        .hoq-upload-card textarea {
+            resize: vertical; min-height: 80px; width: 100%;
+            background: #11131c; border: 2px solid #444; color: #fff;
+        }
+        
+        .hoq-upload-card button.upload-btn {
+            background: var(--hoq-color); color: #fff; border: none; padding: 14px;
+            font-size: 1.2rem; cursor: pointer; border-radius: 6px;
+            font-family: sans-serif; font-weight: bold; transition: all 0.2s;
+        }
+        .hoq-upload-card button.upload-btn:hover { background: #b36ac9; transform: scale(1.02); }
+
+        .paste-indicator {
+            background: #2ecc71; color: #000; padding: 5px 10px; border-radius: 4px;
+            font-family: sans-serif; font-size: 0.8rem; font-weight: bold;
+            position: absolute; top: -10px; right: 20px; display: none;
+        }
+
+        /* HoQ Grid Cards */
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
         .hoq-card { background: #202231; border-radius: 10px; padding: 15px; border: 1px solid #444; display: flex; flex-direction: column; gap: 10px; }
-        .hoq-card img { width: 100%; height: auto; border-radius: 6px; background: #000; }
+        .hoq-card-label { font-family: sans-serif; font-size: 0.75rem; color: #777; text-transform: uppercase; font-weight: bold; }
+        .hoq-card img { width: 100%; height: auto; border-radius: 6px; background: #000; cursor: pointer; transition: opacity 0.2s; }
+        .hoq-card img:hover { opacity: 0.9; }
+        .hoq-no-img { font-family: sans-serif; font-size: 0.85rem; color: #555; padding: 10px; background: #111; border-radius: 6px; text-align: center; }
         .hoq-spoiler-btn { background: #444; color: #fff; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-family: sans-serif; font-weight: bold; }
-        .hoq-answer { background: #111; color: #00ffcc; padding: 10px; border-radius: 6px; font-family: sans-serif; font-size: 0.95rem; display: none; white-space: pre-wrap; }
-        
-        /* FLOATING WIDGETS (Bottom Row) */
+        .hoq-answer-reveal { background: #111; padding: 10px; border-radius: 6px; display: none; }
+        .hoq-answer-reveal img { width: 100%; height: auto; border-radius: 6px; margin-bottom: 8px; }
+        .hoq-answer-text { color: #00ffcc; font-family: sans-serif; font-size: 0.95rem; white-space: pre-wrap; }
+
+        /* Image Lightbox */
+        .lightbox-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999;
+            display: none; align-items: center; justify-content: center; cursor: zoom-out;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-overlay img { max-width: 95vw; max-height: 95vh; object-fit: contain; border-radius: 8px; }
+
+        /* ======================= */
+        /* VID BOT — REDESIGNED    */
+        /* ======================= */
+        .vidbot-wrapper {
+            background: rgba(10, 12, 22, 0.97); border: 2px solid #00f0ff; padding: 18px;
+            border-radius: 14px; box-shadow: 0 10px 40px rgba(0, 240, 255, 0.15);
+            width: 360px; backdrop-filter: blur(8px);
+        }
+        .vidbot-header {
+            font-family: sans-serif; font-size: 0.85rem; color: #00f0ff;
+            margin-bottom: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+        }
+        .vidbot-subheader {
+            font-family: sans-serif; font-size: 0.72rem; color: #556; margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .vidbot-input-group { display: flex; gap: 6px; margin-bottom: 10px; }
+        .vidbot-input-group input {
+            flex-grow: 1; padding: 9px; font-size: 0.82rem;
+            background: #0a0c16; border: 1px solid #1a3a44; color: #ccc; border-radius: 6px;
+        }
+        .vidbot-input-group input:focus { border-color: #00f0ff; outline: none; }
+        .vidbot-input-group button {
+            background: #00f0ff; color: #000; border: none; padding: 9px 14px;
+            font-weight: bold; cursor: pointer; border-radius: 6px; font-family: sans-serif;
+            font-size: 0.85rem; white-space: nowrap; transition: all 0.2s;
+        }
+        .vidbot-input-group button:hover { background: #33f4ff; }
+        .vidbot-input-group button:disabled { background: #2a4a4a; color: #555; cursor: not-allowed; }
+
+        /* Status bar */
+        .vidbot-status {
+            font-family: monospace; font-size: 0.78rem; color: #00f0ff;
+            background: #000d10; border: 1px solid #0a2a30; padding: 6px 10px;
+            border-radius: 4px; min-height: 28px; display: none;
+            align-items: center; gap: 6px; margin-bottom: 8px;
+        }
+        .vidbot-status.active { display: flex; }
+        .vidbot-spinner { width: 10px; height: 10px; border: 2px solid #00f0ff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Results pane */
+        .vidbot-results {
+            background: #000d10; border: 1px solid #0a2a30; border-radius: 8px;
+            padding: 12px; display: none; max-height: 320px; overflow-y: auto;
+            font-family: sans-serif; font-size: 0.85rem;
+        }
+        .vidbot-results.active { display: block; }
+        .vidbot-section-title {
+            color: #00f0ff; font-weight: bold; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+            border-bottom: 1px solid #0a3a40; padding-bottom: 4px;
+        }
+        .vidbot-mcq-row {
+            display: flex; gap: 8px; align-items: baseline;
+            padding: 4px 0; border-bottom: 1px solid #0a1a20; color: #ddd;
+        }
+        .vidbot-q-num { color: #00f0ff; font-weight: bold; min-width: 24px; }
+        .vidbot-answer { color: #00ffaa; font-weight: bold; min-width: 28px; }
+        .vidbot-q-text { color: #888; font-size: 0.78rem; flex: 1; }
+        .vidbot-essay-block {
+            background: #0a1520; border-radius: 4px; padding: 10px;
+            margin-bottom: 8px; border-left: 3px solid #9b59b6;
+        }
+        .vidbot-essay-q { color: #9b59b6; font-weight: bold; margin-bottom: 4px; }
+        .vidbot-essay-a { color: #ccc; line-height: 1.5; white-space: pre-wrap; font-size: 0.82rem; }
+        .vidbot-error { color: #e74c3c; font-family: sans-serif; font-size: 0.82rem; padding: 8px; background: #1a0a0a; border-radius: 4px; }
+        .vidbot-disclaimer {
+            color: #334; font-family: sans-serif; font-size: 0.7rem;
+            margin-top: 8px; line-height: 1.4; font-style: italic;
+        }
+
+
+        /* FLOATING WIDGETS */
         .widgets-container { position: fixed; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 1000; pointer-events: none; }
         .widgets-container > * { pointer-events: auto; }
-
-        /* LEFT SIDE WIDGETS STACK */
         .left-widgets { display: flex; flex-direction: column; align-items: flex-start; gap: 15px; pointer-events: none; }
         .left-widgets > * { pointer-events: auto; }
 
-        /* WIDGET: Notepad */
+        /* Notepad */
         .notepad-wrapper { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
         .notepad-icon { background: #f1c40f; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid #d4ac0d; transition: transform 0.2s; }
         .notepad-icon:hover { transform: scale(1.1); }
@@ -150,15 +312,7 @@
         .notepad-panel h3 { color: #b7950b; font-family: sans-serif; font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
         .notepad-panel textarea { flex-grow: 1; background: transparent; border: none; outline: none; color: #333; font-family: 'Comic Sans MS', sans-serif, Arial; font-size: 1rem; resize: none; font-weight: normal; }
 
-        /* WIDGET: Vid Bot */
-        .vidbot-wrapper { background: rgba(15, 17, 26, 0.95); border: 2px solid #00f0ff; padding: 15px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); width: 320px; backdrop-filter: blur(5px); text-align: center; }
-        .vidbot-header { font-family: sans-serif; font-size: 0.9rem; color: #00f0ff; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; }
-        .vidbot-input-group { display: flex; gap: 5px; margin-bottom: 10px; }
-        .vidbot-input-group input { flex-grow: 1; padding: 8px; font-size: 0.8rem; }
-        .vidbot-input-group button { background: #00f0ff; color: #000; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-family: sans-serif; }
-        .vidbot-console { background: #000; border: 1px solid #333; height: 100px; border-radius: 6px; padding: 10px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 0.8rem; color: #2ecc71; display: none; }
-
-        /* WIDGET: Stopwatch */
+        /* Stopwatch */
         .stopwatch-widget { background: rgba(15, 17, 26, 0.95); border: 2px solid #555; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; backdrop-filter: blur(5px); }
         .stopwatch-widget h3 { font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
         .sw-time { font-size: 2.5rem; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
@@ -167,7 +321,6 @@
         .sw-controls button.play { background: #2ecc71; color: #000; }
         .sw-controls button.pause { background: #f1c40f; color: #000; }
         .sw-controls button.reset { background: #e74c3c; }
-
     </style>
 </head>
 <body>
@@ -189,26 +342,17 @@
             <div class="extended-exams" id="extended-exams-panel"></div>
         </section>
 
-        <!-- QUESTION OF THE DAY -->
         <section class="qotd-container" id="qotd-container" style="display: none;">
             <h3>🌟 Question of the Day 🌟</h3>
-            <div class="qotd-content" id="qotd-content">
-                <!-- Injected via JS -->
-            </div>
+            <div class="qotd-content" id="qotd-content"></div>
         </section>
 
         <section class="leaderboard">
             <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
             <div class="board-flex">
-                <div class="score-box mohamed">
-                    <div>MOHAMED</div>
-                    <div id="score-mohamed">0</div>
-                </div>
+                <div class="score-box mohamed"><div>MOHAMED</div><div id="score-mohamed">0</div></div>
                 <div style="font-size: 1.5rem; color: #555;">VS</div>
-                <div class="score-box moaz">
-                    <div>MOAZ</div>
-                    <div id="score-moaz">0</div>
-                </div>
+                <div class="score-box moaz"><div>MOAZ</div><div id="score-moaz">0</div></div>
             </div>
             <div class="leaderboard-actions">
                 <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
@@ -227,7 +371,6 @@
                 </div>
                 <ul class="todo-list" id="list-mohamed"></ul>
             </div>
-
             <div class="player-column moaz">
                 <h2>Moaz</h2>
                 <div class="player-stats" id="stats-moaz">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
@@ -264,35 +407,78 @@
     <!-- ================= HALL OF QUESTIONS VIEW ================= -->
     <div id="view-hoq" class="view-section">
         <h2 class="hoq-header">🏛️ HALL OF QUESTIONS 🏛️</h2>
-        
+
         <div class="hoq-upload-card">
             <div class="paste-indicator" id="paste-indicator">📸 Image Ready!</div>
-            <p style="font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px;">Select an image OR just hit <strong>Ctrl+V</strong> anywhere to paste a screenshot.</p>
-            <input type="file" id="hoq-file" accept="image/*">
-            <textarea id="hoq-answer-input" placeholder="Type the solution/answer here... (It will be hidden behind a spoiler button)"></textarea>
-            <button onclick="uploadQuestion()">UPLOAD TO HALL</button>
+            <h3>📤 Upload a Question</h3>
+
+            <!-- QUESTION IMAGE FIELD -->
+            <div class="hoq-img-field" id="q-img-field">
+                <label>📷 Question Image</label>
+                <div class="hoq-img-drop-zone" id="q-drop-zone"
+                    ondragover="handleDragOver(event, 'q')"
+                    ondragleave="handleDragLeave('q')"
+                    ondrop="handleDrop(event, 'q')">
+                    <input type="file" accept="image/*" id="hoq-q-file" onchange="handleFileSelect(event, 'q')">
+                    <span class="drop-icon">🖼️</span>
+                    <span class="drop-hint">Click to browse, drag & drop, or Ctrl+V to paste</span>
+                    <img class="hoq-img-preview" id="q-preview" src="" alt="Question preview">
+                </div>
+                <button class="hoq-clear-img" id="q-clear-btn" onclick="clearImage('q')">✕ Remove Image</button>
+            </div>
+
+            <!-- ANSWER FIELD (text + optional image) -->
+            <div class="hoq-img-field" id="a-img-field">
+                <label>✅ Answer Image (optional)</label>
+                <div class="hoq-img-drop-zone" id="a-drop-zone"
+                    ondragover="handleDragOver(event, 'a')"
+                    ondragleave="handleDragLeave('a')"
+                    ondrop="handleDrop(event, 'a')">
+                    <input type="file" accept="image/*" id="hoq-a-file" onchange="handleFileSelect(event, 'a')">
+                    <span class="drop-icon">📝</span>
+                    <span class="drop-hint">Attach an answer image (diagram, worked solution, etc.)</span>
+                    <img class="hoq-img-preview" id="a-preview" src="" alt="Answer preview">
+                </div>
+                <button class="hoq-clear-img" id="a-clear-btn" onclick="clearImage('a')">✕ Remove Image</button>
+            </div>
+
+            <!-- Answer text -->
+            <div>
+                <label style="font-family:sans-serif;font-size:0.85rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-weight:bold;display:block;margin-bottom:6px;">✏️ Answer Text (shown behind spoiler)</label>
+                <textarea id="hoq-answer-input" placeholder="Type the solution, key points, or explanation here..."></textarea>
+            </div>
+
+            <button class="upload-btn" onclick="uploadQuestion()">🏛️ UPLOAD TO HALL</button>
         </div>
 
-        <div class="hoq-grid" id="hoq-grid">
-            <!-- Questions injected via JS -->
-        </div>
+        <div class="hoq-grid" id="hoq-grid"></div>
     </div>
 
+    <!-- Image Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Full size">
+    </div>
 
     <!-- ================= FLOATING BOTTOM WIDGETS ================= -->
     <div class="widgets-container">
-        
-        <!-- LEFT SIDE STACK (Bot above Note) -->
         <div class="left-widgets">
-            
-            <!-- VID TO MODEL ANSWER BOT -->
+
+            <!-- VID BOT — CLAUDE POWERED -->
             <div class="vidbot-wrapper">
-                <div class="vidbot-header">🤖 Vid -> Answer Key Bot</div>
+                <div class="vidbot-header">🤖 AI Exam Answer Extractor</div>
+                <div class="vidbot-subheader">Paste a YouTube exam video link — AI will extract all MCQ answers & essay solutions.</div>
                 <div class="vidbot-input-group">
-                    <input type="text" id="vidbot-url" placeholder="Paste YouTube Exam Link...">
-                    <button onclick="scanVideo()">SCAN</button>
+                    <input type="text" id="vidbot-url" placeholder="Paste YouTube link here...">
+                    <button id="vidbot-scan-btn" onclick="scanVideo()">SCAN</button>
                 </div>
-                <div class="vidbot-console" id="vidbot-console"></div>
+                <div class="vidbot-status" id="vidbot-status">
+                    <div class="vidbot-spinner"></div>
+                    <span id="vidbot-status-text">Analyzing video...</span>
+                </div>
+                <div class="vidbot-results" id="vidbot-results"></div>
+                <div class="vidbot-disclaimer">
+                    ⚡ Powered by Claude AI · Works best with exam correction/model answer videos
+                </div>
             </div>
 
             <!-- NOTEPAD WIDGET -->
@@ -303,11 +489,9 @@
                 </div>
                 <div class="notepad-icon" onclick="toggleNotepad()">📝</div>
             </div>
-
         </div>
 
-        <!-- RIGHT SIDE -->
-        <!-- STOPWATCH WIDGET -->
+        <!-- STOPWATCH -->
         <div class="stopwatch-widget">
             <h3>⏱️ Focus Timer</h3>
             <div class="sw-time" id="sw-display">00:00:00</div>
@@ -317,137 +501,296 @@
                 <button class="reset" onclick="resetTimer()">🔄</button>
             </div>
         </div>
-
     </div>
 
 
     <!-- ================= SCRIPTS ================= -->
-    
-    <!-- VIEW TOGGLE LOGIC -->
+
     <script>
+        /* ---- VIEW TOGGLE ---- */
         function toggleView(view) {
             document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
             document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
-            
             document.getElementById('tab-arena').classList.toggle('active', view === 'arena');
             document.getElementById('tab-hoq').classList.toggle('active', view === 'hoq');
         }
+
+        /* ---- LIGHTBOX ---- */
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        /* ---- NOTEPAD ---- */
+        const npPanel = document.getElementById('notepad-panel');
+        const npText = document.getElementById('notepad-text');
+        npText.value = localStorage.getItem('my_study_notes') || '';
+        npText.addEventListener('input', () => { localStorage.setItem('my_study_notes', npText.value); });
+        function toggleNotepad() { npPanel.style.display = (npPanel.style.display === 'flex') ? 'none' : 'flex'; }
+
+        /* ---- STOPWATCH ---- */
+        let swTimer, swElapsed = 0, startTime, isRunning = false;
+        function updateSWDisplay() {
+            let ms = swElapsed + (isRunning ? Date.now() - startTime : 0);
+            let s = Math.floor(ms / 1000);
+            const h = Math.floor(s / 3600).toString().padStart(2, '0');
+            const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+            s = (s % 60).toString().padStart(2, '0');
+            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
+        }
+        function startTimer() { if (!isRunning) { isRunning = true; startTime = Date.now(); swTimer = setInterval(updateSWDisplay, 1000); } }
+        function pauseTimer() { if (isRunning) { swElapsed += Date.now() - startTime; isRunning = false; clearInterval(swTimer); updateSWDisplay(); } }
+        function resetTimer() { isRunning = false; clearInterval(swTimer); swElapsed = 0; updateSWDisplay(); }
     </script>
 
-    <!-- CLIPBOARD PASTE LOGIC -->
+
+    <!-- =====================================
+         VID BOT — CLAUDE API POWERED
+    ====================================== -->
     <script>
+        async function scanVideo() {
+            const url = document.getElementById('vidbot-url').value.trim();
+            const btn = document.getElementById('vidbot-scan-btn');
+            const statusEl = document.getElementById('vidbot-status');
+            const statusText = document.getElementById('vidbot-status-text');
+            const resultsEl = document.getElementById('vidbot-results');
+
+            if (!url) { alert('Please paste a YouTube link first.'); return; }
+            if (!url.includes('youtu')) { alert('Please paste a valid YouTube URL.'); return; }
+
+            // Reset UI
+            btn.disabled = true;
+            resultsEl.classList.remove('active');
+            resultsEl.innerHTML = '';
+            statusEl.classList.add('active');
+            statusText.textContent = 'Sending to Claude AI...';
+
+            const prompt = `You are an expert Egyptian high school exam assistant. A student has provided this YouTube video link: ${url}
+
+Your job is to analyze this exam correction/model answer video and extract ALL questions and their correct answers.
+
+CRITICAL RULES:
+- Do NOT skip any question. Go through every single question.
+- For MCQ questions: list question number and the correct letter answer (A, B, C, or D). If you can infer the question text, include a short version.
+- For essay/written questions: list the question and provide the full model answer.
+- If you cannot access the video directly, use your web search tool to find any available transcript, description, comments, or related content for this specific video URL that reveals the answers.
+- Format your response ONLY as valid JSON with this exact structure — no markdown, no backticks, no extra text:
+
+{
+  "videoTitle": "title of the video or best guess",
+  "subject": "subject name",
+  "mcq": [
+    {"num": 1, "answer": "A", "questionText": "brief question text or empty string"},
+    {"num": 2, "answer": "C", "questionText": "..."}
+  ],
+  "essays": [
+    {"num": 1, "question": "essay question text", "answer": "full model answer"}
+  ],
+  "notes": "any important notes about the exam, or empty string"
+}
+
+If you truly cannot find any content for this video, return: {"error": "Could not retrieve video content. The video may be private, unavailable, or have no accessible transcript."}`;
+
+            try {
+                statusText.textContent = 'Claude is reading the video...';
+
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || `API error ${response.status}`);
+                }
+
+                const data = await response.json();
+                statusText.textContent = 'Parsing results...';
+
+                // Collect all text blocks from the response (handles tool use + text mixed)
+                const fullText = data.content
+                    .filter(b => b.type === 'text')
+                    .map(b => b.text)
+                    .join('');
+
+                // Strip any accidental markdown fences
+                const cleaned = fullText.replace(/```json|```/gi, '').trim();
+
+                let parsed;
+                try {
+                    // Find the JSON object in the response
+                    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) throw new Error('No JSON found in response');
+                    parsed = JSON.parse(jsonMatch[0]);
+                } catch (e) {
+                    // If parse fails, show raw text nicely
+                    statusEl.classList.remove('active');
+                    btn.disabled = false;
+                    resultsEl.classList.add('active');
+                    resultsEl.innerHTML = `<div class="vidbot-section-title">📋 Raw Output</div><div class="vidbot-essay-a" style="color:#ddd;">${fullText || 'No response received.'}</div>`;
+                    return;
+                }
+
+                statusEl.classList.remove('active');
+                btn.disabled = false;
+
+                if (parsed.error) {
+                    resultsEl.classList.add('active');
+                    resultsEl.innerHTML = `<div class="vidbot-error">⚠️ ${parsed.error}</div>`;
+                    return;
+                }
+
+                // Build the results display
+                let html = '';
+
+                if (parsed.videoTitle) {
+                    html += `<div style="color:#f1c40f; font-family:sans-serif; font-size:0.85rem; font-weight:bold; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #1a3a20;">📹 ${parsed.videoTitle}${parsed.subject ? ' — ' + parsed.subject : ''}</div>`;
+                }
+
+                // MCQ Section
+                if (parsed.mcq && parsed.mcq.length > 0) {
+                    html += `<div class="vidbot-section-title">📝 MCQ ANSWERS (${parsed.mcq.length} questions)</div>`;
+                    parsed.mcq.forEach(q => {
+                        html += `<div class="vidbot-mcq-row">
+                            <span class="vidbot-q-num">${q.num}.</span>
+                            <span class="vidbot-answer">${q.answer || '?'}</span>
+                            <span class="vidbot-q-text">${q.questionText || ''}</span>
+                        </div>`;
+                    });
+                }
+
+                // Essay Section
+                if (parsed.essays && parsed.essays.length > 0) {
+                    if (parsed.mcq && parsed.mcq.length > 0) html += '<br>';
+                    html += `<div class="vidbot-section-title">✍️ ESSAY / WRITTEN ANSWERS (${parsed.essays.length})</div>`;
+                    parsed.essays.forEach(e => {
+                        html += `<div class="vidbot-essay-block">
+                            <div class="vidbot-essay-q">Essay ${e.num}: ${e.question || ''}</div>
+                            <div class="vidbot-essay-a">${e.answer || 'No answer found.'}</div>
+                        </div>`;
+                    });
+                }
+
+                // No questions found at all
+                if ((!parsed.mcq || parsed.mcq.length === 0) && (!parsed.essays || parsed.essays.length === 0)) {
+                    html += `<div class="vidbot-error">⚠️ No questions or answers could be extracted from this video. Try a more popular/public exam video with a description or transcript.</div>`;
+                }
+
+                if (parsed.notes) {
+                    html += `<div style="color:#7f8c8d; font-family:sans-serif; font-size:0.75rem; margin-top:10px; font-style:italic;">📌 ${parsed.notes}</div>`;
+                }
+
+                resultsEl.classList.add('active');
+                resultsEl.innerHTML = html;
+
+            } catch (err) {
+                statusEl.classList.remove('active');
+                btn.disabled = false;
+                resultsEl.classList.add('active');
+                resultsEl.innerHTML = `<div class="vidbot-error">❌ Error: ${err.message}</div>`;
+            }
+        }
+    </script>
+
+
+    <!-- =====================================
+         HALL OF QUESTIONS — IMAGE UPLOAD LOGIC
+    ====================================== -->
+    <script>
+        // State for pending images before upload
+        const pendingImages = { q: null, a: null };
+
+        function setImagePreview(field, dataUrl) {
+            const zone = document.getElementById(`${field}-drop-zone`);
+            const preview = document.getElementById(`${field}-preview`);
+            const fieldDiv = document.getElementById(`${field}-img-field`);
+            preview.src = dataUrl;
+            zone.classList.add('has-image');
+            fieldDiv.classList.add('has-image');
+            pendingImages[field] = dataUrl;
+        }
+
+        function clearImage(field) {
+            const zone = document.getElementById(`${field}-drop-zone`);
+            const preview = document.getElementById(`${field}-preview`);
+            const fieldDiv = document.getElementById(`${field}-img-field`);
+            const fileInput = document.getElementById(`hoq-${field}-file`);
+            preview.src = '';
+            zone.classList.remove('has-image');
+            fieldDiv.classList.remove('has-image');
+            pendingImages[field] = null;
+            fileInput.value = '';
+        }
+
+        function compressAndSet(file, field) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 900;
+                    let scale = Math.min(MAX / img.width, MAX / img.height, 1);
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    setImagePreview(field, canvas.toDataURL('image/jpeg', 0.82));
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleFileSelect(event, field) { compressAndSet(event.target.files[0], field); }
+
+        function handleDragOver(event, field) {
+            event.preventDefault();
+            document.getElementById(`${field}-drop-zone`).classList.add('drag-over');
+        }
+        function handleDragLeave(field) { document.getElementById(`${field}-drop-zone`).classList.remove('drag-over'); }
+        function handleDrop(event, field) {
+            event.preventDefault();
+            document.getElementById(`${field}-drop-zone`).classList.remove('drag-over');
+            const file = event.dataTransfer.files[0];
+            compressAndSet(file, field);
+        }
+
+        // Global paste: whichever field has focus, or default to question field
+        let activePasteField = 'q';
+        document.getElementById('q-drop-zone').addEventListener('click', () => { activePasteField = 'q'; });
+        document.getElementById('a-drop-zone').addEventListener('click', () => { activePasteField = 'a'; });
+
         document.addEventListener('paste', function(e) {
-            const fileInput = document.getElementById('hoq-file');
-            const pasteIndicator = document.getElementById('paste-indicator');
-            
             if (e.clipboardData && e.clipboardData.files.length > 0) {
                 const file = e.clipboardData.files[0];
                 if (file.type.startsWith('image/')) {
-                    // Update the file input with the pasted image
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    fileInput.files = dataTransfer.files;
-                    
-                    // Show a quick visual confirmation
-                    pasteIndicator.style.display = 'block';
-                    setTimeout(() => { pasteIndicator.style.display = 'none'; }, 3000);
-                    
-                    // If user is not currently in HoQ view, maybe auto-switch them?
-                    // toggleView('hoq'); // Uncomment if you want paste to force open the HoQ tab
+                    // Determine which field to paste into: use active tab if in HoQ, else question
+                    const field = activePasteField;
+                    compressAndSet(file, field);
+                    const indicator = document.getElementById('paste-indicator');
+                    indicator.textContent = `📸 Pasted into ${field === 'q' ? 'Question' : 'Answer'}!`;
+                    indicator.style.display = 'block';
+                    setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+                    // Switch to HoQ view so user sees it
+                    toggleView('hoq');
                 }
             }
         });
     </script>
 
-    <!-- NOTEPAD LOGIC -->
-    <script>
-        const npPanel = document.getElementById('notepad-panel');
-        const npText = document.getElementById('notepad-text');
-        
-        // Load saved notes
-        npText.value = localStorage.getItem('my_study_notes') || '';
-        
-        // Auto-save notes on typing
-        npText.addEventListener('input', () => {
-            localStorage.setItem('my_study_notes', npText.value);
-        });
 
-        function toggleNotepad() {
-            npPanel.style.display = (npPanel.style.display === 'flex') ? 'none' : 'flex';
-        }
-    </script>
-
-    <!-- VIDBOT LOGIC (UI Simulation) -->
-    <script>
-        function scanVideo() {
-            const url = document.getElementById('vidbot-url').value;
-            const consoleBox = document.getElementById('vidbot-console');
-            
-            if(!url.includes('youtu')) {
-                alert("Please paste a valid YouTube URL.");
-                return;
-            }
-
-            consoleBox.style.display = 'block';
-            consoleBox.innerHTML = "> Initializing Vision/Audio Agent...<br>";
-            
-            // Mock sequence to simulate processing
-            setTimeout(() => { consoleBox.innerHTML += "> Fetching video stream... OK<br>"; }, 1000);
-            setTimeout(() => { consoleBox.innerHTML += "> Running OCR on teacher's screen...<br>"; }, 2500);
-            setTimeout(() => { consoleBox.innerHTML += "> Listening for verbal confirmations...<br>"; }, 4000);
-            setTimeout(() => { 
-                consoleBox.innerHTML += "<br><span style='color:#fff'>[RESULTS EXTRACTED]</span><br>"; 
-                consoleBox.innerHTML += "1. C (Oxygen)<br>2. A (Newton's 3rd)<br>3. B (Mitochondria)<br>4. D (All of the above)<br>5. B<br><br>";
-                consoleBox.innerHTML += "<i style='color:#7f8c8d; font-size:0.7rem;'>Note: UI is ready. Connect a backend API script to replace this mock data with real AI parsing.</i>";
-            }, 6000);
-        }
-    </script>
-
-    <!-- STOPWATCH LOGIC -->
-    <script>
-        let swTimer;
-        let swElapsed = 0; 
-        let startTime;     
-        let isRunning = false;
-
-        function updateSWDisplay() {
-            let currentTotalMs = swElapsed;
-            if (isRunning) currentTotalMs += (Date.now() - startTime);
-
-            let totalSeconds = Math.floor(currentTotalMs / 1000);
-            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-            const s = (totalSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
-        }
-
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                startTime = Date.now(); 
-                swTimer = setInterval(updateSWDisplay, 1000);
-            }
-        }
-
-        function pauseTimer() {
-            if (isRunning) {
-                swElapsed += (Date.now() - startTime);
-                isRunning = false;
-                clearInterval(swTimer);
-                updateSWDisplay();
-            }
-        }
-
-        function resetTimer() {
-            isRunning = false;
-            clearInterval(swTimer);
-            swElapsed = 0;
-            updateSWDisplay();
-        }
-    </script>
-
-
-    <!-- FIREBASE CLOUD LOGIC (Arena + HoQ) -->
+    <!-- =====================================
+         FIREBASE — ARENA + HOQ LOGIC
+    ====================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -467,14 +810,15 @@
         const db = getDatabase(app);
         const stateRef = ref(db, 'hustleState');
 
+        /* EXAM COUNTDOWN */
         const exams = [
             { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
-            { name: "German", date: new Date("2026-06-23T09:00:00").getTime() },
-            { name: "Arabic Language", date: new Date("2026-06-28T09:00:00").getTime() },
-            { name: "Chemistry", date: new Date("2026-07-02T09:00:00").getTime() },
-            { name: "Foreign Language (English)", date: new Date("2026-07-05T09:00:00").getTime() },
-            { name: "Physics", date: new Date("2026-07-09T09:00:00").getTime() },
-            { name: "Biology", date: new Date("2026-07-16T09:00:00").getTime() }
+            { name: "German",                        date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "Arabic Language",               date: new Date("2026-06-28T09:00:00").getTime() },
+            { name: "Chemistry",                     date: new Date("2026-07-02T09:00:00").getTime() },
+            { name: "Foreign Language (English)",    date: new Date("2026-07-05T09:00:00").getTime() },
+            { name: "Physics",                       date: new Date("2026-07-09T09:00:00").getTime() },
+            { name: "Biology",                       date: new Date("2026-07-16T09:00:00").getTime() }
         ];
 
         window.toggleExamsPanel = function() {
@@ -485,44 +829,39 @@
         setInterval(() => {
             const now = new Date().getTime();
             let nextExam = null; let otherExams = [];
-
             for (let exam of exams) {
-                if (exam.date > now) {
-                    if (!nextExam) nextExam = exam;
-                    else otherExams.push(exam);
-                }
+                if (exam.date > now) { if (!nextExam) nextExam = exam; else otherExams.push(exam); }
             }
-            
             const titleEl = document.getElementById("exam-title");
             const timerEl = document.getElementById("timer");
             const extendedPanel = document.getElementById("extended-exams-panel");
-
             if (nextExam) {
                 titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
                 const d = nextExam.date - now;
-                const days = Math.floor(d / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((d % (1000 * 60)) / 1000);
-                timerEl.innerText = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
-                
-                const newExtendedHTML = otherExams.map(exam => {
-                    const diffMs = exam.date - now;
-                    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-                    return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
+                const days = Math.floor(d / 86400000);
+                const hours = Math.floor((d % 86400000) / 3600000);
+                const minutes = Math.floor((d % 3600000) / 60000);
+                const seconds = Math.floor((d % 60000) / 1000);
+                const pad = n => n < 10 ? '0' + n : n;
+                timerEl.innerText = `${pad(days)}d : ${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s`;
+                const newHTML = otherExams.map(e => {
+                    const daysLeft = Math.ceil((e.date - now) / 86400000);
+                    return `<div class="exam-row"><span>${e.name}</span><strong>${daysLeft} days left</strong></div>`;
                 }).join('');
-                if (extendedPanel.innerHTML !== newExtendedHTML) extendedPanel.innerHTML = newExtendedHTML;
+                if (extendedPanel.innerHTML !== newHTML) extendedPanel.innerHTML = newHTML;
             } else {
-                titleEl.innerText = "ALL EXAMS COMPLETED!"; timerEl.innerText = "00d : 00h : 00m : 00s";
-                if (extendedPanel.innerHTML !== "") extendedPanel.innerHTML = "";
+                titleEl.innerText = "ALL EXAMS COMPLETED!";
+                timerEl.innerText = "00d : 00h : 00m : 00s";
+                extendedPanel.innerHTML = "";
             }
         }, 1000);
 
-        let localState = { 
-            scores: { mohamed: 0, moaz: 0 }, 
+        /* STATE */
+        let localState = {
+            scores: { mohamed: 0, moaz: 0 },
             todos: { mohamed: [], moaz: [] },
             weakpoints: { mohamed: [], moaz: [] },
-            hoq: [] // Hall of Questions Array
+            hoq: []
         };
 
         onValue(stateRef, (snapshot) => {
@@ -541,11 +880,11 @@
         function saveToCloud() { set(stateRef, localState); }
 
         window.resetAllData = function() {
-            if(confirm("🚨 WARNING: Are you 100% sure you want to WIPE EVERYTHING? Scores, tasks, weakpoints - all back to zero. This cannot be undone!")) {
-                if(confirm("Double checking: WIPE ALL DATA for Mohamed and Moaz?")) {
-                    localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, weakpoints: { mohamed: [], moaz: [] }, hoq: localState.hoq }; // Kept HoQ intact during reset
+            if (confirm("🚨 WARNING: Wipe ALL data? Scores, tasks, weakpoints reset to zero. Hall of Questions preserved.")) {
+                if (confirm("Double confirm: WIPE ARENA DATA?")) {
+                    localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, weakpoints: { mohamed: [], moaz: [] }, hoq: localState.hoq };
                     saveToCloud();
-                    alert("Database completely nuked. Starting fresh!");
+                    alert("Arena data nuked. Hall of Questions preserved!");
                 }
             }
         };
@@ -563,7 +902,7 @@
             if (todo) {
                 if (!todo.checked) {
                     let choice = prompt("ذاكرت ولا كروت؟ 🤔\n\n1 - ذاكرت (بجد وعملت اللي عليا)\n2 - كروت (تأدية واجب وخلاص)");
-                    if (choice === null) return; 
+                    if (choice === null) return;
                     todo.quality = (choice.trim() === "1") ? "ذاكرت" : "كروت"; todo.checked = true;
                 } else { todo.checked = false; todo.quality = ''; }
                 saveToCloud();
@@ -571,7 +910,7 @@
         };
 
         window.deleteTodo = function(player, id) { localState.todos[player] = localState.todos[player].filter(t => t.id !== id); saveToCloud(); };
-        
+
         window.updateActualTime = function(player, id, inputVal) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) { todo.act = inputVal === '' ? '' : parseFloat(inputVal); saveToCloud(); }
@@ -586,14 +925,14 @@
         };
 
         window.eliminateWeakpoint = function(player, id) {
-            if(confirm("Did you actually study and eliminate this weakpoint? (+1 Point!)")) {
+            if (confirm("Did you actually study and eliminate this weakpoint? (+1 Point!)")) {
                 localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id);
                 localState.scores[player] += 1; saveToCloud();
             }
         };
 
         window.deleteWeakpoint = function(player, id) {
-            if (confirm("Remove this weakpoint entry? (No points will be added or lost)")) {
+            if (confirm("Remove this weakpoint entry? (No points)")) {
                 localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id); saveToCloud();
             }
         };
@@ -611,67 +950,48 @@
                     let pointsGained = 1; let bonusMessages = [];
                     if (totalAct < totalEst) { pointsGained += 1; bonusMessages.push(`⚡ Speed Demon -> +1 Point`); }
                     localState.scores[player] += pointsGained;
-                    let finalAlert = `✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n` + bonusMessages.join("\n");
-                    alert(finalAlert);
+                    alert(`✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n` + bonusMessages.join("\n"));
                 } else {
                     localState.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
-                localState.todos[player] = []; 
+                localState.todos[player] = [];
             });
             saveToCloud();
         };
 
-        /* HALL OF QUESTIONS LOGIC */
+        /* =====================
+           HALL OF QUESTIONS
+        ===================== */
         window.uploadQuestion = function() {
-            const fileInput = document.getElementById('hoq-file');
-            const answerInput = document.getElementById('hoq-answer-input');
-            
-            if (!fileInput.files[0] || !answerInput.value.trim()) {
-                alert("Please select an image AND write an answer!"); return;
-            }
+            const answerText = document.getElementById('hoq-answer-input').value.trim();
+            const questionImg = window.pendingImages?.q;
+            const answerImg = window.pendingImages?.a;
 
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                // Compress image before saving to DB
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const MAX_WIDTH = 600;
-                    let scaleSize = MAX_WIDTH / img.width;
-                    if(scaleSize > 1) scaleSize = 1; // Don't scale up small images
-                    canvas.width = img.width * scaleSize;
-                    canvas.height = img.height * scaleSize;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    const base64Img = canvas.toDataURL('image/jpeg', 0.6); // Compress Quality
-                    
-                    localState.hoq.unshift({
-                        id: Date.now(),
-                        image: base64Img,
-                        answer: answerInput.value.trim()
-                    });
-                    
-                    fileInput.value = ''; answerInput.value = '';
-                    saveToCloud();
-                }
-            };
-            reader.readAsDataURL(file);
+            if (!questionImg) { alert("Please attach a question image!"); return; }
+
+            localState.hoq.unshift({
+                id: Date.now(),
+                questionImg: questionImg,
+                answerImg: answerImg || null,
+                answer: answerText
+            });
+
+            // Clear form
+            clearImage('q');
+            clearImage('a');
+            document.getElementById('hoq-answer-input').value = '';
+            saveToCloud();
         };
 
         window.toggleSpoiler = function(id) {
-            const answerDiv = document.getElementById(`hoq-ans-${id}`);
-            if(answerDiv.style.display === 'block') {
-                answerDiv.style.display = 'none';
-            } else {
-                answerDiv.style.display = 'block';
-            }
+            const el = document.getElementById(`hoq-ans-${id}`);
+            if (el) el.style.display = (el.style.display === 'block') ? 'none' : 'block';
         };
 
+        /* =====================
+           DOM UPDATE
+        ===================== */
         function updateDOM() {
             document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
             document.getElementById('score-moaz').innerText = localState.scores.moaz;
@@ -679,29 +999,25 @@
             ['mohamed', 'moaz'].forEach(player => {
                 const listEl = document.getElementById(`list-${player}`);
                 const statsEl = document.getElementById(`stats-${player}`);
-                
                 const currentTasks = localState.todos[player];
-                const totalTasksNum = currentTasks.length;
-                const totalEstHours = currentTasks.reduce((sum, item) => sum + (parseFloat(item.est) || 0), 0);
+                const totalEst = currentTasks.reduce((s, i) => s + (parseFloat(i.est) || 0), 0);
 
-                if (statsEl) statsEl.innerHTML = `Tasks: <strong>${totalTasksNum}</strong> | Total Est: <strong>${totalEstHours} Hrs</strong>`;
+                if (statsEl) statsEl.innerHTML = `Tasks: <strong>${currentTasks.length}</strong> | Total Est: <strong>${totalEst} Hrs</strong>`;
 
                 if (listEl) {
                     listEl.innerHTML = '';
                     currentTasks.forEach(todo => {
                         let badgeHTML = '';
                         if (todo.checked && todo.quality) {
-                            let bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
-                            let glow = todo.quality === "ذاكرت" ? "rgba(46, 204, 113, 0.4)" : "rgba(243, 156, 18, 0.4)";
-                            badgeHTML = `<span class="quality-badge" style="background:${bg}; box-shadow: 0 0 8px ${glow};">${todo.quality}</span>`;
+                            const bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
+                            const glow = todo.quality === "ذاكرت" ? "rgba(46,204,113,0.4)" : "rgba(243,156,18,0.4)";
+                            badgeHTML = `<span class="quality-badge" style="background:${bg};box-shadow:0 0 8px ${glow};">${todo.quality}</span>`;
                         }
-                        
                         listEl.innerHTML += `
                             <li class="todo-item ${todo.checked ? 'checked' : ''}">
                                 <div class="todo-info">
-                                    <div style="display:flex; align-items:center;">
-                                        <span class="todo-text">${todo.task}</span>
-                                        ${badgeHTML}
+                                    <div style="display:flex;align-items:center;">
+                                        <span class="todo-text">${todo.task}</span>${badgeHTML}
                                     </div>
                                     <div class="time-tracking-row">
                                         <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
@@ -713,8 +1029,7 @@
                                     <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">${todo.checked ? '↩️' : '✅'}</button>
                                     <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
                                 </div>
-                            </li>
-                        `;
+                            </li>`;
                     });
                 }
 
@@ -732,43 +1047,67 @@
                                     <button class="checkbox-btn" onclick="eliminateWeakpoint('${player}', ${wp.id})">💥 Fix</button>
                                     <button class="delete-btn" onclick="deleteWeakpoint('${player}', ${wp.id})">🗑️</button>
                                 </div>
-                            </li>
-                        `;
+                            </li>`;
                     });
                 }
             });
 
-            // Update HoQ Grid
+            /* HOQ GRID */
             const hoqGrid = document.getElementById('hoq-grid');
-            if(hoqGrid) {
+            if (hoqGrid) {
                 hoqGrid.innerHTML = '';
                 localState.hoq.forEach(q => {
+                    const qImgSrc = q.questionImg || q.image || null; // backward compat with old 'image' field
+                    const aImgSrc = q.answerImg || null;
+
+                    let questionImgHTML = qImgSrc
+                        ? `<img src="${qImgSrc}" alt="Question" onclick="openLightbox('${qImgSrc}')" title="Click to enlarge">`
+                        : `<div class="hoq-no-img">No image</div>`;
+
+                    let answerRevealHTML = '';
+                    if (aImgSrc) {
+                        answerRevealHTML += `<img src="${aImgSrc}" alt="Answer" onclick="openLightbox('${aImgSrc}')" title="Click to enlarge">`;
+                    }
+                    if (q.answer) {
+                        answerRevealHTML += `<div class="hoq-answer-text">${q.answer}</div>`;
+                    }
+                    if (!answerRevealHTML) answerRevealHTML = '<div class="hoq-answer-text" style="color:#555;">No answer provided.</div>';
+
                     hoqGrid.innerHTML += `
                         <div class="hoq-card">
-                            <img src="${q.image}" alt="Question Image">
-                            <button class="hoq-spoiler-btn" onclick="toggleSpoiler(${q.id})">👁️ Toggle Answer</button>
-                            <div class="hoq-answer" id="hoq-ans-${q.id}">${q.answer}</div>
-                        </div>
-                    `;
+                            <div class="hoq-card-label">📷 Question</div>
+                            ${questionImgHTML}
+                            <button class="hoq-spoiler-btn" onclick="toggleSpoiler(${q.id})">👁️ Show / Hide Answer</button>
+                            <div class="hoq-answer-reveal" id="hoq-ans-${q.id}">${answerRevealHTML}</div>
+                        </div>`;
                 });
             }
 
-            // Update QOTD Logic
+            /* QOTD */
             const qotdContainer = document.getElementById('qotd-container');
             const qotdContent = document.getElementById('qotd-content');
-            
-            if(localState.hoq.length > 0) {
+            if (localState.hoq.length > 0) {
                 qotdContainer.style.display = 'block';
-                // Pick a pseudo-random question based on the current day so it stays the same all day
-                const daySeed = Math.floor(Date.now() / 86400000); 
+                const daySeed = Math.floor(Date.now() / 86400000);
                 const selectedIndex = daySeed % localState.hoq.length;
                 const dailyQ = localState.hoq[selectedIndex];
+                const qImgSrc = dailyQ.questionImg || dailyQ.image || null;
+                const aImgSrc = dailyQ.answerImg || null;
+
+                let answerRevealHTML = '';
+                if (aImgSrc) {
+                    answerRevealHTML += `<img src="${aImgSrc}" alt="Answer" style="max-width:100%;border-radius:8px;cursor:pointer;" onclick="openLightbox('${aImgSrc}')">`;
+                }
+                if (dailyQ.answer) {
+                    answerRevealHTML += `<div style="color:#00ffcc;font-family:sans-serif;font-size:1rem;white-space:pre-wrap;text-align:left;width:100%;">${dailyQ.answer}</div>`;
+                }
 
                 qotdContent.innerHTML = `
-                    <img src="${dailyQ.image}" alt="Question of the Day">
-                    <button class="hoq-spoiler-btn" onclick="toggleSpoiler('qotd')">👁️ Reveal Answer</button>
-                    <div class="hoq-answer" id="hoq-ans-qotd" style="background:#000; padding:15px; width:100%;">${dailyQ.answer}</div>
-                `;
+                    ${qImgSrc ? `<img class="qotd-question-img" src="${qImgSrc}" alt="Question of the Day" onclick="openLightbox('${qImgSrc}')">` : ''}
+                    <button class="hoq-spoiler-btn" onclick="toggleSpoiler('qotd')" style="font-size:1rem;padding:10px 20px;">👁️ Reveal Answer</button>
+                    <div class="hoq-answer-reveal" id="hoq-ans-qotd" style="background:#000;padding:15px;width:100%;border-radius:8px;">
+                        ${answerRevealHTML || '<span style="color:#555;font-family:sans-serif;">No answer provided.</span>'}
+                    </div>`;
             } else {
                 qotdContainer.style.display = 'none';
             }
