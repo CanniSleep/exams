@@ -6,33 +6,36 @@
     <title>MOHAMED VS MOAZ: THE FINAL LAP</title>
     <style>
         :root {
-            --bg-color: #0d0e15;
-            --card-bg: #171926;
-            --mohamed-color: #00f0ff;
-            --mohamed-glow: rgba(0, 240, 255, 0.4);
-            --moaz-color: #ff007f;
-            --moaz-glow: rgba(255, 0, 127, 0.4);
-            --text-color: #f0f1f5;
-            --countdown-color: #ff00ff;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
+            --bg-color: #0d0e15; --card-bg: #171926;
+            --mohamed-color: #00f0ff; --mohamed-glow: rgba(0, 240, 255, 0.4);
+            --moaz-color: #ff007f; --moaz-glow: rgba(255, 0, 127, 0.4);
+            --text-color: #f0f1f5; --countdown-color: #ff00ff;
+            --success-color: #2ecc71; --danger-color: #e74c3c; --hoq-color: #9b59b6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Impact', 'Arial Black', sans-serif; letter-spacing: 1px; }
 
         body {
             background-color: var(--bg-color); color: var(--text-color);
-            padding: 20px; padding-bottom: 120px;
+            padding: 20px; padding-bottom: 150px;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
+        /* NAVIGATION TABS */
+        .nav-tabs { display: flex; gap: 20px; margin-bottom: 20px; }
+        .nav-tab {
+            background: #222; color: #fff; border: 2px solid #555; padding: 10px 30px; font-size: 1.2rem;
+            border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+        }
+        .nav-tab.active { background: var(--countdown-color); border-color: #fff; box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); }
+
+        /* VIEW CONTAINERS */
+        .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        #view-hoq { display: none; }
+
         header { text-align: center; margin-bottom: 20px; }
         h1 { font-size: 3.5rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 5px; }
-
-        .vs {
-            font-style: italic; background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 10px;
-        }
+        .vs { font-style: italic; background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 10px; }
 
         /* BANNER & LEADERBOARD */
         .countdown-banner, .leaderboard {
@@ -46,22 +49,20 @@
         .countdown-banner h3 { font-size: 1.2rem; color: #00ffcc; font-family: sans-serif; text-transform: uppercase; margin-bottom: 5px; }
         #timer { font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px var(--countdown-color); margin-bottom: 15px; }
 
-        .see-all-btn {
-            background: transparent; border: 1px solid var(--countdown-color); color: #fff;
-            padding: 8px 16px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold;
-            border-radius: 20px; cursor: pointer; transition: all 0.3s;
-        }
+        .see-all-btn { background: transparent; border: 1px solid var(--countdown-color); color: #fff; padding: 8px 16px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
         .see-all-btn:hover { background: var(--countdown-color); box-shadow: 0 0 10px var(--countdown-color); }
         
-        .extended-exams {
-            display: none; margin-top: 15px; background: rgba(0, 0, 0, 0.4); border-radius: 8px;
-            padding: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;
-            font-family: sans-serif; text-align: left;
+        .extended-exams { display: none; margin-top: 15px; background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-family: sans-serif; text-align: left; }
+        .exam-row { background: #221736; padding: 8px 12px; border-radius: 5px; font-size: 0.9rem; border-left: 3px solid #00ffcc; display: flex; justify-content: space-between; }
+
+        /* QOTD SECTION */
+        .qotd-container {
+            width: 100%; max-width: 900px; background: #1a1a2e; border: 2px solid #f1c40f; border-radius: 12px;
+            padding: 20px; margin-bottom: 25px; text-align: center; box-shadow: 0 0 20px rgba(241, 196, 15, 0.2);
         }
-        .exam-row {
-            background: #221736; padding: 8px 12px; border-radius: 5px; font-size: 0.9rem;
-            border-left: 3px solid #00ffcc; display: flex; justify-content: space-between;
-        }
+        .qotd-container h3 { color: #f1c40f; font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; }
+        .qotd-content { display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: sans-serif; }
+        .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #444; }
 
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; flex-wrap: wrap; gap: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
@@ -69,86 +70,90 @@
         .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); box-shadow: 0 0 15px var(--moaz-glow); }
 
         .leaderboard-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        
         button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; transition: transform 0.2s; }
         button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-
-        button.reset-data-btn {
-            background: transparent; color: var(--danger-color); border: 2px solid var(--danger-color);
-            padding: 8px 20px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: sans-serif;
-            font-weight: bold; transition: all 0.2s; margin-top: 10px;
-        }
-        button.reset-data-btn:hover { background: var(--danger-color); color: #fff; box-shadow: 0 0 10px rgba(231, 76, 60, 0.6); }
+        button.reset-data-btn { background: transparent; color: var(--danger-color); border: 2px solid var(--danger-color); padding: 8px 20px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: sans-serif; font-weight: bold; transition: all 0.2s; margin-top: 10px; }
 
         /* ARENA & COLUMNS */
         .arena { display: flex; gap: 30px; width: 100%; max-width: 1100px; flex-wrap: wrap; margin-bottom: 40px; }
         .player-column { flex: 1; min-width: 320px; background: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
         .player-column.moaz { border-top: 8px solid var(--moaz-color); }
-
         .player-column h2 { font-size: 2.2rem; margin-bottom: 5px; text-transform: uppercase; }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
 
-        /* PLAYER STATS COUNTER BAR */
         .player-stats { display: flex; gap: 15px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.9rem; color: #aaa; text-transform: uppercase; font-weight: bold; }
         .player-stats strong { color: #fff; font-size: 1rem; }
 
-        /* INPUTS & FORMS */
         .todo-form { display: flex; gap: 10px; margin-bottom: 25px; }
         .todo-form input.task-name { flex: 2; min-width: 150px; }
         .todo-form input.task-est { flex: 1; min-width: 80px; }
-        
-        input, select {
-            background: #25283d; border: 2px solid #444; color: white; padding: 12px; font-size: 1rem; border-radius: 6px; font-family: sans-serif; font-weight: bold;
-        }
-        input:focus, select:focus { outline: none; border-color: #888; }
-        
-        .todo-form button, .add-btn {
-            color: #000; border: none; padding: 12px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 6px;
-            flex-shrink: 0; white-space: nowrap;
-        }
+        input, select, textarea { background: #25283d; border: 2px solid #444; color: white; padding: 12px; font-size: 1rem; border-radius: 6px; font-family: sans-serif; font-weight: bold; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #888; }
+        .todo-form button, .add-btn { color: #000; border: none; padding: 12px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
         .mohamed .todo-form button, .mohamed .add-btn { background: var(--mohamed-color); }
         .moaz .todo-form button, .moaz .add-btn { background: var(--moaz-color); }
 
-        /* TASK LISTS */
         .todo-list, .weakpoint-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
         .todo-item, .wp-item { background: #202231; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-left: 4px solid #555; }
-        
         .mohamed .todo-item { border-left-color: var(--mohamed-color); }
         .moaz .todo-item { border-left-color: var(--moaz-color); }
-
         .todo-item.checked { border-left-color: var(--success-color) !important; }
         .todo-item.checked .todo-text { opacity: 0.4; text-decoration: line-through; }
-
         .todo-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
         .todo-text { font-size: 1.2rem; }
-        
         .time-tracking-row { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 0.85rem; color: #aaa; flex-wrap: wrap; }
         .actual-input-box { background: #11131c; border: 1px solid #555; color: #fff; width: 70px; padding: 4px 6px; border-radius: 4px; text-align: center; font-family: sans-serif; }
-        
         .quality-badge { color: #000; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; font-family: sans-serif; }
-
         .todo-actions { display: flex; align-items: center; gap: 8px; }
         .checkbox-btn, .delete-btn { border: none; color: white; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; }
         .checkbox-btn { background: var(--success-color); }
         .delete-btn { background: var(--danger-color); }
 
-        /* WEAKPOINTS SECTION */
         .weakpoints-header { width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px; font-size: 2.5rem; color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); }
         .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
         .wp-input-group select { flex: 1; }
         .wp-input-group input { flex: 2; }
-
         .wp-item { background: #1a0f14; border: 1px solid #444; border-left: 5px solid #ff3366; }
         .wp-subject { font-family: sans-serif; font-size: 0.8rem; color: #ff3366; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
-        .wp-text { font-size: 1.1rem; }
+
+        /* HALL OF QUESTIONS STYLES */
+        .hoq-header { font-size: 2.5rem; color: var(--hoq-color); text-shadow: 0 0 15px rgba(155, 89, 182, 0.5); margin-bottom: 20px; }
+        .hoq-upload-card { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 100%; max-width: 700px; border: 2px dashed var(--hoq-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .hoq-upload-card input[type="file"] { background: #111; padding: 10px; }
+        .hoq-upload-card textarea { resize: vertical; min-height: 80px; }
+        .hoq-upload-card button { background: var(--hoq-color); color: #fff; border: none; padding: 12px; font-size: 1.2rem; cursor: pointer; border-radius: 6px; font-family: sans-serif; font-weight: bold; }
         
-        /* STOPWATCH */
-        .stopwatch-widget {
-            position: fixed; bottom: 20px; right: 20px; background: rgba(15, 17, 26, 0.95); border: 2px solid #555;
-            padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 1000; text-align: center; backdrop-filter: blur(5px);
-        }
+        .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
+        .hoq-card { background: #202231; border-radius: 10px; padding: 15px; border: 1px solid #444; display: flex; flex-direction: column; gap: 10px; }
+        .hoq-card img { width: 100%; height: auto; border-radius: 6px; background: #000; }
+        .hoq-spoiler-btn { background: #444; color: #fff; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-family: sans-serif; font-weight: bold; }
+        .hoq-answer { background: #111; color: #00ffcc; padding: 10px; border-radius: 6px; font-family: sans-serif; font-size: 0.95rem; display: none; white-space: pre-wrap; }
+        
+        /* FLOATING WIDGETS (Bottom Row) */
+        .widgets-container { position: fixed; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 1000; pointer-events: none; }
+        .widgets-container > * { pointer-events: auto; }
+
+        /* WIDGET: Notepad */
+        .notepad-wrapper { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+        .notepad-icon { background: #f1c40f; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid #d4ac0d; transition: transform 0.2s; }
+        .notepad-icon:hover { transform: scale(1.1); }
+        .notepad-panel { background: #fcf3cf; border-radius: 12px; width: 280px; height: 350px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; flex-direction: column; border: 1px solid #d4ac0d; position: relative; }
+        .notepad-panel::before { content: ''; position: absolute; top: -10px; left: 20px; width: 100px; height: 20px; background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .notepad-panel h3 { color: #b7950b; font-family: sans-serif; font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .notepad-panel textarea { flex-grow: 1; background: transparent; border: none; outline: none; color: #333; font-family: 'Comic Sans MS', sans-serif, Arial; font-size: 1rem; resize: none; font-weight: normal; }
+
+        /* WIDGET: Vid Bot */
+        .vidbot-wrapper { background: rgba(15, 17, 26, 0.95); border: 2px solid #00f0ff; padding: 15px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); width: 320px; backdrop-filter: blur(5px); text-align: center; }
+        .vidbot-header { font-family: sans-serif; font-size: 0.9rem; color: #00f0ff; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; }
+        .vidbot-input-group { display: flex; gap: 5px; margin-bottom: 10px; }
+        .vidbot-input-group input { flex-grow: 1; padding: 8px; font-size: 0.8rem; }
+        .vidbot-input-group button { background: #00f0ff; color: #000; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-family: sans-serif; }
+        .vidbot-console { background: #000; border: 1px solid #333; height: 100px; border-radius: 6px; padding: 10px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 0.8rem; color: #2ecc71; display: none; }
+
+        /* WIDGET: Stopwatch */
+        .stopwatch-widget { background: rgba(15, 17, 26, 0.95); border: 2px solid #555; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; backdrop-filter: blur(5px); }
         .stopwatch-widget h3 { font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
         .sw-time { font-size: 2.5rem; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
         .sw-controls button { background: #333; color: white; border: none; padding: 8px 15px; margin: 0 3px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
@@ -163,105 +168,247 @@
 
     <header>
         <h1>Mohamed <span class="vs">VS</span> Moaz</h1>
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="toggleView('arena')" id="tab-arena">The Arena</div>
+            <div class="nav-tab" onclick="toggleView('hoq')" id="tab-hoq">Hall of Questions</div>
+        </div>
     </header>
 
-    <section class="countdown-banner">
-        <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
-        <div id="timer">00d : 00h : 00m : 00s</div>
+    <!-- ================= THE ARENA VIEW ================= -->
+    <div id="view-arena" class="view-section">
+        <section class="countdown-banner">
+            <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
+            <div id="timer">00d : 00h : 00m : 00s</div>
+            <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
+            <div class="extended-exams" id="extended-exams-panel"></div>
+        </section>
+
+        <!-- QUESTION OF THE DAY -->
+        <section class="qotd-container" id="qotd-container" style="display: none;">
+            <h3>🌟 Question of the Day 🌟</h3>
+            <div class="qotd-content" id="qotd-content">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <section class="leaderboard">
+            <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
+            <div class="board-flex">
+                <div class="score-box mohamed">
+                    <div>MOHAMED</div>
+                    <div id="score-mohamed">0</div>
+                </div>
+                <div style="font-size: 1.5rem; color: #555;">VS</div>
+                <div class="score-box moaz">
+                    <div>MOAZ</div>
+                    <div id="score-moaz">0</div>
+                </div>
+            </div>
+            <div class="leaderboard-actions">
+                <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+                <button class="reset-data-btn" onclick="resetAllData()">⚠️ Reset All Data to Zero ⚠️</button>
+            </div>
+        </section>
+
+        <main class="arena">
+            <div class="player-column mohamed">
+                <h2>Mohamed</h2>
+                <div class="player-stats" id="stats-mohamed">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
+                <div class="todo-form">
+                    <input type="text" id="input-mohamed-task" class="task-name" placeholder="Add task...">
+                    <input type="number" step="0.5" id="input-mohamed-est" class="task-est" placeholder="Est. Hrs" min="0">
+                    <button onclick="addTodo('mohamed')">ADD</button>
+                </div>
+                <ul class="todo-list" id="list-mohamed"></ul>
+            </div>
+
+            <div class="player-column moaz">
+                <h2>Moaz</h2>
+                <div class="player-stats" id="stats-moaz">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
+                <div class="todo-form">
+                    <input type="text" id="input-moaz-task" class="task-name" placeholder="Add task...">
+                    <input type="number" step="0.5" id="input-moaz-est" class="task-est" placeholder="Est. Hrs" min="0">
+                    <button onclick="addTodo('moaz')">ADD</button>
+                </div>
+                <ul class="todo-list" id="list-moaz"></ul>
+            </div>
+        </main>
+
+        <h2 class="weakpoints-header">🎯 WEAKPOINT ANNIHILATION ZONE</h2>
+        <main class="arena">
+            <div class="player-column mohamed">
+                <div class="wp-input-group">
+                    <select id="wp-subj-mohamed"><option>Arabic</option><option>Physics</option><option>Biology</option><option>Chemistry</option></select>
+                    <input type="text" id="wp-text-mohamed" placeholder="Identify weakpoint...">
+                    <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
+                </div>
+                <ul class="weakpoint-list" id="wp-list-mohamed"></ul>
+            </div>
+            <div class="player-column moaz">
+                <div class="wp-input-group">
+                    <select id="wp-subj-moaz"><option>Arabic</option><option>Physics</option><option>Biology</option><option>Chemistry</option></select>
+                    <input type="text" id="wp-text-moaz" placeholder="Identify weakpoint...">
+                    <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
+                </div>
+                <ul class="weakpoint-list" id="wp-list-moaz"></ul>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= HALL OF QUESTIONS VIEW ================= -->
+    <div id="view-hoq" class="view-section">
+        <h2 class="hoq-header">🏛️ HALL OF QUESTIONS 🏛️</h2>
         
-        <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
-        <div class="extended-exams" id="extended-exams-panel"></div>
-    </section>
-
-    <section class="leaderboard">
-        <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
-        <div class="board-flex">
-            <div class="score-box mohamed">
-                <div>MOHAMED</div>
-                <div id="score-mohamed">0</div>
-            </div>
-            <div style="font-size: 1.5rem; color: #555;">VS</div>
-            <div class="score-box moaz">
-                <div>MOAZ</div>
-                <div id="score-moaz">0</div>
-            </div>
-        </div>
-        
-        <div class="leaderboard-actions">
-            <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
-            <button class="reset-data-btn" onclick="resetAllData()">⚠️ Reset All Data to Zero ⚠️</button>
-        </div>
-    </section>
-
-    <main class="arena">
-        <div class="player-column mohamed">
-            <h2>Mohamed</h2>
-            <div class="player-stats" id="stats-mohamed">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
-            
-            <div class="todo-form">
-                <input type="text" id="input-mohamed-task" class="task-name" placeholder="Add task...">
-                <input type="number" step="0.5" id="input-mohamed-est" class="task-est" placeholder="Est. Hrs" min="0">
-                <button onclick="addTodo('mohamed')">ADD</button>
-            </div>
-            <ul class="todo-list" id="list-mohamed"></ul>
+        <div class="hoq-upload-card">
+            <input type="file" id="hoq-file" accept="image/*">
+            <textarea id="hoq-answer-input" placeholder="Type the solution/answer here... (It will be hidden behind a spoiler button)"></textarea>
+            <button onclick="uploadQuestion()">UPLOAD TO HALL</button>
         </div>
 
-        <div class="player-column moaz">
-            <h2>Moaz</h2>
-            <div class="player-stats" id="stats-moaz">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
-            
-            <div class="todo-form">
-                <input type="text" id="input-moaz-task" class="task-name" placeholder="Add task...">
-                <input type="number" step="0.5" id="input-moaz-est" class="task-est" placeholder="Est. Hrs" min="0">
-                <button onclick="addTodo('moaz')">ADD</button>
-            </div>
-            <ul class="todo-list" id="list-moaz"></ul>
-        </div>
-    </main>
-
-    <h2 class="weakpoints-header">🎯 WEAKPOINT ANNIHILATION ZONE</h2>
-    <main class="arena">
-        <div class="player-column mohamed">
-            <div class="wp-input-group">
-                <select id="wp-subj-mohamed">
-                    <option value="Arabic">Arabic</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Chemistry">Chemistry</option>
-                </select>
-                <input type="text" id="wp-text-mohamed" placeholder="Identify weakpoint...">
-                <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
-            </div>
-            <ul class="weakpoint-list" id="wp-list-mohamed"></ul>
-        </div>
-
-        <div class="player-column moaz">
-            <div class="wp-input-group">
-                <select id="wp-subj-moaz">
-                    <option value="Arabic">Arabic</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Chemistry">Chemistry</option>
-                </select>
-                <input type="text" id="wp-text-moaz" placeholder="Identify weakpoint...">
-                <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
-            </div>
-            <ul class="weakpoint-list" id="wp-list-moaz"></ul>
-        </div>
-    </main>
-
-    <!-- LOCAL STOPWATCH WIDGET -->
-    <div class="stopwatch-widget">
-        <h3>⏱️ Personal Focus Timer</h3>
-        <div class="sw-time" id="sw-display">00:00:00</div>
-        <div class="sw-controls">
-            <button class="play" onclick="startTimer()">▶️</button>
-            <button class="pause" onclick="pauseTimer()">⏸️</button>
-            <button class="reset" onclick="resetTimer()">🔄</button>
+        <div class="hoq-grid" id="hoq-grid">
+            <!-- Questions injected via JS -->
         </div>
     </div>
 
-    <!-- FIREBASE CLOUD LOGIC -->
+
+    <!-- ================= FLOATING BOTTOM WIDGETS ================= -->
+    <div class="widgets-container">
+        
+        <!-- NOTEPAD WIDGET -->
+        <div class="notepad-wrapper">
+            <div class="notepad-panel" id="notepad-panel">
+                <h3>Scratchpad</h3>
+                <textarea id="notepad-text" placeholder="Write quick notes, formulas, or rants here..."></textarea>
+            </div>
+            <div class="notepad-icon" onclick="toggleNotepad()">📝</div>
+        </div>
+
+        <!-- VID TO MODEL ANSWER BOT -->
+        <div class="vidbot-wrapper">
+            <div class="vidbot-header">🤖 Vid -> Answer Key Bot</div>
+            <div class="vidbot-input-group">
+                <input type="text" id="vidbot-url" placeholder="Paste YouTube Exam Link...">
+                <button onclick="scanVideo()">SCAN</button>
+            </div>
+            <div class="vidbot-console" id="vidbot-console"></div>
+        </div>
+
+        <!-- STOPWATCH WIDGET -->
+        <div class="stopwatch-widget">
+            <h3>⏱️ Focus Timer</h3>
+            <div class="sw-time" id="sw-display">00:00:00</div>
+            <div class="sw-controls">
+                <button class="play" onclick="startTimer()">▶️</button>
+                <button class="pause" onclick="pauseTimer()">⏸️</button>
+                <button class="reset" onclick="resetTimer()">🔄</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= SCRIPTS ================= -->
+    
+    <!-- VIEW TOGGLE LOGIC -->
+    <script>
+        function toggleView(view) {
+            document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
+            document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
+            
+            document.getElementById('tab-arena').classList.toggle('active', view === 'arena');
+            document.getElementById('tab-hoq').classList.toggle('active', view === 'hoq');
+        }
+    </script>
+
+    <!-- NOTEPAD LOGIC -->
+    <script>
+        const npPanel = document.getElementById('notepad-panel');
+        const npText = document.getElementById('notepad-text');
+        
+        // Load saved notes
+        npText.value = localStorage.getItem('my_study_notes') || '';
+        
+        // Auto-save notes on typing
+        npText.addEventListener('input', () => {
+            localStorage.setItem('my_study_notes', npText.value);
+        });
+
+        function toggleNotepad() {
+            npPanel.style.display = (npPanel.style.display === 'flex') ? 'none' : 'flex';
+        }
+    </script>
+
+    <!-- VIDBOT LOGIC (UI Simulation) -->
+    <script>
+        function scanVideo() {
+            const url = document.getElementById('vidbot-url').value;
+            const consoleBox = document.getElementById('vidbot-console');
+            
+            if(!url.includes('youtu')) {
+                alert("Please paste a valid YouTube URL.");
+                return;
+            }
+
+            consoleBox.style.display = 'block';
+            consoleBox.innerHTML = "> Initializing Vision/Audio Agent...<br>";
+            
+            // Mock sequence to simulate processing
+            setTimeout(() => { consoleBox.innerHTML += "> Fetching video stream... OK<br>"; }, 1000);
+            setTimeout(() => { consoleBox.innerHTML += "> Running OCR on teacher's screen...<br>"; }, 2500);
+            setTimeout(() => { consoleBox.innerHTML += "> Listening for verbal confirmations...<br>"; }, 4000);
+            setTimeout(() => { 
+                consoleBox.innerHTML += "<br><span style='color:#fff'>[RESULTS EXTRACTED]</span><br>"; 
+                consoleBox.innerHTML += "1. C (Oxygen)<br>2. A (Newton's 3rd)<br>3. B (Mitochondria)<br>4. D (All of the above)<br>5. B<br><br>";
+                consoleBox.innerHTML += "<i style='color:#7f8c8d; font-size:0.7rem;'>Note: UI is ready. Connect a backend API script to replace this mock data with real AI parsing.</i>";
+            }, 6000);
+        }
+    </script>
+
+    <!-- STOPWATCH LOGIC -->
+    <script>
+        let swTimer;
+        let swElapsed = 0; 
+        let startTime;     
+        let isRunning = false;
+
+        function updateSWDisplay() {
+            let currentTotalMs = swElapsed;
+            if (isRunning) currentTotalMs += (Date.now() - startTime);
+
+            let totalSeconds = Math.floor(currentTotalMs / 1000);
+            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = Date.now(); 
+                swTimer = setInterval(updateSWDisplay, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (isRunning) {
+                swElapsed += (Date.now() - startTime);
+                isRunning = false;
+                clearInterval(swTimer);
+                updateSWDisplay();
+            }
+        }
+
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(swTimer);
+            swElapsed = 0;
+            updateSWDisplay();
+        }
+    </script>
+
+
+    <!-- FIREBASE CLOUD LOGIC (Arena + HoQ) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -298,8 +445,7 @@
 
         setInterval(() => {
             const now = new Date().getTime();
-            let nextExam = null;
-            let otherExams = [];
+            let nextExam = null; let otherExams = [];
 
             for (let exam of exams) {
                 if (exam.date > now) {
@@ -326,24 +472,18 @@
                     const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
                     return `<div class="exam-row"><span>${exam.name}</span><strong>${daysLeft} days left</strong></div>`;
                 }).join('');
-
-                if (extendedPanel.innerHTML !== newExtendedHTML) {
-                    extendedPanel.innerHTML = newExtendedHTML;
-                }
-
+                if (extendedPanel.innerHTML !== newExtendedHTML) extendedPanel.innerHTML = newExtendedHTML;
             } else {
-                titleEl.innerText = "ALL EXAMS COMPLETED!";
-                timerEl.innerText = "00d : 00h : 00m : 00s";
-                if (extendedPanel.innerHTML !== "") {
-                    extendedPanel.innerHTML = "";
-                }
+                titleEl.innerText = "ALL EXAMS COMPLETED!"; timerEl.innerText = "00d : 00h : 00m : 00s";
+                if (extendedPanel.innerHTML !== "") extendedPanel.innerHTML = "";
             }
         }, 1000);
 
         let localState = { 
             scores: { mohamed: 0, moaz: 0 }, 
             todos: { mohamed: [], moaz: [] },
-            weakpoints: { mohamed: [], moaz: [] }
+            weakpoints: { mohamed: [], moaz: [] },
+            hoq: [] // Hall of Questions Array
         };
 
         onValue(stateRef, (snapshot) => {
@@ -352,7 +492,8 @@
                 localState = {
                     scores: data.scores || { mohamed: 0, moaz: 0 },
                     todos: { mohamed: data.todos?.mohamed || [], moaz: data.todos?.moaz || [] },
-                    weakpoints: { mohamed: data.weakpoints?.mohamed || [], moaz: data.weakpoints?.moaz || [] }
+                    weakpoints: { mohamed: data.weakpoints?.mohamed || [], moaz: data.weakpoints?.moaz || [] },
+                    hoq: data.hoq || []
                 };
             }
             updateDOM();
@@ -363,11 +504,7 @@
         window.resetAllData = function() {
             if(confirm("🚨 WARNING: Are you 100% sure you want to WIPE EVERYTHING? Scores, tasks, weakpoints - all back to zero. This cannot be undone!")) {
                 if(confirm("Double checking: WIPE ALL DATA for Mohamed and Moaz?")) {
-                    localState = { 
-                        scores: { mohamed: 0, moaz: 0 }, 
-                        todos: { mohamed: [], moaz: [] },
-                        weakpoints: { mohamed: [], moaz: [] }
-                    };
+                    localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, weakpoints: { mohamed: [], moaz: [] }, hoq: localState.hoq }; // Kept HoQ intact during reset
                     saveToCloud();
                     alert("Database completely nuked. Starting fresh!");
                 }
@@ -377,19 +514,9 @@
         window.addTodo = function(player) {
             const nameInput = document.getElementById(`input-${player}-task`);
             const estInput = document.getElementById(`input-${player}-est`);
-
             if (!nameInput.value.trim() || !estInput.value) return alert("Enter task and estimated hours!");
-
-            localState.todos[player].push({
-                id: Date.now(),
-                task: nameInput.value.trim(),
-                est: parseFloat(estInput.value),
-                act: '', 
-                checked: false,
-                quality: ''
-            });
-            nameInput.value = ''; estInput.value = '';
-            saveToCloud();
+            localState.todos[player].push({ id: Date.now(), task: nameInput.value.trim(), est: parseFloat(estInput.value), act: '', checked: false, quality: '' });
+            nameInput.value = ''; estInput.value = ''; saveToCloud();
         };
 
         window.toggleTodo = function(player, id) {
@@ -398,29 +525,17 @@
                 if (!todo.checked) {
                     let choice = prompt("ذاكرت ولا كروت؟ 🤔\n\n1 - ذاكرت (بجد وعملت اللي عليا)\n2 - كروت (تأدية واجب وخلاص)");
                     if (choice === null) return; 
-                    
-                    let selection = (choice.trim() === "1") ? "ذاكرت" : "كروت";
-                    todo.quality = selection;
-                    todo.checked = true;
-                } else {
-                    todo.checked = false;
-                    todo.quality = '';
-                }
+                    todo.quality = (choice.trim() === "1") ? "ذاكرت" : "كروت"; todo.checked = true;
+                } else { todo.checked = false; todo.quality = ''; }
                 saveToCloud();
             }
         };
 
-        window.deleteTodo = function(player, id) {
-            localState.todos[player] = localState.todos[player].filter(t => t.id !== id);
-            saveToCloud();
-        };
-
+        window.deleteTodo = function(player, id) { localState.todos[player] = localState.todos[player].filter(t => t.id !== id); saveToCloud(); };
+        
         window.updateActualTime = function(player, id, inputVal) {
             const todo = localState.todos[player].find(t => t.id === id);
-            if (todo) {
-                todo.act = inputVal === '' ? '' : parseFloat(inputVal);
-                saveToCloud(); 
-            }
+            if (todo) { todo.act = inputVal === '' ? '' : parseFloat(inputVal); saveToCloud(); }
         };
 
         window.addWeakpoint = function(player) {
@@ -428,75 +543,94 @@
             const textInput = document.getElementById(`wp-text-${player}`);
             if (!textInput.value.trim()) return alert("Enter a weakpoint!");
             localState.weakpoints[player].push({ id: Date.now(), subject: subj, text: textInput.value.trim() });
-            textInput.value = '';
-            saveToCloud();
+            textInput.value = ''; saveToCloud();
         };
 
         window.eliminateWeakpoint = function(player, id) {
             if(confirm("Did you actually study and eliminate this weakpoint? (+1 Point!)")) {
                 localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id);
-                localState.scores[player] += 1;
-                saveToCloud();
+                localState.scores[player] += 1; saveToCloud();
             }
         };
 
-        // NEW: ACCIDENT / ERROR DELETE GUARD (NO POINTS ALTERED)
         window.deleteWeakpoint = function(player, id) {
             if (confirm("Remove this weakpoint entry? (No points will be added or lost)")) {
-                localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id);
-                saveToCloud();
+                localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id); saveToCloud();
             }
         };
 
         window.endTheDay = function() {
             if (!confirm("Process daily tallies for BOTH players?")) return;
-
             ['mohamed', 'moaz'].forEach(player => {
                 const tasks = localState.todos[player];
-                const totalTasks = tasks.length;
-                
-                if (totalTasks === 0) return;
-
+                if (tasks.length === 0) return;
                 const allChecked = tasks.every(t => t.checked);
-                
                 if (allChecked) {
-                    const missedActuals = tasks.some(t => t.act === '' || t.act <= 0);
-                    if (missedActuals) {
-                        alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0! You must enter real times before ending the day.`);
-                        return; 
-                    }
-
-                    let totalEst = 0;
-                    let totalAct = 0;
-
-                    tasks.forEach(t => {
-                        totalEst += t.est;
-                        totalAct += t.act;
-                    });
-
-                    let pointsGained = 1; 
-                    let bonusMessages = [];
-
-                    if (totalAct < totalEst) {
-                        pointsGained += 1;
-                        bonusMessages.push(`⚡ Speed Demon (${totalAct}h actual < ${totalEst}h est) -> +1 Point`);
-                    }
-
+                    if (tasks.some(t => t.act === '' || t.act <= 0)) { alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0!`); return; }
+                    let totalEst = 0; let totalAct = 0;
+                    tasks.forEach(t => { totalEst += t.est; totalAct += t.act; });
+                    let pointsGained = 1; let bonusMessages = [];
+                    if (totalAct < totalEst) { pointsGained += 1; bonusMessages.push(`⚡ Speed Demon -> +1 Point`); }
                     localState.scores[player] += pointsGained;
-                    
-                    let finalAlert = `✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n`;
-                    if (bonusMessages.length > 0) finalAlert += bonusMessages.join("\n");
+                    let finalAlert = `✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n` + bonusMessages.join("\n");
                     alert(finalAlert);
-
                 } else {
                     localState.scores[player] -= 1;
                     alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
                 }
-
                 localState.todos[player] = []; 
             });
-
             saveToCloud();
+        };
+
+        /* HALL OF QUESTIONS LOGIC */
+        window.uploadQuestion = function() {
+            const fileInput = document.getElementById('hoq-file');
+            const answerInput = document.getElementById('hoq-answer-input');
+            
+            if (!fileInput.files[0] || !answerInput.value.trim()) {
+                alert("Please select an image AND write an answer!"); return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Compress image before saving to DB
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const MAX_WIDTH = 600;
+                    let scaleSize = MAX_WIDTH / img.width;
+                    if(scaleSize > 1) scaleSize = 1; // Don't scale up small images
+                    canvas.width = img.width * scaleSize;
+                    canvas.height = img.height * scaleSize;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const base64Img = canvas.toDataURL('image/jpeg', 0.6); // Compress Quality
+                    
+                    localState.hoq.unshift({
+                        id: Date.now(),
+                        image: base64Img,
+                        answer: answerInput.value.trim()
+                    });
+                    
+                    fileInput.value = ''; answerInput.value = '';
+                    saveToCloud();
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.toggleSpoiler = function(id) {
+            const answerDiv = document.getElementById(`hoq-ans-${id}`);
+            if(answerDiv.style.display === 'block') {
+                answerDiv.style.display = 'none';
+            } else {
+                answerDiv.style.display = 'block';
+            }
         };
 
         function updateDOM() {
@@ -511,9 +645,7 @@
                 const totalTasksNum = currentTasks.length;
                 const totalEstHours = currentTasks.reduce((sum, item) => sum + (parseFloat(item.est) || 0), 0);
 
-                if (statsEl) {
-                    statsEl.innerHTML = `Tasks: <strong>${totalTasksNum}</strong> | Total Est: <strong>${totalEstHours} Hrs</strong>`;
-                }
+                if (statsEl) statsEl.innerHTML = `Tasks: <strong>${totalTasksNum}</strong> | Total Est: <strong>${totalEstHours} Hrs</strong>`;
 
                 if (listEl) {
                     listEl.innerHTML = '';
@@ -535,17 +667,11 @@
                                     <div class="time-tracking-row">
                                         <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
                                         <span>| Actual Hrs:</span>
-                                        <input type="number" step="0.5"
-                                            class="actual-input-box" 
-                                            placeholder="Hrs" 
-                                            value="${todo.act}" 
-                                            onblur="updateActualTime('${player}', ${todo.id}, this.value)">
+                                        <input type="number" step="0.5" class="actual-input-box" placeholder="Hrs" value="${todo.act}" onblur="updateActualTime('${player}', ${todo.id}, this.value)">
                                     </div>
                                 </div>
                                 <div class="todo-actions">
-                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">
-                                        ${todo.checked ? '↩️' : '✅'}
-                                    </button>
+                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">${todo.checked ? '↩️' : '✅'}</button>
                                     <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
                                 </div>
                             </li>
@@ -572,53 +698,43 @@
                     });
                 }
             });
-        }
-    </script>
 
-    <!-- UPDATED CLOCK-SYNCED STOPWATCH SCRIPT -->
-    <script>
-        let swTimer;
-        let swElapsed = 0; 
-        let startTime;     
-        let isRunning = false;
-
-        function updateSWDisplay() {
-            let currentTotalMs = swElapsed;
-            if (isRunning) {
-                currentTotalMs += (Date.now() - startTime);
+            // Update HoQ Grid
+            const hoqGrid = document.getElementById('hoq-grid');
+            if(hoqGrid) {
+                hoqGrid.innerHTML = '';
+                localState.hoq.forEach(q => {
+                    hoqGrid.innerHTML += `
+                        <div class="hoq-card">
+                            <img src="${q.image}" alt="Question Image">
+                            <button class="hoq-spoiler-btn" onclick="toggleSpoiler(${q.id})">👁️ Toggle Answer</button>
+                            <div class="hoq-answer" id="hoq-ans-${q.id}">${q.answer}</div>
+                        </div>
+                    `;
+                });
             }
 
-            let totalSeconds = Math.floor(currentTotalMs / 1000);
-            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            // Update QOTD Logic
+            const qotdContainer = document.getElementById('qotd-container');
+            const qotdContent = document.getElementById('qotd-content');
             
-            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
-        }
+            if(localState.hoq.length > 0) {
+                qotdContainer.style.display = 'block';
+                // Pick a pseudo-random question based on the current day so it stays the same all day
+                const daySeed = Math.floor(Date.now() / 86400000); 
+                const selectedIndex = daySeed % localState.hoq.length;
+                const dailyQ = localState.hoq[selectedIndex];
 
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                startTime = Date.now(); 
-                swTimer = setInterval(updateSWDisplay, 1000);
+                qotdContent.innerHTML = `
+                    <img src="${dailyQ.image}" alt="Question of the Day">
+                    <button class="hoq-spoiler-btn" onclick="toggleSpoiler('qotd')">👁️ Reveal Answer</button>
+                    <div class="hoq-answer" id="hoq-ans-qotd" style="background:#000; padding:15px; width:100%;">${dailyQ.answer}</div>
+                `;
+            } else {
+                qotdContainer.style.display = 'none';
             }
-        }
-
-        function pauseTimer() {
-            if (isRunning) {
-                swElapsed += (Date.now() - startTime);
-                isRunning = false;
-                clearInterval(swTimer);
-                updateSWDisplay();
-            }
-        }
-
-        function resetTimer() {
-            isRunning = false;
-            clearInterval(swTimer);
-            swElapsed = 0;
-            updateSWDisplay();
         }
     </script>
+
 </body>
 </html>
