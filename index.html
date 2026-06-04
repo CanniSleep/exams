@@ -86,9 +86,13 @@
         .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
         .player-column.moaz { border-top: 8px solid var(--moaz-color); }
 
-        .player-column h2 { font-size: 2.2rem; margin-bottom: 15px; text-transform: uppercase; }
+        .player-column h2 { font-size: 2.2rem; margin-bottom: 5px; text-transform: uppercase; }
         .mohamed h2 { color: var(--mohamed-color); }
         .moaz h2 { color: var(--moaz-color); }
+
+        /* PLAYER STATS COUNTER BAR */
+        .player-stats { display: flex; gap: 15px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.9rem; color: #aaa; text-transform: uppercase; font-weight: bold; }
+        .player-stats strong { color: #fff; font-size: 1rem; }
 
         /* INPUTS & FORMS */
         .todo-form { display: flex; gap: 10px; margin-bottom: 25px; }
@@ -191,6 +195,8 @@
     <main class="arena">
         <div class="player-column mohamed">
             <h2>Mohamed</h2>
+            <div class="player-stats" id="stats-mohamed">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
+            
             <div class="todo-form">
                 <input type="text" id="input-mohamed-task" class="task-name" placeholder="Add task...">
                 <input type="number" step="0.5" id="input-mohamed-est" class="task-est" placeholder="Est. Hrs" min="0">
@@ -201,6 +207,8 @@
 
         <div class="player-column moaz">
             <h2>Moaz</h2>
+            <div class="player-stats" id="stats-moaz">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
+            
             <div class="todo-form">
                 <input type="text" id="input-moaz-task" class="task-name" placeholder="Add task...">
                 <input type="number" step="0.5" id="input-moaz-est" class="task-est" placeholder="Est. Hrs" min="0">
@@ -381,7 +389,6 @@
             saveToCloud();
         };
 
-        // --- UPDATED CHOICE PROMPT LOGIC ---
         window.toggleTodo = function(player, id) {
             const todo = localState.todos[player].find(t => t.id === id);
             if (todo) {
@@ -430,7 +437,6 @@
             }
         };
 
-        // --- CALCULATE POINTS WITH NEUTRAL QUALITY SCALE ---
         window.endTheDay = function() {
             if (!confirm("Process daily tallies for BOTH players?")) return;
 
@@ -488,10 +494,21 @@
 
             ['mohamed', 'moaz'].forEach(player => {
                 const listEl = document.getElementById(`list-${player}`);
+                const statsEl = document.getElementById(`stats-${player}`);
+                
+                // Calculate live totals for the counter row
+                const currentTasks = localState.todos[player];
+                const totalTasksNum = currentTasks.length;
+                const totalEstHours = currentTasks.reduce((sum, item) => sum + (parseFloat(item.est) || 0), 0);
+
+                // Update the counter text
+                if (statsEl) {
+                    statsEl.innerHTML = `Tasks: <strong>${totalTasksNum}</strong> | Total Est: <strong>${totalEstHours} Hrs</strong>`;
+                }
+
                 if (listEl) {
                     listEl.innerHTML = '';
-                    localState.todos[player].forEach(todo => {
-                        // Color-coded badge markers based on selection
+                    currentTasks.forEach(todo => {
                         let badgeHTML = '';
                         if (todo.checked && todo.quality) {
                             let bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
