@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOHAMED VS MOAZ: FINAL LAP</title>
+    <title>MOHAMED VS MOAZ: THE FINAL LAP</title>
     <style>
         :root {
             --bg-color: #0d0e15; --card-bg: #171926;
@@ -21,46 +22,305 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        /* NAVIGATION */
-        .nav-tabs { display: flex; gap: 20px; margin-bottom: 30px; }
+        /* NAVIGATION TABS */
+        .nav-tabs { display: flex; gap: 20px; margin-bottom: 20px; }
         .nav-tab {
-            background: #222; color: #fff; border: 2px solid #555; padding: 12px 40px; font-size: 1.2rem;
+            background: #222; color: #fff; border: 2px solid #555; padding: 10px 30px; font-size: 1.2rem;
             border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase;
         }
         .nav-tab.active { background: var(--countdown-color); border-color: #fff; box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); }
 
-        .view-section { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
+        /* VIEW CONTAINERS */
+        .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         #view-hoq { display: none; }
 
         header { text-align: center; margin-bottom: 20px; }
-        h1 { font-size: 4rem; text-transform: uppercase; margin-bottom: 10px; }
-        .vs { font-style: italic; color: var(--countdown-color); padding: 0 10px; }
+        h1 { font-size: 3.5rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.3); margin-bottom: 5px; }
+        .vs { font-style: italic; background: linear-gradient(45deg, var(--mohamed-color), var(--moaz-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 10px; }
 
-        /* ARENA */
-        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 30px; width: 100%; border-radius: 12px; margin-bottom: 40px; text-align: center; }
-        .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 3rem; margin-bottom: 20px; }
-        .score-box { padding: 20px 40px; border-radius: 10px; }
-        .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); }
-        .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); }
+        /* BANNER & LEADERBOARD */
+        .countdown-banner, .leaderboard {
+            background: linear-gradient(135deg, #1f1135, #0b061f);
+            border: 2px dashed var(--countdown-color); border-radius: 12px;
+            padding: 20px; width: 100%; max-width: 900px; margin-bottom: 25px; text-align: center;
+        }
+        .leaderboard { border: 3px solid #333; background: var(--card-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .leaderboard h2 { font-size: 2rem; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
 
-        .arena { display: flex; gap: 40px; width: 100%; flex-wrap: wrap; }
-        .player-column { flex: 1; min-width: 400px; background: var(--card-bg); border-radius: 15px; padding: 30px; }
+        .countdown-banner h3 { font-size: 1.2rem; color: #00ffcc; font-family: sans-serif; text-transform: uppercase; margin-bottom: 5px; }
+        #timer { font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px var(--countdown-color); margin-bottom: 15px; }
+
+        .see-all-btn { background: transparent; border: 1px solid var(--countdown-color); color: #fff; padding: 8px 16px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
+        .see-all-btn:hover { background: var(--countdown-color); box-shadow: 0 0 10px var(--countdown-color); }
         
-        input, select, textarea { background: #25283d; border: 2px solid #444; color: white; padding: 15px; font-size: 1.1rem; border-radius: 6px; width: 100%; margin-bottom: 10px; }
-        button { padding: 15px 30px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
+        .extended-exams { display: none; margin-top: 15px; background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 15px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-family: sans-serif; text-align: left; }
+        .exam-row { background: #221736; padding: 8px 12px; border-radius: 5px; font-size: 0.9rem; border-left: 3px solid #00ffcc; display: flex; justify-content: space-between; }
+
+        /* QOTD SECTION */
+        .qotd-container {
+            width: 100%; max-width: 900px; background: #1a1a2e; border: 2px solid #f1c40f; border-radius: 12px;
+            padding: 20px; margin-bottom: 25px; text-align: center; box-shadow: 0 0 20px rgba(241, 196, 15, 0.2);
+        }
+        .qotd-container h3 { color: #f1c40f; font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; }
+        .qotd-content { display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: sans-serif; }
+        /* FIXED: Bigger, better QOTD image */
+        .qotd-content .qotd-question-img {
+            max-width: 100%;
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 2px solid #f1c40f;
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+            background: #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qotd-content .qotd-question-img:hover { transform: scale(1.01); }
+
+        .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; flex-wrap: wrap; gap: 15px; }
+        .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
+        .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); box-shadow: 0 0 15px var(--mohamed-glow); }
+        .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); box-shadow: 0 0 15px var(--moaz-glow); }
+
+        .leaderboard-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        button.day-btn { background: #ffcc00; color: #000; border: none; padding: 15px 35px; font-size: 1.3rem; cursor: pointer; border-radius: 8px; transition: transform 0.2s; }
+        button.day-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
+        button.reset-data-btn { background: transparent; color: var(--danger-color); border: 2px solid var(--danger-color); padding: 8px 20px; font-size: 1rem; cursor: pointer; border-radius: 6px; font-family: sans-serif; font-weight: bold; transition: all 0.2s; margin-top: 10px; }
+
+        /* ARENA & COLUMNS */
+        .arena { display: flex; gap: 30px; width: 100%; max-width: 1100px; flex-wrap: wrap; margin-bottom: 40px; }
+        .player-column { flex: 1; min-width: 320px; background: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .player-column.mohamed { border-top: 8px solid var(--mohamed-color); }
+        .player-column.moaz { border-top: 8px solid var(--moaz-color); }
+        .player-column h2 { font-size: 2.2rem; margin-bottom: 5px; text-transform: uppercase; }
+        .mohamed h2 { color: var(--mohamed-color); }
+        .moaz h2 { color: var(--moaz-color); }
+
+        .player-stats { display: flex; gap: 15px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.9rem; color: #aaa; text-transform: uppercase; font-weight: bold; }
+        .player-stats strong { color: #fff; font-size: 1rem; }
+
+        .todo-form { display: flex; gap: 10px; margin-bottom: 25px; }
+        .todo-form input.task-name { flex: 2; min-width: 150px; }
+        .todo-form input.task-est { flex: 1; min-width: 80px; }
+        input, select, textarea { background: #25283d; border: 2px solid #444; color: white; padding: 12px; font-size: 1rem; border-radius: 6px; font-family: sans-serif; font-weight: bold; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #888; }
+        .todo-form button, .add-btn { color: #000; border: none; padding: 12px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+        .mohamed .todo-form button, .mohamed .add-btn { background: var(--mohamed-color); }
+        .moaz .todo-form button, .moaz .add-btn { background: var(--moaz-color); }
+
+        .todo-list, .weakpoint-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .todo-item, .wp-item { background: #202231; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-left: 4px solid #555; }
+        .mohamed .todo-item { border-left-color: var(--mohamed-color); }
+        .moaz .todo-item { border-left-color: var(--moaz-color); }
+        .todo-item.checked { border-left-color: var(--success-color) !important; }
+        .todo-item.checked .todo-text { opacity: 0.4; text-decoration: line-through; }
+        .todo-info { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
+        .todo-text { font-size: 1.2rem; }
+        .time-tracking-row { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-size: 0.85rem; color: #aaa; flex-wrap: wrap; }
+        .actual-input-box { background: #11131c; border: 1px solid #555; color: #fff; width: 70px; padding: 4px 6px; border-radius: 4px; text-align: center; font-family: sans-serif; }
+        .quality-badge { color: #000; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; font-family: sans-serif; }
+        .todo-actions { display: flex; align-items: center; gap: 8px; }
+        .checkbox-btn, .delete-btn { border: none; color: white; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; }
+        .checkbox-btn { background: var(--success-color); }
+        .delete-btn { background: var(--danger-color); }
+
+        .weakpoints-header { width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px; font-size: 2.5rem; color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); }
+        .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .wp-input-group select { flex: 1; }
+        .wp-input-group input { flex: 2; }
+        .wp-item { background: #1a0f14; border: 1px solid #444; border-left: 5px solid #ff3366; }
+        .wp-subject { font-family: sans-serif; font-size: 0.8rem; color: #ff3366; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
+
+        /* ======================= */
+        /* HALL OF QUESTIONS STYLES */
+        /* ======================= */
+        .hoq-header { font-size: 2.5rem; color: var(--hoq-color); text-shadow: 0 0 15px rgba(155, 89, 182, 0.5); margin-bottom: 20px; }
         
-        .todo-item { background: #202231; padding: 20px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        /* NEW: Redesigned upload card with dual image fields */
+        .hoq-upload-card {
+            background: var(--card-bg); padding: 25px; border-radius: 12px;
+            width: 100%; max-width: 750px; border: 2px dashed var(--hoq-color);
+            margin-bottom: 30px; display: flex; flex-direction: column; gap: 18px;
+            position: relative;
+        }
+        .hoq-upload-card h3 {
+            color: var(--hoq-color); font-size: 1.2rem; text-align: center;
+            font-family: sans-serif; text-transform: uppercase; letter-spacing: 2px;
+        }
+        
+        /* Image input field (question or answer) */
+        .hoq-img-field {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .hoq-img-field label {
+            font-family: sans-serif; font-size: 0.85rem; color: #aaa;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+        .hoq-img-drop-zone {
+            background: #11131c; border: 2px dashed #444; border-radius: 8px;
+            padding: 20px; text-align: center; cursor: pointer; transition: all 0.25s;
+            position: relative; min-height: 90px; display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 8px;
+        }
+        .hoq-img-drop-zone:hover, .hoq-img-drop-zone.drag-over { border-color: var(--hoq-color); background: #1a1030; }
+        .hoq-img-drop-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        .hoq-img-drop-zone .drop-hint {
+            font-family: sans-serif; font-size: 0.85rem; color: #666; pointer-events: none;
+        }
+        .hoq-img-drop-zone .drop-icon { font-size: 1.8rem; pointer-events: none; }
+        .hoq-img-preview {
+            max-width: 100%; max-height: 200px; border-radius: 6px; object-fit: contain;
+            display: none; pointer-events: none;
+        }
+        .hoq-img-drop-zone.has-image .drop-icon,
+        .hoq-img-drop-zone.has-image .drop-hint { display: none; }
+        .hoq-img-drop-zone.has-image .hoq-img-preview { display: block; }
+        .hoq-clear-img {
+            background: var(--danger-color); color: #fff; border: none; padding: 4px 10px;
+            border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-family: sans-serif;
+            font-weight: bold; display: none; align-self: flex-start;
+        }
+        .hoq-img-field.has-image .hoq-clear-img { display: inline-block; }
 
-        /* HALL OF QUESTIONS */
-        .hoq-upload-card { background: var(--card-bg); padding: 30px; border-radius: 12px; width: 100%; border: 2px dashed var(--hoq-color); margin-bottom: 30px; }
-        .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; width: 100%; }
-        .hoq-card { background: #202231; padding: 20px; border-radius: 10px; border: 1px solid #444; }
-        .hoq-card img { width: 100%; height: auto; border-radius: 6px; margin-bottom: 10px; }
+        /* Text answer field */
+        .hoq-upload-card textarea {
+            resize: vertical; min-height: 80px; width: 100%;
+            background: #11131c; border: 2px solid #444; color: #fff;
+        }
+        
+        .hoq-upload-card button.upload-btn {
+            background: var(--hoq-color); color: #fff; border: none; padding: 14px;
+            font-size: 1.2rem; cursor: pointer; border-radius: 6px;
+            font-family: sans-serif; font-weight: bold; transition: all 0.2s;
+        }
+        .hoq-upload-card button.upload-btn:hover { background: #b36ac9; transform: scale(1.02); }
 
-        /* WIDGETS */
-        .widgets-container { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 20px; z-index: 1000; }
-        .notepad-panel { background: #fcf3cf; border-radius: 12px; width: 300px; height: 300px; padding: 15px; display: none; flex-direction: column; }
-        .stopwatch-widget { background: #171926; padding: 20px; border-radius: 12px; border: 2px solid #555; }
+        .paste-indicator {
+            background: #2ecc71; color: #000; padding: 5px 10px; border-radius: 4px;
+            font-family: sans-serif; font-size: 0.8rem; font-weight: bold;
+            position: absolute; top: -10px; right: 20px; display: none;
+        }
+
+        /* HoQ Grid Cards */
+        .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
+        .hoq-card { background: #202231; border-radius: 10px; padding: 15px; border: 1px solid #444; display: flex; flex-direction: column; gap: 10px; }
+        .hoq-card-label { font-family: sans-serif; font-size: 0.75rem; color: #777; text-transform: uppercase; font-weight: bold; }
+        .hoq-card img { width: 100%; height: auto; border-radius: 6px; background: #000; cursor: pointer; transition: opacity 0.2s; }
+        .hoq-card img:hover { opacity: 0.9; }
+        .hoq-no-img { font-family: sans-serif; font-size: 0.85rem; color: #555; padding: 10px; background: #111; border-radius: 6px; text-align: center; }
+        .hoq-spoiler-btn { background: #444; color: #fff; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-family: sans-serif; font-weight: bold; }
+        .hoq-answer-reveal { background: #111; padding: 10px; border-radius: 6px; display: none; }
+        .hoq-answer-reveal img { width: 100%; height: auto; border-radius: 6px; margin-bottom: 8px; }
+        .hoq-answer-text { color: #00ffcc; font-family: sans-serif; font-size: 0.95rem; white-space: pre-wrap; }
+
+        /* Image Lightbox */
+        .lightbox-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999;
+            display: none; align-items: center; justify-content: center; cursor: zoom-out;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-overlay img { max-width: 95vw; max-height: 95vh; object-fit: contain; border-radius: 8px; }
+
+        /* ======================= */
+        /* VID BOT — REDESIGNED    */
+        /* ======================= */
+        .vidbot-wrapper {
+            background: rgba(10, 12, 22, 0.97); border: 2px solid #00f0ff; padding: 18px;
+            border-radius: 14px; box-shadow: 0 10px 40px rgba(0, 240, 255, 0.15);
+            width: 360px; backdrop-filter: blur(8px);
+        }
+        .vidbot-header {
+            font-family: sans-serif; font-size: 0.85rem; color: #00f0ff;
+            margin-bottom: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+        }
+        .vidbot-subheader {
+            font-family: sans-serif; font-size: 0.72rem; color: #556; margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .vidbot-input-group { display: flex; gap: 6px; margin-bottom: 10px; }
+        .vidbot-input-group input {
+            flex-grow: 1; padding: 9px; font-size: 0.82rem;
+            background: #0a0c16; border: 1px solid #1a3a44; color: #ccc; border-radius: 6px;
+        }
+        .vidbot-input-group input:focus { border-color: #00f0ff; outline: none; }
+        .vidbot-input-group button {
+            background: #00f0ff; color: #000; border: none; padding: 9px 14px;
+            font-weight: bold; cursor: pointer; border-radius: 6px; font-family: sans-serif;
+            font-size: 0.85rem; white-space: nowrap; transition: all 0.2s;
+        }
+        .vidbot-input-group button:hover { background: #33f4ff; }
+        .vidbot-input-group button:disabled { background: #2a4a4a; color: #555; cursor: not-allowed; }
+
+        /* Status bar */
+        .vidbot-status {
+            font-family: monospace; font-size: 0.78rem; color: #00f0ff;
+            background: #000d10; border: 1px solid #0a2a30; padding: 6px 10px;
+            border-radius: 4px; min-height: 28px; display: none;
+            align-items: center; gap: 6px; margin-bottom: 8px;
+        }
+        .vidbot-status.active { display: flex; }
+        .vidbot-spinner { width: 10px; height: 10px; border: 2px solid #00f0ff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Results pane */
+        .vidbot-results {
+            background: #000d10; border: 1px solid #0a2a30; border-radius: 8px;
+            padding: 12px; display: none; max-height: 320px; overflow-y: auto;
+            font-family: sans-serif; font-size: 0.85rem;
+        }
+        .vidbot-results.active { display: block; }
+        .vidbot-section-title {
+            color: #00f0ff; font-weight: bold; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+            border-bottom: 1px solid #0a3a40; padding-bottom: 4px;
+        }
+        .vidbot-mcq-row {
+            display: flex; gap: 8px; align-items: baseline;
+            padding: 4px 0; border-bottom: 1px solid #0a1a20; color: #ddd;
+        }
+        .vidbot-q-num { color: #00f0ff; font-weight: bold; min-width: 24px; }
+        .vidbot-answer { color: #00ffaa; font-weight: bold; min-width: 28px; }
+        .vidbot-q-text { color: #888; font-size: 0.78rem; flex: 1; }
+        .vidbot-essay-block {
+            background: #0a1520; border-radius: 4px; padding: 10px;
+            margin-bottom: 8px; border-left: 3px solid #9b59b6;
+        }
+        .vidbot-essay-q { color: #9b59b6; font-weight: bold; margin-bottom: 4px; }
+        .vidbot-essay-a { color: #ccc; line-height: 1.5; white-space: pre-wrap; font-size: 0.82rem; }
+        .vidbot-error { color: #e74c3c; font-family: sans-serif; font-size: 0.82rem; padding: 8px; background: #1a0a0a; border-radius: 4px; }
+        .vidbot-disclaimer {
+            color: #334; font-family: sans-serif; font-size: 0.7rem;
+            margin-top: 8px; line-height: 1.4; font-style: italic;
+        }
+
+
+        /* FLOATING WIDGETS */
+        .widgets-container { position: fixed; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 1000; pointer-events: none; }
+        .widgets-container > * { pointer-events: auto; }
+        .left-widgets { display: flex; flex-direction: column; align-items: flex-start; gap: 15px; pointer-events: none; }
+        .left-widgets > * { pointer-events: auto; }
+
+        /* Notepad */
+        .notepad-wrapper { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+        .notepad-icon { background: #f1c40f; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid #d4ac0d; transition: transform 0.2s; }
+        .notepad-icon:hover { transform: scale(1.1); }
+        .notepad-panel { background: #fcf3cf; border-radius: 12px; width: 280px; height: 350px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: none; flex-direction: column; border: 1px solid #d4ac0d; position: relative; }
+        .notepad-panel::before { content: ''; position: absolute; bottom: -10px; left: 20px; width: 20px; height: 20px; background: #fcf3cf; transform: rotate(45deg); border-right: 1px solid #d4ac0d; border-bottom: 1px solid #d4ac0d; }
+        .notepad-panel h3 { color: #b7950b; font-family: sans-serif; font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .notepad-panel textarea { flex-grow: 1; background: transparent; border: none; outline: none; color: #333; font-family: 'Comic Sans MS', sans-serif, Arial; font-size: 1rem; resize: none; font-weight: normal; }
+
+        /* Stopwatch */
+        .stopwatch-widget { background: rgba(15, 17, 26, 0.95); border: 2px solid #555; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; backdrop-filter: blur(5px); }
+        .stopwatch-widget h3 { font-family: sans-serif; font-size: 0.9rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
+        .sw-time { font-size: 2.5rem; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+        .sw-controls button { background: #333; color: white; border: none; padding: 8px 15px; margin: 0 3px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+        .sw-controls button:hover { background: #555; }
+        .sw-controls button.play { background: #2ecc71; color: #000; }
+        .sw-controls button.pause { background: #f1c40f; color: #000; }
+        .sw-controls button.reset { background: #e74c3c; }
     </style>
 </head>
 <body>
@@ -73,59 +333,446 @@
         </div>
     </header>
 
+    <!-- ================= THE ARENA VIEW ================= -->
     <div id="view-arena" class="view-section">
+        <section class="countdown-banner">
+            <h3 id="exam-title">INITIALIZING SYSTEM...</h3>
+            <div id="timer">00d : 00h : 00m : 00s</div>
+            <button class="see-all-btn" onclick="toggleExamsPanel()">📂 See All Exams</button>
+            <div class="extended-exams" id="extended-exams-panel"></div>
+        </section>
+
+        <section class="qotd-container" id="qotd-container" style="display: none;">
+            <h3>🌟 Question of the Day 🌟</h3>
+            <div class="qotd-content" id="qotd-content"></div>
+        </section>
+
         <section class="leaderboard">
-            <h2>🔥 LEADERBOARD 🔥</h2>
+            <h2>🔥 OVERALL LEADERBOARD 🔥</h2>
             <div class="board-flex">
                 <div class="score-box mohamed"><div>MOHAMED</div><div id="score-mohamed">0</div></div>
+                <div style="font-size: 1.5rem; color: #555;">VS</div>
                 <div class="score-box moaz"><div>MOAZ</div><div id="score-moaz">0</div></div>
             </div>
-            <button class="reset-btn" onclick="resetAllData()" style="color: #e74c3c; background: transparent; border: 1px solid #e74c3c;">⚠️ Reset Data</button>
+            <div class="leaderboard-actions">
+                <button class="day-btn" onclick="endTheDay()">🚨 END THE DAY & CALCULATE POINTS 🚨</button>
+                <button class="reset-data-btn" onclick="resetAllData()">⚠️ Reset All Data to Zero ⚠️</button>
+            </div>
         </section>
 
         <main class="arena">
             <div class="player-column mohamed">
                 <h2>Mohamed</h2>
+                <div class="player-stats" id="stats-mohamed">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
                 <div class="todo-form">
-                    <input type="text" id="input-mohamed-task" placeholder="Task name...">
-                    <input type="number" id="input-mohamed-est" placeholder="Est. Hrs">
-                    <button onclick="addTodo('mohamed')" style="background: var(--mohamed-color);">ADD</button>
+                    <input type="text" id="input-mohamed-task" class="task-name" placeholder="Add task...">
+                    <input type="number" step="0.5" id="input-mohamed-est" class="task-est" placeholder="Est. Hrs" min="0">
+                    <button onclick="addTodo('mohamed')">ADD</button>
                 </div>
-                <ul id="list-mohamed" style="list-style:none;"></ul>
+                <ul class="todo-list" id="list-mohamed"></ul>
             </div>
             <div class="player-column moaz">
                 <h2>Moaz</h2>
+                <div class="player-stats" id="stats-moaz">Tasks: <strong>0</strong> | Total Est: <strong>0 Hrs</strong></div>
                 <div class="todo-form">
-                    <input type="text" id="input-moaz-task" placeholder="Task name...">
-                    <input type="number" id="input-moaz-est" placeholder="Est. Hrs">
-                    <button onclick="addTodo('moaz')" style="background: var(--moaz-color);">ADD</button>
+                    <input type="text" id="input-moaz-task" class="task-name" placeholder="Add task...">
+                    <input type="number" step="0.5" id="input-moaz-est" class="task-est" placeholder="Est. Hrs" min="0">
+                    <button onclick="addTodo('moaz')">ADD</button>
                 </div>
-                <ul id="list-moaz" style="list-style:none;"></ul>
+                <ul class="todo-list" id="list-moaz"></ul>
+            </div>
+        </main>
+
+        <h2 class="weakpoints-header">🎯 WEAKPOINT ANNIHILATION ZONE</h2>
+        <main class="arena">
+            <div class="player-column mohamed">
+                <div class="wp-input-group">
+                    <select id="wp-subj-mohamed"><option>Arabic</option><option>Physics</option><option>Biology</option><option>Chemistry</option></select>
+                    <input type="text" id="wp-text-mohamed" placeholder="Identify weakpoint...">
+                    <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
+                </div>
+                <ul class="weakpoint-list" id="wp-list-mohamed"></ul>
+            </div>
+            <div class="player-column moaz">
+                <div class="wp-input-group">
+                    <select id="wp-subj-moaz"><option>Arabic</option><option>Physics</option><option>Biology</option><option>Chemistry</option></select>
+                    <input type="text" id="wp-text-moaz" placeholder="Identify weakpoint...">
+                    <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
+                </div>
+                <ul class="weakpoint-list" id="wp-list-moaz"></ul>
             </div>
         </main>
     </div>
 
+    <!-- ================= HALL OF QUESTIONS VIEW ================= -->
     <div id="view-hoq" class="view-section">
+        <h2 class="hoq-header">🏛️ HALL OF QUESTIONS 🏛️</h2>
+
         <div class="hoq-upload-card">
-            <h3 style="color:var(--hoq-color); margin-bottom: 10px;">📤 Upload (MCQ / Essay)</h3>
-            <input type="file" id="hoq-q-file" accept="image/*">
-            <textarea id="hoq-answer-input" placeholder="Enter answer/solution text..."></textarea>
-            <button class="upload-btn" onclick="uploadQuestion()" style="background: var(--hoq-color);">UPLOAD TO HALL</button>
+            <div class="paste-indicator" id="paste-indicator">📸 Image Ready!</div>
+            <h3>📤 Upload a Question</h3>
+
+            <!-- QUESTION IMAGE FIELD -->
+            <div class="hoq-img-field" id="q-img-field">
+                <label>📷 Question Image</label>
+                <div class="hoq-img-drop-zone" id="q-drop-zone"
+                    ondragover="handleDragOver(event, 'q')"
+                    ondragleave="handleDragLeave('q')"
+                    ondrop="handleDrop(event, 'q')">
+                    <input type="file" accept="image/*" id="hoq-q-file" onchange="handleFileSelect(event, 'q')">
+                    <span class="drop-icon">🖼️</span>
+                    <span class="drop-hint">Click to browse, drag & drop, or Ctrl+V to paste</span>
+                    <img class="hoq-img-preview" id="q-preview" src="" alt="Question preview">
+                </div>
+                <button class="hoq-clear-img" id="q-clear-btn" onclick="clearImage('q')">✕ Remove Image</button>
+            </div>
+
+            <!-- ANSWER FIELD (text + optional image) -->
+            <div class="hoq-img-field" id="a-img-field">
+                <label>✅ Answer Image (optional)</label>
+                <div class="hoq-img-drop-zone" id="a-drop-zone"
+                    ondragover="handleDragOver(event, 'a')"
+                    ondragleave="handleDragLeave('a')"
+                    ondrop="handleDrop(event, 'a')">
+                    <input type="file" accept="image/*" id="hoq-a-file" onchange="handleFileSelect(event, 'a')">
+                    <span class="drop-icon">📝</span>
+                    <span class="drop-hint">Attach an answer image (diagram, worked solution, etc.)</span>
+                    <img class="hoq-img-preview" id="a-preview" src="" alt="Answer preview">
+                </div>
+                <button class="hoq-clear-img" id="a-clear-btn" onclick="clearImage('a')">✕ Remove Image</button>
+            </div>
+
+            <!-- Answer text -->
+            <div>
+                <label style="font-family:sans-serif;font-size:0.85rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-weight:bold;display:block;margin-bottom:6px;">✏️ Answer Text (shown behind spoiler)</label>
+                <textarea id="hoq-answer-input" placeholder="Type the solution, key points, or explanation here..."></textarea>
+            </div>
+
+            <button class="upload-btn" onclick="uploadQuestion()">🏛️ UPLOAD TO HALL</button>
         </div>
+
         <div class="hoq-grid" id="hoq-grid"></div>
     </div>
 
+    <!-- Image Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Full size">
+    </div>
+
+    <!-- ================= FLOATING BOTTOM WIDGETS ================= -->
     <div class="widgets-container">
-        <div class="notepad-wrapper">
-            <div class="notepad-panel" id="notepad-panel"><textarea id="notepad-text"></textarea></div>
-            <button onclick="document.getElementById('notepad-panel').style.display = document.getElementById('notepad-panel').style.display === 'flex' ? 'none' : 'flex'">📝</button>
+        <div class="left-widgets">
+
+            <!-- NOTEPAD WIDGET -->
+            <div class="notepad-wrapper">
+                <div class="notepad-panel" id="notepad-panel">
+                    <h3>Scratchpad</h3>
+                    <textarea id="notepad-text" placeholder="Write quick notes, formulas, or rants here..."></textarea>
+                </div>
+                <div class="notepad-icon" onclick="toggleNotepad()">📝</div>
+            </div>
         </div>
+
+        <!-- STOPWATCH -->
         <div class="stopwatch-widget">
-            <div id="sw-display" style="font-size: 2rem;">00:00:00</div>
-            <button onclick="startTimer()">▶</button><button onclick="resetTimer()">↺</button>
+            <h3>⏱️ Focus Timer</h3>
+            <div class="sw-time" id="sw-display">00:00:00</div>
+            <div class="sw-controls">
+                <button class="play" onclick="startTimer()">▶️</button>
+                <button class="pause" onclick="pauseTimer()">⏸️</button>
+                <button class="reset" onclick="resetTimer()">🔄</button>
+            </div>
         </div>
     </div>
 
+
+    <!-- ================= SCRIPTS ================= -->
+
+    <script>
+        /* ---- VIEW TOGGLE ---- */
+        function toggleView(view) {
+            document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
+            document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
+            document.getElementById('tab-arena').classList.toggle('active', view === 'arena');
+            document.getElementById('tab-hoq').classList.toggle('active', view === 'hoq');
+        }
+
+        /* ---- LIGHTBOX ---- */
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        /* ---- NOTEPAD ---- */
+        const npPanel = document.getElementById('notepad-panel');
+        const npText = document.getElementById('notepad-text');
+        npText.value = localStorage.getItem('my_study_notes') || '';
+        npText.addEventListener('input', () => { localStorage.setItem('my_study_notes', npText.value); });
+        function toggleNotepad() { npPanel.style.display = (npPanel.style.display === 'flex') ? 'none' : 'flex'; }
+
+        /* ---- STOPWATCH ---- */
+        let swTimer, swElapsed = 0, startTime, isRunning = false;
+        function updateSWDisplay() {
+            let ms = swElapsed + (isRunning ? Date.now() - startTime : 0);
+            let s = Math.floor(ms / 1000);
+            const h = Math.floor(s / 3600).toString().padStart(2, '0');
+            const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+            s = (s % 60).toString().padStart(2, '0');
+            document.getElementById('sw-display').innerText = `${h}:${m}:${s}`;
+        }
+        function startTimer() { if (!isRunning) { isRunning = true; startTime = Date.now(); swTimer = setInterval(updateSWDisplay, 1000); } }
+        function pauseTimer() { if (isRunning) { swElapsed += Date.now() - startTime; isRunning = false; clearInterval(swTimer); updateSWDisplay(); } }
+        function resetTimer() { isRunning = false; clearInterval(swTimer); swElapsed = 0; updateSWDisplay(); }
+    </script>
+
+
+    <!-- =====================================
+         VID BOT — CLAUDE API POWERED
+    ====================================== -->
+    <script>
+        async function scanVideo() {
+            const url = document.getElementById('vidbot-url').value.trim();
+            const btn = document.getElementById('vidbot-scan-btn');
+            const statusEl = document.getElementById('vidbot-status');
+            const statusText = document.getElementById('vidbot-status-text');
+            const resultsEl = document.getElementById('vidbot-results');
+
+            if (!url) { alert('Please paste a YouTube link first.'); return; }
+            if (!url.includes('youtu')) { alert('Please paste a valid YouTube URL.'); return; }
+
+            // Reset UI
+            btn.disabled = true;
+            resultsEl.classList.remove('active');
+            resultsEl.innerHTML = '';
+            statusEl.classList.add('active');
+            statusText.textContent = 'Sending to Claude AI...';
+
+            const prompt = `You are an expert Egyptian high school exam assistant. A student has provided this YouTube video link: ${url}
+
+Your job is to analyze this exam correction/model answer video and extract ALL questions and their correct answers.
+
+CRITICAL RULES:
+- Do NOT skip any question. Go through every single question.
+- For MCQ questions: list question number and the correct letter answer (A, B, C, or D). If you can infer the question text, include a short version.
+- For essay/written questions: list the question and provide the full model answer.
+- If you cannot access the video directly, use your web search tool to find any available transcript, description, comments, or related content for this specific video URL that reveals the answers.
+- Format your response ONLY as valid JSON with this exact structure — no markdown, no backticks, no extra text:
+
+{
+  "videoTitle": "title of the video or best guess",
+  "subject": "subject name",
+  "mcq": [
+    {"num": 1, "answer": "A", "questionText": "brief question text or empty string"},
+    {"num": 2, "answer": "C", "questionText": "..."}
+  ],
+  "essays": [
+    {"num": 1, "question": "essay question text", "answer": "full model answer"}
+  ],
+  "notes": "any important notes about the exam, or empty string"
+}
+
+If you truly cannot find any content for this video, return: {"error": "Could not retrieve video content. The video may be private, unavailable, or have no accessible transcript."}`;
+
+            try {
+                statusText.textContent = 'Claude is reading the video...';
+
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || `API error ${response.status}`);
+                }
+
+                const data = await response.json();
+                statusText.textContent = 'Parsing results...';
+
+                // Collect all text blocks from the response (handles tool use + text mixed)
+                const fullText = data.content
+                    .filter(b => b.type === 'text')
+                    .map(b => b.text)
+                    .join('');
+
+                // Strip any accidental markdown fences
+                const cleaned = fullText.replace(/```json|```/gi, '').trim();
+
+                let parsed;
+                try {
+                    // Find the JSON object in the response
+                    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) throw new Error('No JSON found in response');
+                    parsed = JSON.parse(jsonMatch[0]);
+                } catch (e) {
+                    // If parse fails, show raw text nicely
+                    statusEl.classList.remove('active');
+                    btn.disabled = false;
+                    resultsEl.classList.add('active');
+                    resultsEl.innerHTML = `<div class="vidbot-section-title">📋 Raw Output</div><div class="vidbot-essay-a" style="color:#ddd;">${fullText || 'No response received.'}</div>`;
+                    return;
+                }
+
+                statusEl.classList.remove('active');
+                btn.disabled = false;
+
+                if (parsed.error) {
+                    resultsEl.classList.add('active');
+                    resultsEl.innerHTML = `<div class="vidbot-error">⚠️ ${parsed.error}</div>`;
+                    return;
+                }
+
+                // Build the results display
+                let html = '';
+
+                if (parsed.videoTitle) {
+                    html += `<div style="color:#f1c40f; font-family:sans-serif; font-size:0.85rem; font-weight:bold; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #1a3a20;">📹 ${parsed.videoTitle}${parsed.subject ? ' — ' + parsed.subject : ''}</div>`;
+                }
+
+                // MCQ Section
+                if (parsed.mcq && parsed.mcq.length > 0) {
+                    html += `<div class="vidbot-section-title">📝 MCQ ANSWERS (${parsed.mcq.length} questions)</div>`;
+                    parsed.mcq.forEach(q => {
+                        html += `<div class="vidbot-mcq-row">
+                            <span class="vidbot-q-num">${q.num}.</span>
+                            <span class="vidbot-answer">${q.answer || '?'}</span>
+                            <span class="vidbot-q-text">${q.questionText || ''}</span>
+                        </div>`;
+                    });
+                }
+
+                // Essay Section
+                if (parsed.essays && parsed.essays.length > 0) {
+                    if (parsed.mcq && parsed.mcq.length > 0) html += '<br>';
+                    html += `<div class="vidbot-section-title">✍️ ESSAY / WRITTEN ANSWERS (${parsed.essays.length})</div>`;
+                    parsed.essays.forEach(e => {
+                        html += `<div class="vidbot-essay-block">
+                            <div class="vidbot-essay-q">Essay ${e.num}: ${e.question || ''}</div>
+                            <div class="vidbot-essay-a">${e.answer || 'No answer found.'}</div>
+                        </div>`;
+                    });
+                }
+
+                // No questions found at all
+                if ((!parsed.mcq || parsed.mcq.length === 0) && (!parsed.essays || parsed.essays.length === 0)) {
+                    html += `<div class="vidbot-error">⚠️ No questions or answers could be extracted from this video. Try a more popular/public exam video with a description or transcript.</div>`;
+                }
+
+                if (parsed.notes) {
+                    html += `<div style="color:#7f8c8d; font-family:sans-serif; font-size:0.75rem; margin-top:10px; font-style:italic;">📌 ${parsed.notes}</div>`;
+                }
+
+                resultsEl.classList.add('active');
+                resultsEl.innerHTML = html;
+
+            } catch (err) {
+                statusEl.classList.remove('active');
+                btn.disabled = false;
+                resultsEl.classList.add('active');
+                resultsEl.innerHTML = `<div class="vidbot-error">❌ Error: ${err.message}</div>`;
+            }
+        }
+    </script>
+
+
+    <!-- =====================================
+         HALL OF QUESTIONS — IMAGE UPLOAD LOGIC
+    ====================================== -->
+    <script>
+        // State for pending images before upload
+        const pendingImages = { q: null, a: null };
+
+        function setImagePreview(field, dataUrl) {
+            const zone = document.getElementById(`${field}-drop-zone`);
+            const preview = document.getElementById(`${field}-preview`);
+            const fieldDiv = document.getElementById(`${field}-img-field`);
+            preview.src = dataUrl;
+            zone.classList.add('has-image');
+            fieldDiv.classList.add('has-image');
+            pendingImages[field] = dataUrl;
+        }
+
+        function clearImage(field) {
+            const zone = document.getElementById(`${field}-drop-zone`);
+            const preview = document.getElementById(`${field}-preview`);
+            const fieldDiv = document.getElementById(`${field}-img-field`);
+            const fileInput = document.getElementById(`hoq-${field}-file`);
+            preview.src = '';
+            zone.classList.remove('has-image');
+            fieldDiv.classList.remove('has-image');
+            pendingImages[field] = null;
+            fileInput.value = '';
+        }
+
+        function compressAndSet(file, field) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 900;
+                    let scale = Math.min(MAX / img.width, MAX / img.height, 1);
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    setImagePreview(field, canvas.toDataURL('image/jpeg', 0.82));
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleFileSelect(event, field) { compressAndSet(event.target.files[0], field); }
+
+        function handleDragOver(event, field) {
+            event.preventDefault();
+            document.getElementById(`${field}-drop-zone`).classList.add('drag-over');
+        }
+        function handleDragLeave(field) { document.getElementById(`${field}-drop-zone`).classList.remove('drag-over'); }
+        function handleDrop(event, field) {
+            event.preventDefault();
+            document.getElementById(`${field}-drop-zone`).classList.remove('drag-over');
+            const file = event.dataTransfer.files[0];
+            compressAndSet(file, field);
+        }
+
+        // Global paste: whichever field has focus, or default to question field
+        let activePasteField = 'q';
+        document.getElementById('q-drop-zone').addEventListener('click', () => { activePasteField = 'q'; });
+        document.getElementById('a-drop-zone').addEventListener('click', () => { activePasteField = 'a'; });
+
+        document.addEventListener('paste', function(e) {
+            if (e.clipboardData && e.clipboardData.files.length > 0) {
+                const file = e.clipboardData.files[0];
+                if (file.type.startsWith('image/')) {
+                    // Determine which field to paste into: use active tab if in HoQ, else question
+                    const field = activePasteField;
+                    compressAndSet(file, field);
+                    const indicator = document.getElementById('paste-indicator');
+                    indicator.textContent = `📸 Pasted into ${field === 'q' ? 'Question' : 'Answer'}!`;
+                    indicator.style.display = 'block';
+                    setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+                    // Switch to HoQ view so user sees it
+                    toggleView('hoq');
+                }
+            }
+        });
+    </script>
+
+
+    <!-- =====================================
+         FIREBASE — ARENA + HOQ LOGIC
+    ====================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -137,60 +784,317 @@
             projectId: "exam-3abc3",
             storageBucket: "exam-3abc3.firebasestorage.app",
             messagingSenderId: "93565862046",
-            appId: "1:93565862046:web:a905f5044a9d19957dbb8f"
+            appId: "1:93565862046:web:a905f5044a9d19957dbb8f",
+            measurementId: "G-DZ0BPSF553"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const stateRef = ref(db, 'hustleState');
 
-        let localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, hoq: [] };
+        /* EXAM COUNTDOWN */
+        const exams = [
+            { name: "Religion & National Education", date: new Date("2026-06-21T09:00:00").getTime() },
+            { name: "German",                        date: new Date("2026-06-23T09:00:00").getTime() },
+            { name: "Arabic Language",               date: new Date("2026-06-28T09:00:00").getTime() },
+            { name: "Chemistry",                     date: new Date("2026-07-02T09:00:00").getTime() },
+            { name: "Foreign Language (English)",    date: new Date("2026-07-05T09:00:00").getTime() },
+            { name: "Physics",                       date: new Date("2026-07-09T09:00:00").getTime() },
+            { name: "Biology",                       date: new Date("2026-07-16T09:00:00").getTime() }
+        ];
+
+        window.toggleExamsPanel = function() {
+            const panel = document.getElementById("extended-exams-panel");
+            panel.style.display = (panel.style.display === "grid") ? "none" : "grid";
+        };
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            let nextExam = null; let otherExams = [];
+            for (let exam of exams) {
+                if (exam.date > now) { if (!nextExam) nextExam = exam; else otherExams.push(exam); }
+            }
+            const titleEl = document.getElementById("exam-title");
+            const timerEl = document.getElementById("timer");
+            const extendedPanel = document.getElementById("extended-exams-panel");
+            if (nextExam) {
+                titleEl.innerText = `NEXT TARGET: ${nextExam.name}`;
+                const d = nextExam.date - now;
+                const days = Math.floor(d / 86400000);
+                const hours = Math.floor((d % 86400000) / 3600000);
+                const minutes = Math.floor((d % 3600000) / 60000);
+                const seconds = Math.floor((d % 60000) / 1000);
+                const pad = n => n < 10 ? '0' + n : n;
+                timerEl.innerText = `${pad(days)}d : ${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s`;
+                const newHTML = otherExams.map(e => {
+                    const daysLeft = Math.ceil((e.date - now) / 86400000);
+                    return `<div class="exam-row"><span>${e.name}</span><strong>${daysLeft} days left</strong></div>`;
+                }).join('');
+                if (extendedPanel.innerHTML !== newHTML) extendedPanel.innerHTML = newHTML;
+            } else {
+                titleEl.innerText = "ALL EXAMS COMPLETED!";
+                timerEl.innerText = "00d : 00h : 00m : 00s";
+                extendedPanel.innerHTML = "";
+            }
+        }, 1000);
+
+        /* STATE */
+        let localState = {
+            scores: { mohamed: 0, moaz: 0 },
+            todos: { mohamed: [], moaz: [] },
+            weakpoints: { mohamed: [], moaz: [] },
+            hoq: []
+        };
 
         onValue(stateRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) { localState = data; updateDOM(); }
+            if (data) {
+                localState = {
+                    scores: data.scores || { mohamed: 0, moaz: 0 },
+                    todos: { mohamed: data.todos?.mohamed || [], moaz: data.todos?.moaz || [] },
+                    weakpoints: { mohamed: data.weakpoints?.mohamed || [], moaz: data.weakpoints?.moaz || [] },
+                    hoq: data.hoq || []
+                };
+            }
+            updateDOM();
         });
 
-        window.toggleView = function(view) {
-            document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
-            document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
+        function saveToCloud() { set(stateRef, localState); }
+
+        window.resetAllData = function() {
+            if (confirm("🚨 WARNING: Wipe ALL data? Scores, tasks, weakpoints reset to zero. Hall of Questions preserved.")) {
+                if (confirm("Double confirm: WIPE ARENA DATA?")) {
+                    localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, weakpoints: { mohamed: [], moaz: [] }, hoq: localState.hoq };
+                    saveToCloud();
+                    alert("Arena data nuked. Hall of Questions preserved!");
+                }
+            }
         };
 
         window.addTodo = function(player) {
-            const task = document.getElementById(`input-${player}-task`).value;
-            const est = document.getElementById(`input-${player}-est`).value;
-            if(!task) return;
-            localState.todos[player].push({ id: Date.now(), task, est });
-            set(stateRef, localState);
+            const nameInput = document.getElementById(`input-${player}-task`);
+            const estInput = document.getElementById(`input-${player}-est`);
+            if (!nameInput.value.trim() || !estInput.value) return alert("Enter task and estimated hours!");
+            localState.todos[player].push({ id: Date.now(), task: nameInput.value.trim(), est: parseFloat(estInput.value), act: '', checked: false, quality: '' });
+            nameInput.value = ''; estInput.value = ''; saveToCloud();
         };
 
+        window.toggleTodo = function(player, id) {
+            const todo = localState.todos[player].find(t => t.id === id);
+            if (todo) {
+                if (!todo.checked) {
+                    let choice = prompt("ذاكرت ولا كروت؟ 🤔\n\n1 - ذاكرت (بجد وعملت اللي عليا)\n2 - كروت (تأدية واجب وخلاص)");
+                    if (choice === null) return;
+                    todo.quality = (choice.trim() === "1") ? "ذاكرت" : "كروت"; todo.checked = true;
+                } else { todo.checked = false; todo.quality = ''; }
+                saveToCloud();
+            }
+        };
+
+        window.deleteTodo = function(player, id) { localState.todos[player] = localState.todos[player].filter(t => t.id !== id); saveToCloud(); };
+
+        window.updateActualTime = function(player, id, inputVal) {
+            const todo = localState.todos[player].find(t => t.id === id);
+            if (todo) { todo.act = inputVal === '' ? '' : parseFloat(inputVal); saveToCloud(); }
+        };
+
+        window.addWeakpoint = function(player) {
+            const subj = document.getElementById(`wp-subj-${player}`).value;
+            const textInput = document.getElementById(`wp-text-${player}`);
+            if (!textInput.value.trim()) return alert("Enter a weakpoint!");
+            localState.weakpoints[player].push({ id: Date.now(), subject: subj, text: textInput.value.trim() });
+            textInput.value = ''; saveToCloud();
+        };
+
+        window.eliminateWeakpoint = function(player, id) {
+            if (confirm("Did you actually study and eliminate this weakpoint? (+1 Point!)")) {
+                localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id);
+                localState.scores[player] += 1; saveToCloud();
+            }
+        };
+
+        window.deleteWeakpoint = function(player, id) {
+            if (confirm("Remove this weakpoint entry? (No points)")) {
+                localState.weakpoints[player] = localState.weakpoints[player].filter(w => w.id !== id); saveToCloud();
+            }
+        };
+
+        window.endTheDay = function() {
+            if (!confirm("Process daily tallies for BOTH players?")) return;
+            ['mohamed', 'moaz'].forEach(player => {
+                const tasks = localState.todos[player];
+                if (tasks.length === 0) return;
+                const allChecked = tasks.every(t => t.checked);
+                if (allChecked) {
+                    if (tasks.some(t => t.act === '' || t.act <= 0)) { alert(`⚠️ ${player.toUpperCase()} left an 'Actual Hrs' box empty or at 0!`); return; }
+                    let totalEst = 0; let totalAct = 0;
+                    tasks.forEach(t => { totalEst += t.est; totalAct += t.act; });
+                    let pointsGained = 1; let bonusMessages = [];
+                    if (totalAct < totalEst) { pointsGained += 1; bonusMessages.push(`⚡ Speed Demon -> +1 Point`); }
+                    localState.scores[player] += pointsGained;
+                    alert(`✅ ${player.toUpperCase()} completed all tasks! (+1 Base Point)\n` + bonusMessages.join("\n"));
+                } else {
+                    localState.scores[player] -= 1;
+                    alert(`❌ ${player.toUpperCase()} failed to complete all tasks. (-1 Point)`);
+                }
+                localState.todos[player] = [];
+            });
+            saveToCloud();
+        };
+
+        /* =====================
+           HALL OF QUESTIONS
+        ===================== */
         window.uploadQuestion = function() {
-            const fileInput = document.getElementById('hoq-q-file');
-            const ans = document.getElementById('hoq-answer-input').value;
-            if(!fileInput.files[0]) return;
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                localState.hoq.unshift({ id: Date.now(), image: e.target.result, answer: ans });
-                set(stateRef, localState);
-            };
-            reader.readAsDataURL(fileInput.files[0]);
+            const answerText = document.getElementById('hoq-answer-input').value.trim();
+            const questionImg = window.pendingImages?.q;
+            const answerImg = window.pendingImages?.a;
+
+            if (!questionImg) { alert("Please attach a question image!"); return; }
+
+            localState.hoq.unshift({
+                id: Date.now(),
+                questionImg: questionImg,
+                answerImg: answerImg || null,
+                answer: answerText
+            });
+
+            // Clear form
+            clearImage('q');
+            clearImage('a');
+            document.getElementById('hoq-answer-input').value = '';
+            saveToCloud();
         };
 
+        window.toggleSpoiler = function(id) {
+            const el = document.getElementById(`hoq-ans-${id}`);
+            if (el) el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        };
+
+        /* =====================
+           DOM UPDATE
+        ===================== */
         function updateDOM() {
             document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
             document.getElementById('score-moaz').innerText = localState.scores.moaz;
-            
+
+            ['mohamed', 'moaz'].forEach(player => {
+                const listEl = document.getElementById(`list-${player}`);
+                const statsEl = document.getElementById(`stats-${player}`);
+                const currentTasks = localState.todos[player];
+                const totalEst = currentTasks.reduce((s, i) => s + (parseFloat(i.est) || 0), 0);
+
+                if (statsEl) statsEl.innerHTML = `Tasks: <strong>${currentTasks.length}</strong> | Total Est: <strong>${totalEst} Hrs</strong>`;
+
+                if (listEl) {
+                    listEl.innerHTML = '';
+                    currentTasks.forEach(todo => {
+                        let badgeHTML = '';
+                        if (todo.checked && todo.quality) {
+                            const bg = todo.quality === "ذاكرت" ? "#2ecc71" : "#f39c12";
+                            const glow = todo.quality === "ذاكرت" ? "rgba(46,204,113,0.4)" : "rgba(243,156,18,0.4)";
+                            badgeHTML = `<span class="quality-badge" style="background:${bg};box-shadow:0 0 8px ${glow};">${todo.quality}</span>`;
+                        }
+                        listEl.innerHTML += `
+                            <li class="todo-item ${todo.checked ? 'checked' : ''}">
+                                <div class="todo-info">
+                                    <div style="display:flex;align-items:center;">
+                                        <span class="todo-text">${todo.task}</span>${badgeHTML}
+                                    </div>
+                                    <div class="time-tracking-row">
+                                        <span>⏱️ Est: <strong>${todo.est} Hrs</strong></span>
+                                        <span>| Actual Hrs:</span>
+                                        <input type="number" step="0.5" class="actual-input-box" placeholder="Hrs" value="${todo.act}" onblur="updateActualTime('${player}', ${todo.id}, this.value)">
+                                    </div>
+                                </div>
+                                <div class="todo-actions">
+                                    <button class="checkbox-btn" onclick="toggleTodo('${player}', ${todo.id})">${todo.checked ? '↩️' : '✅'}</button>
+                                    <button class="delete-btn" onclick="deleteTodo('${player}', ${todo.id})">🗑️</button>
+                                </div>
+                            </li>`;
+                    });
+                }
+
+                const wpListEl = document.getElementById(`wp-list-${player}`);
+                if (wpListEl) {
+                    wpListEl.innerHTML = '';
+                    localState.weakpoints[player].forEach(wp => {
+                        wpListEl.innerHTML += `
+                            <li class="wp-item">
+                                <div class="todo-info">
+                                    <div class="wp-subject">${wp.subject}</div>
+                                    <div class="wp-text">${wp.text}</div>
+                                </div>
+                                <div class="todo-actions">
+                                    <button class="checkbox-btn" onclick="eliminateWeakpoint('${player}', ${wp.id})">💥 Fix</button>
+                                    <button class="delete-btn" onclick="deleteWeakpoint('${player}', ${wp.id})">🗑️</button>
+                                </div>
+                            </li>`;
+                    });
+                }
+            });
+
+            /* HOQ GRID */
             const hoqGrid = document.getElementById('hoq-grid');
-            hoqGrid.innerHTML = localState.hoq.map(q => `
-                <div class="hoq-card">
-                    <img src="${q.image}">
-                    <p style="margin-bottom:10px;">${q.answer}</p>
-                </div>
-            `).join('');
+            if (hoqGrid) {
+                hoqGrid.innerHTML = '';
+                localState.hoq.forEach(q => {
+                    const qImgSrc = q.questionImg || q.image || null; // backward compat with old 'image' field
+                    const aImgSrc = q.answerImg || null;
+
+                    let questionImgHTML = qImgSrc
+                        ? `<img src="${qImgSrc}" alt="Question" onclick="openLightbox('${qImgSrc}')" title="Click to enlarge">`
+                        : `<div class="hoq-no-img">No image</div>`;
+
+                    let answerRevealHTML = '';
+                    if (aImgSrc) {
+                        answerRevealHTML += `<img src="${aImgSrc}" alt="Answer" onclick="openLightbox('${aImgSrc}')" title="Click to enlarge">`;
+                    }
+                    if (q.answer) {
+                        answerRevealHTML += `<div class="hoq-answer-text">${q.answer}</div>`;
+                    }
+                    if (!answerRevealHTML) answerRevealHTML = '<div class="hoq-answer-text" style="color:#555;">No answer provided.</div>';
+
+                    hoqGrid.innerHTML += `
+                        <div class="hoq-card">
+                            <div class="hoq-card-label">📷 Question</div>
+                            ${questionImgHTML}
+                            <button class="hoq-spoiler-btn" onclick="toggleSpoiler(${q.id})">👁️ Show / Hide Answer</button>
+                            <div class="hoq-answer-reveal" id="hoq-ans-${q.id}">${answerRevealHTML}</div>
+                        </div>`;
+                });
+            }
+
+            /* QOTD */
+            const qotdContainer = document.getElementById('qotd-container');
+            const qotdContent = document.getElementById('qotd-content');
+            if (localState.hoq.length > 0) {
+                qotdContainer.style.display = 'block';
+                const daySeed = Math.floor(Date.now() / 86400000);
+                const selectedIndex = daySeed % localState.hoq.length;
+                const dailyQ = localState.hoq[selectedIndex];
+                const qImgSrc = dailyQ.questionImg || dailyQ.image || null;
+                const aImgSrc = dailyQ.answerImg || null;
+
+                let answerRevealHTML = '';
+                if (aImgSrc) {
+                    answerRevealHTML += `<img src="${aImgSrc}" alt="Answer" style="max-width:100%;border-radius:8px;cursor:pointer;" onclick="openLightbox('${aImgSrc}')">`;
+                }
+                if (dailyQ.answer) {
+                    answerRevealHTML += `<div style="color:#00ffcc;font-family:sans-serif;font-size:1rem;white-space:pre-wrap;text-align:left;width:100%;">${dailyQ.answer}</div>`;
+                }
+
+                qotdContent.innerHTML = `
+                    ${qImgSrc ? `<img class="qotd-question-img" src="${qImgSrc}" alt="Question of the Day" onclick="openLightbox('${qImgSrc}')">` : ''}
+                    <button class="hoq-spoiler-btn" onclick="toggleSpoiler('qotd')" style="font-size:1rem;padding:10px 20px;">👁️ Reveal Answer</button>
+                    <div class="hoq-answer-reveal" id="hoq-ans-qotd" style="background:#000;padding:15px;width:100%;border-radius:8px;">
+                        ${answerRevealHTML || '<span style="color:#555;font-family:sans-serif;">No answer provided.</span>'}
+                    </div>`;
+            } else {
+                qotdContainer.style.display = 'none';
+            }
         }
-        
-        window.resetAllData = () => { if(confirm("Reset all?")) { localState = { scores: { mohamed: 0, moaz: 0 }, todos: { mohamed: [], moaz: [] }, hoq: [] }; set(stateRef, localState); } };
     </script>
+
 </body>
 </html>
