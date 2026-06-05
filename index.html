@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,7 +86,9 @@
 
         .hoq-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--hoq-color); margin-bottom: 30px; }
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; width: 100%; }
-        .hoq-card { background: #202231; padding: 20px; border-radius: 10px; border: 1px solid #444; position: relative; }
+        .hoq-card { background: #202231; padding: 24px; border-radius: 14px; border: 1px solid #444; position: relative; min-height:220px; }
+        .hoq-question-title{font-size:1.1rem;font-weight:bold;margin-bottom:10px;}
+        .practice-badge{display:inline-block;background:#9b59b6;padding:4px 8px;border-radius:6px;margin-bottom:10px;}
         .hoq-card img { width: 100%; border-radius: 6px; margin-top: 10px; cursor: pointer; }
         .delete-btn-corner { position: absolute; top: 10px; right: 10px; background: var(--danger-color); border: none; color: white; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
@@ -142,7 +145,57 @@
         .stopwatch-btn.start { background: #2ecc71; }
         .stopwatch-btn.pause { background: #f39c12; }
         .stopwatch-btn.reset { background: #e74c3c; }
-    </style>
+    
+.question-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    z-index:999999;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+.question-modal-content{
+    background:#202231;
+    width:min(1100px,95vw);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:16px;
+    padding:30px;
+    border:2px solid #9b59b6;
+}
+.question-modal-content img{
+    width:100%;
+    max-height:75vh;
+    object-fit:contain;
+    border-radius:8px;
+    margin-top:15px;
+}
+.modal-question-text,.modal-answer-text{
+    white-space:pre-wrap;
+    font-size:1.1rem;
+    line-height:1.6;
+}
+.close-modal{
+    float:right;
+    font-size:40px;
+    cursor:pointer;
+    color:white;
+}
+.open-question-btn{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:#9b59b6;
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+</style>
 </head>
 <body>
 
@@ -318,7 +371,18 @@
         </div>
     </div>
 
-    <script type="module">
+    
+<div id="questionModal" class="question-modal">
+    <div class="question-modal-content">
+        <span class="close-modal" onclick="closeQuestionModal()">&times;</span>
+        <h2 style="margin-bottom:20px;color:#9b59b6;">Challenge Yourself</h2>
+        <div id="modal-question"></div>
+        <button class="upload-btn" style="margin-top:20px;" onclick="revealModalAnswer()">Reveal Answer</button>
+        <div id="modal-answer" class="answer-reveal" style="margin-top:20px;"></div>
+    </div>
+</div>
+
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref as dbRef, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -343,6 +407,31 @@
         };
 
         let pendingImages = { q: null, a: null, 'qotd-q': null, 'qotd-a': null };
+let currentModalQuestion = null;
+
+window.openQuestionModal = function(id){
+    currentModalQuestion = localState.hoq.find(q => q.id === id);
+    if(!currentModalQuestion) return;
+    document.getElementById('modal-question').innerHTML = `
+        <div class="modal-question-text">${currentModalQuestion.qText || ''}</div>
+        ${currentModalQuestion.qImg ? `<img src="${currentModalQuestion.qImg}">` : ''}
+    `;
+    document.getElementById('modal-answer').style.display='none';
+    document.getElementById('questionModal').style.display='flex';
+}
+
+window.closeQuestionModal = function(){
+    document.getElementById('questionModal').style.display='none';
+}
+
+window.revealModalAnswer = function(){
+    if(!currentModalQuestion) return;
+    document.getElementById('modal-answer').innerHTML = `
+        <div class="modal-answer-text">${currentModalQuestion.aText || ''}</div>
+        ${currentModalQuestion.aImg ? `<img src="${currentModalQuestion.aImg}">` : ''}
+    `;
+    document.getElementById('modal-answer').style.display='block';
+};
 
         // ================= STOPWATCH LOGIC =================
         let stopwatchRunning = false;
@@ -415,6 +504,7 @@
                     }));
                 });
 
+                if((!localState.qotd?.qText || localState.qotd.qText==='No Question of the Day set yet!') && localState.hoq.length){ pickRandomQOTDFromHall(); }
                 updateDOM(); 
             }
         });
@@ -489,7 +579,14 @@
             document.getElementById(`preview-${type}`).src = '';
         };
 
-        // ================= QOTD LOGIC =================
+        
+        function pickRandomQOTDFromHall() {
+            if (!localState.hoq || localState.hoq.length === 0) return;
+            const q = localState.hoq[Math.floor(Math.random()*localState.hoq.length)];
+            localState.qotd = { qText:q.qText||'', qImg:q.qImg||null, aText:q.aText||'', aImg:q.aImg||null };
+        }
+
+// ================= QOTD LOGIC =================
         window.updateQOTD = function() {
             const qText = document.getElementById('qotd-q-input').value;
             const aText = document.getElementById('qotd-a-input').value;
@@ -511,6 +608,7 @@
             document.getElementById('qotd-edit-panel').classList.remove('open');
             document.getElementById('edit-qotd-btn').textContent = '✏️ Edit QOTD';
             
+            if(localState.hoq.length===1 && (!localState.qotd.qText || localState.qotd.qText==='No Question of the Day set yet!')) pickRandomQOTDFromHall();
             set(stateRef, localState);
         };
 
@@ -718,18 +816,17 @@
 
             // Render HOQ
             document.getElementById('hoq-grid').innerHTML = localState.hoq.map((q, i) => `
-                <div class="hoq-card">
-                    <button class="delete-btn-corner" onclick="deleteHoq(${q.id})">🗑️</button>
-                    <p style="white-space: pre-wrap;"><b>Q:</b> ${q.qText}</p>
-                    ${q.qImg ? `<img src="${q.qImg}">` : ''}
-                    
-                    <button class="show-ans-btn" id="hoq-btn-${i}" onclick="toggleHOQAnswer(${i})">Show Answer</button>
-                    <div class="answer-reveal" id="hoq-ans-${i}">
-                        <p style="white-space: pre-wrap;">${q.aText}</p>
-                        ${q.aImg ? `<img src="${q.aImg}">` : ''}
-                    </div>
-                </div>
-            `).join('');
+    <div class="hoq-card">
+        <button class="delete-btn-corner" onclick="deleteHoq(${q.id})">🗑️</button>
+        <div class="practice-badge">Challenge Yourself</div>
+        <div class="hoq-question-title">Question #${localState.hoq.length-i}</div>
+        <p>Open the question and solve it first.</p>
+        ${q.qImg ? `<img src="${q.qImg}" style="max-height:80px;object-fit:cover;">` : ''}
+        <button class="open-question-btn" onclick="openQuestionModal(${q.id})">
+            Open Question
+        </button>
+    </div>
+`).join('');
         }
 
         // HOQ toggle function
