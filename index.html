@@ -29,14 +29,14 @@
         #view-hoq { display: none; }
 
         /* QUESTION OF THE DAY */
-        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255,51,102,0.2); }
+        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
         .qotd-container h2 { color: var(--qotd-color); font-family: 'Impact'; letter-spacing: 1px; margin-bottom: 15px; }
         .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; }
         .qotd-edit { display: none; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; transition: all 0.3s ease; }
         .qotd-edit.open { display: block; }
 
         /* LEADERBOARD */
-        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; font-family: 'Impact'; margin-top: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
         .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); }
@@ -76,7 +76,7 @@
         .img-preview { display: none; max-height: 150px; margin-top: 10px; border-radius: 6px; }
         .remove-img { display: none; position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 0.8rem; }
         
-        .upload-btn { background: var(--hoq-color); color: white; font-weight: bold; font-size: 1.2rem; padding: 15px; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; width: 100%; }
+        .upload-btn { background: var(--hoq-color); color: white; font-weight: bold; font-size: 1.2rem; padding: 15px; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
 
         .hoq-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--hoq-color); margin-bottom: 30px; }
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; width: 100%; }
@@ -85,11 +85,12 @@
         .delete-btn-corner { position: absolute; top: 10px; right: 10px; background: var(--danger-color); border: none; color: white; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
         .show-ans-btn { background: #444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .hide-ans-btn { background: #666; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
 
         /* WIDGETS */
         .widgets-container { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 15px; z-index: 1000; }
-        .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .widget-panel { position: absolute; bottom: 65px; left: 0; background: #fcf3cf; border: 2px solid #d4ac0d; border-radius: 12px; padding: 15px; color: #000; display: none; flex-direction: column; min-width: 300px; max-width: 400px; max-height: 400px; overflow-y: auto; }
+        .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+        .widget-panel { position: absolute; bottom: 65px; left: 0; background: #fcf3cf; border: 2px solid #d4ac0d; border-radius: 12px; padding: 15px; color: #000; display: none; flex-direction: column; min-width: 250px; }
         .prayer-panel { background: #1a252c; border-color: #00ffcc; color: white; }
         .prayer-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
         .prayer-next { color: #00ffcc; font-weight: bold; margin-top: 10px; text-align: center; }
@@ -156,14 +157,15 @@
             <div id="qotd-display" class="qotd-content">
                 <p id="qotd-text-display">Loading QOTD...</p>
                 <img id="qotd-img-display" style="display:none;">
-                <button class="show-ans-btn" style="width: auto; padding: 5px 15px; margin-top: 15px;" onclick="document.getElementById('qotd-ans-display').style.display='block'">Reveal Answer</button>
+                <button class="show-ans-btn" id="qotd-reveal-btn" style="width: auto; padding: 5px 15px; margin-top: 15px;" onclick="toggleQOTDAnswer()">Reveal Answer</button>
                 <div class="answer-reveal" id="qotd-ans-display">
                     <p id="qotd-atext-display"></p>
                     <img id="qotd-aimg-display" style="display:none;">
+                    <button class="hide-ans-btn" style="width: auto; padding: 5px 15px; margin-top: 10px;" onclick="hideQOTDAnswer()">Show Less</button>
                 </div>
             </div>
             
-            <button id="edit-qotd-btn" onclick="toggleQOTDEdit()" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; cursor:pointer; margin-top:10px;">✏️ Edit QOTD</button>
+            <button id="edit-qotd-btn" onclick="toggleQOTDEdit()" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; cursor:pointer; margin-top: 15px;">✏️ Edit QOTD</button>
             
             <div class="qotd-edit" id="qotd-edit-panel">
                 <div class="input-box">
@@ -199,7 +201,7 @@
                 <h2 style="color: var(--mohamed-color); margin-bottom: 15px; font-family: 'Impact';">MOHAMED</h2>
                 <div class="todo-form">
                     <input type="text" id="mohamed-task" placeholder="Task name...">
-                    <input type="number" id="mohamed-est" placeholder="Est Mins" style="width: 100px;">
+                    <input type="number" id="mohamed-est" placeholder="Est Hours" style="width: 100px;">
                     <button class="add-btn" onclick="addTask('mohamed')">ADD</button>
                 </div>
                 <div id="list-mohamed"></div>
@@ -208,7 +210,7 @@
                 <h2 style="color: var(--moaz-color); margin-bottom: 15px; font-family: 'Impact';">MOAZ</h2>
                 <div class="todo-form">
                     <input type="text" id="moaz-task" placeholder="Task name...">
-                    <input type="number" id="moaz-est" placeholder="Est Mins" style="width: 100px;">
+                    <input type="number" id="moaz-est" placeholder="Est Hours" style="width: 100px;">
                     <button class="add-btn" onclick="addTask('moaz')">ADD</button>
                 </div>
                 <div id="list-moaz"></div>
@@ -390,6 +392,17 @@
             }
         });
 
+        // ================= QOTD ANSWER TOGGLE =================
+        window.toggleQOTDAnswer = function() {
+            const answerDiv = document.getElementById('qotd-ans-display');
+            answerDiv.style.display = 'block';
+        };
+
+        window.hideQOTDAnswer = function() {
+            const answerDiv = document.getElementById('qotd-ans-display');
+            answerDiv.style.display = 'none';
+        };
+
         // ================= VIEW & WIDGET TOGGLES =================
         window.toggleView = function(view) {
             document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
@@ -555,8 +568,8 @@
                 let pts = 0;
                 localState.todos[player].forEach(t => {
                     if(t.completed) {
-                        let mins = parseInt(t.actual) || parseInt(t.est) || 0;
-                        pts += (mins / 60); 
+                        let hours = parseFloat(t.actual) || parseFloat(t.est) || 0;
+                        pts += hours; 
                     }
                 });
                 localState.weakpoints[player].forEach(w => {
@@ -574,14 +587,16 @@
             alert("Day Ended! Points calculated and daily tasks cleared. Questions are safe.");
         };
 
+        // ================= AUTO END DAY AT MIDNIGHT =================
         setInterval(() => {
             const now = new Date();
-            if (now.getHours() === 0 && now.getMinutes() === 0) {
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() < 5) {
                 if (localState.lastResetDate !== now.toDateString()) {
+                    console.log("🌙 Midnight reached! Auto-ending the day...");
                     endTheDay();
                 }
             }
-        }, 60000); 
+        }, 1000);
 
         window.resetAllData = () => { 
             if(confirm("⚠️ WARNING: This will delete EVERYTHING including the Hall of Questions. Are you 100% sure?")) { 
@@ -633,8 +648,8 @@
                         </div>
                     </div>
                     <div class="task-controls">
-                        ⏱️ Est: ${t.est}m | Actual: 
-                        <input type="number" class="actual-input" value="${t.actual}" onchange="updateActual('${player}', ${t.id}, this.value)" onblur="saveActual()"> mins
+                        ⏱️ Est: ${t.est}h | Actual: 
+                        <input type="number" class="actual-input" value="${t.actual}" onchange="updateActual('${player}', ${t.id}, this.value)" onblur="saveActual()"> hours
                     </div>
                 </div>
             `).join('');
@@ -667,6 +682,7 @@
                     <div class="answer-reveal" id="ans-${i}">
                         <p style="white-space: pre-wrap;">${q.aText}</p>
                         ${q.aImg ? `<img src="${q.aImg}">` : ''}
+                        <button class="hide-ans-btn" onclick="document.getElementById('ans-${i}').style.display='none'">Show Less</button>
                     </div>
                 </div>
             `).join('');
