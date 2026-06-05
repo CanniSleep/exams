@@ -48,6 +48,11 @@
         .player-column.mohamed { border-top-color: var(--mohamed-color); }
         .player-column.moaz { border-top-color: var(--moaz-color); }
         
+        .player-stats { display: flex; gap: 20px; margin-bottom: 15px; padding: 10px; background: #0d0e15; border-radius: 8px; font-size: 0.9rem; }
+        .stat-item { flex: 1; text-align: center; }
+        .stat-label { color: #aaa; font-size: 0.8rem; }
+        .stat-value { font-weight: bold; color: inherit; }
+        
         .todo-form, .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
         input, textarea { background: #25283d; border: 1px solid #444; color: white; padding: 10px; font-size: 1rem; border-radius: 6px; width: 100%; }
         select { background: #25283d; border: 1px solid #444; color: white; padding: 10px; font-size: 1rem; border-radius: 6px; width: 100%; cursor: pointer; }
@@ -197,6 +202,18 @@
         <main class="arena">
             <div class="player-column mohamed">
                 <h2 style="color: var(--mohamed-color); margin-bottom: 15px; font-family: 'Impact';">MOHAMED</h2>
+                
+                <div class="player-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Tasks</div>
+                        <div class="stat-value" id="total-tasks-mohamed">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Est Hours</div>
+                        <div class="stat-value" id="total-hours-mohamed">0h</div>
+                    </div>
+                </div>
+                
                 <div class="todo-form">
                     <input type="text" id="mohamed-task" placeholder="Task name...">
                     <input type="number" id="mohamed-est" placeholder="Est Hours" style="width: 100px;">
@@ -206,6 +223,18 @@
             </div>
             <div class="player-column moaz">
                 <h2 style="color: var(--moaz-color); margin-bottom: 15px; font-family: 'Impact';">MOAZ</h2>
+                
+                <div class="player-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Tasks</div>
+                        <div class="stat-value" id="total-tasks-moaz">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Est Hours</div>
+                        <div class="stat-value" id="total-hours-moaz">0h</div>
+                    </div>
+                </div>
+                
                 <div class="todo-form">
                     <input type="text" id="moaz-task" placeholder="Task name...">
                     <input type="number" id="moaz-est" placeholder="Est Hours" style="width: 100px;">
@@ -615,6 +644,13 @@
             } 
         };
 
+        // ================= CALCULATE STATS =================
+        function calculateStats(player) {
+            const totalTasks = localState.todos[player].length;
+            const totalHours = localState.todos[player].reduce((sum, t) => sum + (parseFloat(t.est) || 0), 0);
+            return { totalTasks, totalHours: totalHours.toFixed(1) };
+        }
+
         // ================= DOM RENDERING =================
         function updateDOM() {
             document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
@@ -667,6 +703,13 @@
                     </div>
                 </div>
             `).join('');
+
+            // Update stats
+            ['mohamed', 'moaz'].forEach(player => {
+                const stats = calculateStats(player);
+                document.getElementById(`total-tasks-${player}`).innerText = stats.totalTasks;
+                document.getElementById(`total-hours-${player}`).innerText = stats.totalHours + 'h';
+            });
 
             document.getElementById('list-mohamed').innerHTML = renderTasks('mohamed');
             document.getElementById('list-moaz').innerHTML = renderTasks('moaz');
