@@ -10,7 +10,7 @@
             --mohamed-color: #00f0ff; --moaz-color: #ff007f;
             --text-color: #f0f1f5; --countdown-color: #ff00ff;
             --success-color: #2ecc71; --danger-color: #e74c3c; 
-            --hoq-color: #9b59b6; --book-color: #f39c12; --qotd-color: #ff3366;
+            --hoq-color: #9b59b6; --qotd-color: #ff3366;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
@@ -24,10 +24,9 @@
         .nav-tabs { display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
         .nav-tab { background: #222; border: 2px solid #555; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 8px; text-transform: uppercase; transition: 0.3s; }
         .nav-tab.active { background: var(--countdown-color); border-color: #fff; }
-        #tab-books.active { background: var(--book-color); }
 
         .view-section { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
-        #view-hoq, #view-books { display: none; }
+        #view-hoq { display: none; }
 
         /* QUESTION OF THE DAY */
         .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255,51,102,0.2); }
@@ -86,13 +85,6 @@
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
         .show-ans-btn { background: #444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
 
-        /* BOOKS LIBRARY (URL BASED NOW) */
-        .book-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--book-color); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; width: 100%; }
-        .book-card { background: #25283d; padding: 20px; border-radius: 8px; text-align: center; position: relative; border-bottom: 4px solid var(--book-color); display: flex; flex-direction: column; justify-content: space-between; }
-        .book-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: white; word-wrap: break-word; }
-        .book-btn { background: var(--book-color); color: black; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; display: inline-block; width: 100%; }
-
         /* WIDGETS */
         .widgets-container { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 15px; z-index: 1000; }
         .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
@@ -109,7 +101,6 @@
         <div class="nav-tabs">
             <div class="nav-tab active" onclick="toggleView('arena')" id="tab-arena">The Arena</div>
             <div class="nav-tab" onclick="toggleView('hoq')" id="tab-hoq">Hall of Questions</div>
-            <div class="nav-tab" onclick="toggleView('books')" id="tab-books">كتب خارجية</div>
         </div>
     </header>
 
@@ -224,19 +215,6 @@
         <div class="hoq-grid" id="hoq-grid"></div>
     </div>
 
-    <div id="view-books" class="view-section">
-        <div class="book-upload-card">
-            <h3 style="color:var(--book-color); text-transform: uppercase; margin-bottom: 10px;">📚 Link External Books</h3>
-            <p style="color: #aaa; font-size: 0.9rem; text-align: center; margin-bottom: 15px;">Upload your PDF to Google Drive or Telegram, then paste the link here. It's 100% free!</p>
-            <div style="display: flex; gap: 10px; width: 100%; max-width: 600px;">
-                <input type="text" id="book-title-input" placeholder="Book Title (e.g. El Moasser Physics)..." style="flex: 1;">
-                <input type="text" id="book-url-input" placeholder="Paste Drive/Telegram Link Here..." style="flex: 2;">
-            </div>
-            <button class="upload-btn" style="background: var(--book-color); width: 100%; max-width: 600px; color: black;" onclick="addBookLink()">🔗 Save Book Link</button>
-        </div>
-        <div class="book-grid" id="book-grid"></div>
-    </div>
-
     <div class="widgets-container">
         <div style="position: relative;">
             <div class="widget-panel" id="notepad-panel">
@@ -276,7 +254,6 @@
             todos: { mohamed: [], moaz: [] }, 
             weakpoints: { mohamed: [], moaz: [] },
             hoq: [],
-            books: [],
             qotd: { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
             lastResetDate: new Date().toDateString()
         };
@@ -292,7 +269,6 @@
                     todos: data.todos || { mohamed: [], moaz: [] },
                     weakpoints: data.weakpoints || { mohamed: [], moaz: [] },
                     hoq: data.hoq || [],
-                    books: data.books || [],
                     qotd: data.qotd || { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
                     lastResetDate: data.lastResetDate || new Date().toDateString()
                 };
@@ -302,6 +278,16 @@
                 if(!localState.todos.moaz) localState.todos.moaz = [];
                 if(!localState.weakpoints.mohamed) localState.weakpoints.mohamed = [];
                 if(!localState.weakpoints.moaz) localState.weakpoints.moaz = [];
+                
+                // SANITIZE weakpoints - ensure all have required properties
+                ['mohamed', 'moaz'].forEach(player => {
+                    localState.weakpoints[player] = localState.weakpoints[player].map(wp => ({
+                        id: wp.id,
+                        task: wp.task || 'Untitled',
+                        subj: wp.subj || 'Physics',
+                        completed: wp.completed || false
+                    }));
+                });
 
                 updateDOM(); 
             }
@@ -311,11 +297,9 @@
         window.toggleView = function(view) {
             document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
             document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
-            document.getElementById('view-books').style.display = view === 'books' ? 'flex' : 'none';
             
             document.getElementById('tab-arena').className = 'nav-tab ' + (view === 'arena' ? 'active' : '');
             document.getElementById('tab-hoq').className = 'nav-tab ' + (view === 'hoq' ? 'active' : '');
-            document.getElementById('tab-books').className = 'nav-tab ' + (view === 'books' ? 'active' : '');
         };
 
         window.toggleWidget = function(id) {
@@ -457,32 +441,6 @@
             }
         };
 
-        // ================= BOOKS LIBRARY (URL) =================
-        window.addBookLink = function() {
-            const title = document.getElementById('book-title-input').value.trim();
-            const url = document.getElementById('book-url-input').value.trim();
-
-            if (!title) return alert("Please enter a book title.");
-            if (!url) return alert("Please paste a link.");
-
-            localState.books.unshift({
-                id: Date.now(),
-                title: title,
-                url: url
-            });
-
-            document.getElementById('book-title-input').value = '';
-            document.getElementById('book-url-input').value = '';
-            set(stateRef, localState);
-        };
-
-        window.deleteBook = function(id) {
-            if(confirm("Delete this book link?")) {
-                localState.books = localState.books.filter(b => b.id !== id);
-                set(stateRef, localState);
-            }
-        };
-
         // ================= END DAY & RESET LOGIC =================
         window.endTheDay = function() {
             ['mohamed', 'moaz'].forEach(player => {
@@ -499,13 +457,13 @@
                 localState.scores[player] += Math.round(pts * 10) / 10; 
             });
 
-            // ONLY wipe tasks. Do NOT wipe HOQ, Books, or QOTD.
+            // ONLY wipe tasks. Do NOT wipe HOQ or QOTD.
             localState.todos = { mohamed: [], moaz: [] };
             localState.weakpoints = { mohamed: [], moaz: [] };
             localState.lastResetDate = new Date().toDateString();
             
             set(stateRef, localState);
-            alert("Day Ended! Points calculated and daily tasks cleared. Questions and Books are safe.");
+            alert("Day Ended! Points calculated and daily tasks cleared. Questions are safe.");
         };
 
         setInterval(() => {
@@ -518,14 +476,13 @@
         }, 60000); 
 
         window.resetAllData = () => { 
-            if(confirm("⚠️ WARNING: This will delete EVERYTHING including the Hall of Questions and Books. Are you 100% sure?")) { 
+            if(confirm("⚠️ WARNING: This will delete EVERYTHING including the Hall of Questions. Are you 100% sure?")) { 
                 if(confirm("Final warning. This cannot be undone.")) {
                     localState = { 
                         scores: { mohamed: 0, moaz: 0 }, 
                         todos: { mohamed: [], moaz: [] }, 
                         weakpoints: { mohamed: [], moaz: [] }, 
                         hoq: [], 
-                        books: [], 
                         qotd: { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
                         lastResetDate: new Date().toDateString() 
                     }; 
@@ -577,7 +534,7 @@
             const renderWP = (player) => localState.weakpoints[player].map(w => `
                 <div class="todo-item ${w.completed ? 'completed' : ''}" style="border-left-color: #ff3366;">
                     <div class="task-header">
-                        <span style="font-size:0.9rem; color:#ff3366;">[${w.subj}]</span> ${w.task}
+                        <span style="font-size:0.9rem; color:#ff3366;">[${w.subj || 'Physics'}]</span> ${w.task || 'Untitled'}
                         <div class="btn-group">
                             <button class="icon-btn btn-done" onclick="toggleWeakpoint('${player}', ${w.id})">✔</button>
                             <button class="icon-btn btn-del" onclick="deleteWeakpoint('${player}', ${w.id})">🗑️</button>
@@ -603,15 +560,6 @@
                         <p style="white-space: pre-wrap;">${q.aText}</p>
                         ${q.aImg ? `<img src="${q.aImg}">` : ''}
                     </div>
-                </div>
-            `).join('');
-
-            // Render Books
-            document.getElementById('book-grid').innerHTML = localState.books.map(b => `
-                <div class="book-card">
-                    <button class="delete-btn-corner" onclick="deleteBook(${b.id})">🗑️</button>
-                    <h3>📑 ${b.title}</h3>
-                    <a href="${b.url}" target="_blank" class="book-btn">Open Link</a>
                 </div>
             `).join('');
         }
