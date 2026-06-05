@@ -14,9 +14,10 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+
         body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; padding-bottom: 150px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 
-        /* HEADER */
+        /* NAVIGATION & HEADER */
         header { text-align: center; margin-bottom: 20px; font-family: 'Impact', sans-serif; }
         h1 { font-size: 3.5rem; text-transform: uppercase; letter-spacing: 2px; }
         .vs { font-style: italic; color: var(--countdown-color); }
@@ -28,19 +29,20 @@
         .view-section { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; }
         #view-hoq, #view-books { display: none; }
 
-        /* QOTD */
-        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; }
-        .qotd-container h2 { color: var(--qotd-color); font-family: 'Impact'; margin-bottom: 15px; }
+        /* QUESTION OF THE DAY */
+        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
+        .qotd-container h2 { color: var(--qotd-color); font-family: 'Impact'; letter-spacing: 1px; margin-bottom: 15px; }
         .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; }
         .qotd-edit { display: none; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; }
 
-        /* LEADERBOARD & ARENA */
-        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; }
+        /* LEADERBOARD */
+        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; font-family: 'Impact'; margin-top: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
         .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); }
         .score-box.moaz { color: var(--moaz-color); border: 2px solid var(--moaz-color); }
 
+        /* ARENA & COLUMNS */
         .arena { display: flex; gap: 30px; width: 100%; flex-wrap: wrap; margin-bottom: 20px; }
         .player-column { flex: 1; min-width: 350px; background: var(--card-bg); border-radius: 15px; padding: 25px; border-top: 5px solid #555; }
         .player-column.mohamed { border-top-color: var(--mohamed-color); }
@@ -65,12 +67,14 @@
 
         .wp-header { text-align: center; color: #ff3366; font-family: 'Impact'; font-size: 2rem; margin: 30px 0 15px; text-transform: uppercase; }
 
-        /* HALL & BOOKS */
+        /* HALL OF QUESTIONS & QOTD INPUTS */
         .input-box { position: relative; background: #11131c; border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; text-align: left; }
         .input-box textarea { background: transparent; border: none; min-height: 60px; resize: vertical; outline: none; width: 100%; color: white; }
         .img-preview { display: none; max-height: 150px; margin-top: 10px; border-radius: 6px; }
         .remove-img { display: none; position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 0.8rem; }
+        
         .upload-btn { background: var(--hoq-color); color: white; font-weight: bold; font-size: 1.2rem; padding: 15px; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; width: 100%; }
+
         .hoq-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--hoq-color); margin-bottom: 30px; }
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; width: 100%; }
         .hoq-card { background: #202231; padding: 20px; border-radius: 10px; border: 1px solid #444; position: relative; }
@@ -79,6 +83,7 @@
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
         .show-ans-btn { background: #444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
 
+        /* BOOKS LIBRARY (URL BASED NOW) */
         .book-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--book-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
         .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; width: 100%; }
         .book-card { background: #25283d; padding: 20px; border-radius: 8px; text-align: center; position: relative; border-bottom: 4px solid var(--book-color); display: flex; flex-direction: column; justify-content: space-between; height: 160px; }
@@ -90,6 +95,8 @@
         .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
         .widget-panel { position: absolute; bottom: 65px; left: 0; background: #fcf3cf; border: 2px solid #d4ac0d; border-radius: 12px; padding: 15px; color: #000; display: none; flex-direction: column; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .prayer-panel { background: #1a252c; border-color: #00ffcc; color: white; }
+        .prayer-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
+        .prayer-next { color: #00ffcc; font-weight: bold; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
@@ -104,6 +111,7 @@
     </header>
 
     <div id="view-arena" class="view-section">
+        
         <div class="qotd-container">
             <h2>⭐ QUESTION OF THE DAY ⭐</h2>
             <div id="qotd-display" class="qotd-content">
@@ -115,14 +123,20 @@
                     <img id="qotd-aimg-display" style="display:none;">
                 </div>
             </div>
+            
             <button onclick="document.getElementById('qotd-edit-panel').style.display='block'" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; margin-top:15px; cursor:pointer; font-size:0.8rem;">Change QOTD</button>
+            
             <div class="qotd-edit" id="qotd-edit-panel">
                 <div class="input-box">
+                    <label style="color:#aaa; font-size:0.8rem; font-weight:bold;">NEW QUESTION (Paste Image or Type)</label>
                     <textarea id="qotd-q-input" placeholder="Paste image (Ctrl+V) or type here..."></textarea>
+                    <button class="remove-img" id="rm-qotd-q" onclick="removeImage('qotd-q')">X</button>
                     <img id="preview-qotd-q" class="img-preview">
                 </div>
                 <div class="input-box">
+                    <label style="color:#aaa; font-size:0.8rem; font-weight:bold;">NEW ANSWER (Paste Image or Type)</label>
                     <textarea id="qotd-a-input" placeholder="Paste image (Ctrl+V) or type here..."></textarea>
+                    <button class="remove-img" id="rm-qotd-a" onclick="removeImage('qotd-a')">X</button>
                     <img id="preview-qotd-a" class="img-preview">
                 </div>
                 <button class="upload-btn" style="background: var(--qotd-color);" onclick="updateQOTD()">Update QOTD</button>
@@ -130,39 +144,44 @@
         </div>
 
         <section class="leaderboard">
+            <h2 style="color: #ffd700; font-family: 'Impact'; letter-spacing: 2px;">🔥 OVERALL LEADERBOARD 🔥</h2>
             <div class="board-flex">
                 <div class="score-box mohamed"><div>MOHAMED</div><div id="score-mohamed">0</div></div>
                 <div class="score-box moaz"><div>MOAZ</div><div id="score-moaz">0</div></div>
             </div>
-            <div style="margin-top: 15px;"><button onclick="endTheDay()" style="background: #ffcc00; color: black; font-weight: bold; padding: 10px 20px; border: none; cursor: pointer;">🚨 END DAY MANUALLY</button></div>
+            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                <button onclick="endTheDay()" style="background: #ffcc00; color: black; font-weight: bold; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">🚨 END DAY MANUALLY</button>
+                <button onclick="resetAllData()" style="color: var(--danger-color); background: transparent; border: 1px solid var(--danger-color); padding: 10px; border-radius: 6px; cursor: pointer;">⚠️ Deep Reset (Wipes Everything)</button>
+            </div>
         </section>
 
         <main class="arena">
             <div class="player-column mohamed">
-                <h2 style="color: var(--mohamed-color);">MOHAMED</h2>
+                <h2 style="color: var(--mohamed-color); margin-bottom: 15px; font-family: 'Impact';">MOHAMED</h2>
                 <div class="todo-form">
-                    <input type="text" id="mohamed-task" placeholder="Task...">
-                    <input type="number" id="mohamed-est" placeholder="Mins" style="width: 80px;">
+                    <input type="text" id="mohamed-task" placeholder="Task name...">
+                    <input type="number" id="mohamed-est" placeholder="Est Mins" style="width: 100px;">
                     <button class="add-btn" onclick="addTask('mohamed')">ADD</button>
                 </div>
                 <div id="list-mohamed"></div>
             </div>
             <div class="player-column moaz">
-                <h2 style="color: var(--moaz-color);">MOAZ</h2>
+                <h2 style="color: var(--moaz-color); margin-bottom: 15px; font-family: 'Impact';">MOAZ</h2>
                 <div class="todo-form">
-                    <input type="text" id="moaz-task" placeholder="Task...">
-                    <input type="number" id="moaz-est" placeholder="Mins" style="width: 80px;">
+                    <input type="text" id="moaz-task" placeholder="Task name...">
+                    <input type="number" id="moaz-est" placeholder="Est Mins" style="width: 100px;">
                     <button class="add-btn" onclick="addTask('moaz')">ADD</button>
                 </div>
                 <div id="list-moaz"></div>
             </div>
         </main>
 
-        <h2 class="wp-header">🎯 SIDE QUESTS</h2>
+        <h2 class="wp-header">🎯 SIDE QUESTS (Weakpoints)</h2>
+        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">*Complete all main tasks before unlocking side quests.</p>
         <main class="arena">
             <div class="player-column mohamed">
                 <div class="wp-input-group">
-                    <select id="mohamed-wp-subj"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
+                    <select id="mohamed-wp-subj" style="width: 120px;"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
                     <input type="text" id="mohamed-wp-task" placeholder="Weakpoint...">
                     <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
                 </div>
@@ -170,7 +189,7 @@
             </div>
             <div class="player-column moaz">
                 <div class="wp-input-group">
-                    <select id="moaz-wp-subj"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
+                    <select id="moaz-wp-subj" style="width: 120px;"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
                     <input type="text" id="moaz-wp-task" placeholder="Weakpoint...">
                     <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
                 </div>
@@ -181,134 +200,469 @@
 
     <div id="view-hoq" class="view-section">
         <div class="hoq-upload-card">
-            <h3 style="color:var(--hoq-color); text-align:center;">🏛️ ADD TO HALL</h3>
-            <div class="input-box"><textarea id="hoq-q-text" placeholder="Question..."></textarea></div>
-            <div class="input-box"><textarea id="hoq-a-text" placeholder="Answer..."></textarea></div>
-            <button class="upload-btn" onclick="uploadQuestion()">UPLOAD</button>
+            <h3 style="color:var(--hoq-color); text-align: center; text-transform: uppercase; margin-bottom: 15px;">🏛️ Add to Hall of Questions</h3>
+            
+            <div class="input-box">
+                <label style="color:#aaa; font-size:0.8rem; font-weight:bold;">QUESTION (Type or Paste Image)</label>
+                <textarea id="hoq-q-text" placeholder="Type question or hit Ctrl+V to paste an image here..."></textarea>
+                <button class="remove-img" id="rm-q" onclick="removeImage('q')">X</button>
+                <img id="preview-q" class="img-preview">
+            </div>
+
+            <div class="input-box">
+                <label style="color:#aaa; font-size:0.8rem; font-weight:bold;">ANSWER (Type or Paste Image)</label>
+                <textarea id="hoq-a-text" placeholder="Type answer or hit Ctrl+V to paste an image here..."></textarea>
+                <button class="remove-img" id="rm-a" onclick="removeImage('a')">X</button>
+                <img id="preview-a" class="img-preview">
+            </div>
+
+            <button class="upload-btn" onclick="uploadQuestion()">🏛️ UPLOAD</button>
         </div>
         <div class="hoq-grid" id="hoq-grid"></div>
     </div>
 
     <div id="view-books" class="view-section">
         <div class="book-upload-card">
-            <h3 style="color:var(--book-color);">📚 LINK EXTERNAL BOOKS</h3>
+            <h3 style="color:var(--book-color); text-transform: uppercase; margin-bottom: 10px;">📚 Link External Books</h3>
+            <p style="color: #aaa; font-size: 0.9rem; text-align: center; margin-bottom: 15px;">Upload your PDF to Google Drive or Telegram, then paste the link here. It's 100% free!</p>
             <div style="display: flex; gap: 10px; width: 100%; max-width: 600px;">
-                <input type="text" id="book-title-input" placeholder="Title..." style="flex: 1;">
-                <input type="text" id="book-url-input" placeholder="Link..." style="flex: 2;">
+                <input type="text" id="book-title-input" placeholder="Book Title (e.g. El Moasser Physics)..." style="flex: 1;">
+                <input type="text" id="book-url-input" placeholder="Paste Drive/Telegram Link Here..." style="flex: 2;">
             </div>
-            <button class="upload-btn" style="background: var(--book-color);" onclick="addBookLink()">SAVE LINK</button>
+            <button class="upload-btn" style="background: var(--book-color); width: 100%; max-width: 600px; color: black;" onclick="addBookLink()">🔗 Save Book Link</button>
         </div>
         <div class="book-grid" id="book-grid"></div>
     </div>
 
+    <div class="widgets-container">
+        <div style="position: relative;">
+            <div class="widget-panel" id="notepad-panel">
+                <h4 style="margin-bottom: 10px;">📝 Scratchpad</h4>
+                <textarea id="notepad-text" style="background: transparent; color: black; border: 1px solid #ccc; height: 200px; resize: none;"></textarea>
+            </div>
+            <button class="widget-btn" style="background: #f1c40f;" onclick="toggleWidget('notepad-panel')">📝</button>
+        </div>
+        
+        <div style="position: relative;">
+            <div class="widget-panel prayer-panel" id="prayer-panel">
+                <h4 style="color: #00ffcc; text-align: center; margin-bottom: 10px;">🕌 Egypt Prayers</h4>
+                <div id="prayer-times-list">Loading...</div>
+                <div class="prayer-next" id="prayer-next-timer"></div>
+            </div>
+            <button class="widget-btn" style="background: #1a252c; color: #00ffcc;" onclick="toggleWidget('prayer-panel')">🕌</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref as dbRef, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        const app = initializeApp({
+        const firebaseConfig = {
             apiKey: "AIzaSyDv8JBa9MtaTbCzNQ66HbAxB7YPBi_pGfQ",
+            authDomain: "exam-3abc3.firebaseapp.com",
             databaseURL: "https://exam-3abc3-default-rtdb.firebaseio.com",
             projectId: "exam-3abc3"
-        });
+        };
+
+        const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const stateRef = ref(db, 'hustleState');
-        let localState = null;
+        const stateRef = dbRef(db, 'hustleState');
+
+        let localState = { 
+            scores: { mohamed: 0, moaz: 0 }, 
+            todos: { mohamed: [], moaz: [] }, 
+            weakpoints: { mohamed: [], moaz: [] },
+            hoq: [],
+            books: [],
+            qotd: { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
+            lastResetDate: new Date().toDateString()
+        };
+
+        let pendingImages = { q: null, a: null, 'qotd-q': null, 'qotd-a': null };
 
         onValue(stateRef, (snapshot) => {
             const data = snapshot.val();
-            // ONLY update if data changed significantly to prevent UI thrashing
-            if(JSON.stringify(localState) !== JSON.stringify(data)) {
-                localState = data || { scores: {mohamed:0, moaz:0}, todos: {mohamed:[], moaz:[]}, weakpoints: {mohamed:[], moaz:[]}, hoq:[], books:[], qotd:{qText:"..."} };
-                updateDOM();
+            if (data) { 
+                // Merge safeguard so we don't overwrite empty arrays if structure changes
+                localState = {
+                    scores: data.scores || { mohamed: 0, moaz: 0 },
+                    todos: data.todos || { mohamed: [], moaz: [] },
+                    weakpoints: data.weakpoints || { mohamed: [], moaz: [] },
+                    hoq: data.hoq || [],
+                    books: data.books || [],
+                    qotd: data.qotd || { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
+                    lastResetDate: data.lastResetDate || new Date().toDateString()
+                };
+                
+                // Initialize arrays if missing for players
+                if(!localState.todos.mohamed) localState.todos.mohamed = [];
+                if(!localState.todos.moaz) localState.todos.moaz = [];
+                if(!localState.weakpoints.mohamed) localState.weakpoints.mohamed = [];
+                if(!localState.weakpoints.moaz) localState.weakpoints.moaz = [];
+
+                updateDOM(); 
             }
         });
 
-        window.toggleView = (v) => {
-            ['arena', 'hoq', 'books'].forEach(s => document.getElementById('view-'+s).style.display = (v === s ? 'flex' : 'none'));
+        // ================= VIEW & WIDGET TOGGLES =================
+        window.toggleView = function(view) {
+            document.getElementById('view-arena').style.display = view === 'arena' ? 'flex' : 'none';
+            document.getElementById('view-hoq').style.display = view === 'hoq' ? 'flex' : 'none';
+            document.getElementById('view-books').style.display = view === 'books' ? 'flex' : 'none';
+            
+            document.getElementById('tab-arena').className = 'nav-tab ' + (view === 'arena' ? 'active' : '');
+            document.getElementById('tab-hoq').className = 'nav-tab ' + (view === 'hoq' ? 'active' : '');
+            document.getElementById('tab-books').className = 'nav-tab ' + (view === 'books' ? 'active' : '');
         };
 
-        window.addTask = (p) => {
-            const t = document.getElementById(p+'-task').value;
-            if(!t) return;
-            localState.todos[p].push({ id: Date.now(), task: t, est: document.getElementById(p+'-est').value, actual: "", completed: false });
+        window.toggleWidget = function(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
+        };
+
+        // ================= IMAGE PASTE HANDLER =================
+        function handlePaste(type) {
+            return function(e) {
+                const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                for (let index in items) {
+                    const item = items[index];
+                    if (item.kind === 'file') {
+                        const blob = item.getAsFile();
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            pendingImages[type] = event.target.result;
+                            document.getElementById(`preview-${type}`).src = event.target.result;
+                            document.getElementById(`preview-${type}`).style.display = 'block';
+                            document.getElementById(`rm-${type}`).style.display = 'block';
+                        };
+                        reader.readAsDataURL(blob);
+                    }
+                }
+            }
+        }
+        
+        // Attach paste listeners
+        document.getElementById('hoq-q-text').addEventListener('paste', handlePaste('q'));
+        document.getElementById('hoq-a-text').addEventListener('paste', handlePaste('a'));
+        document.getElementById('qotd-q-input').addEventListener('paste', handlePaste('qotd-q'));
+        document.getElementById('qotd-a-input').addEventListener('paste', handlePaste('qotd-a'));
+
+        window.removeImage = function(type) {
+            pendingImages[type] = null;
+            document.getElementById(`preview-${type}`).style.display = 'none';
+            document.getElementById(`rm-${type}`).style.display = 'none';
+            document.getElementById(`preview-${type}`).src = '';
+        };
+
+        // ================= QOTD LOGIC =================
+        window.updateQOTD = function() {
+            const qText = document.getElementById('qotd-q-input').value;
+            const aText = document.getElementById('qotd-a-input').value;
+            
+            if(!qText && !pendingImages['qotd-q']) return alert("Add some content for QOTD!");
+
+            localState.qotd = {
+                qText: qText,
+                qImg: pendingImages['qotd-q'],
+                aText: aText,
+                aImg: pendingImages['qotd-a']
+            };
+
+            document.getElementById('qotd-q-input').value = '';
+            document.getElementById('qotd-a-input').value = '';
+            removeImage('qotd-q'); removeImage('qotd-a');
+            document.getElementById('qotd-edit-panel').style.display = 'none';
+            
             set(stateRef, localState);
         };
 
-        window.addWeakpoint = (p) => {
-            const t = document.getElementById(p+'-wp-task').value;
-            if(!t) return;
-            localState.weakpoints[p].push({ id: Date.now(), task: t, subj: document.getElementById(p+'-wp-subj').value, completed: false });
+        // ================= TASKS & WEAKPOINTS =================
+        window.addTask = function(player) {
+            const task = document.getElementById(`${player}-task`).value;
+            const est = document.getElementById(`${player}-est`).value || 0;
+            if(!task) return;
+            localState.todos[player].push({ id: Date.now(), task, est, actual: "", completed: false });
+            document.getElementById(`${player}-task`).value = '';
+            document.getElementById(`${player}-est`).value = '';
             set(stateRef, localState);
         };
 
-        window.toggleTask = (p, id) => {
-            const t = localState.todos[p].find(x => x.id === id);
+        window.addWeakpoint = function(player) {
+            const task = document.getElementById(`${player}-wp-task`).value;
+            const subj = document.getElementById(`${player}-wp-subj`).value;
+            if(!task) return;
+            localState.weakpoints[player].push({ id: Date.now(), task, subj, completed: false });
+            document.getElementById(`${player}-wp-task`).value = '';
+            set(stateRef, localState);
+        };
+
+        window.updateActual = function(player, id, value) {
+            const t = localState.todos[player].find(x => x.id === id);
+            if(t) t.actual = value;
+        };
+        window.saveActual = function() { set(stateRef, localState); };
+
+        window.toggleTask = function(player, id) {
+            const t = localState.todos[player].find(x => x.id === id);
             if(t) { t.completed = !t.completed; set(stateRef, localState); }
         };
 
-        window.deleteTask = (p, id) => {
-            localState.todos[p] = localState.todos[p].filter(x => x.id !== id);
+        window.deleteTask = function(player, id) {
+            localState.todos[player] = localState.todos[player].filter(x => x.id !== id);
             set(stateRef, localState);
         };
 
-        window.toggleWeakpoint = (p, id) => {
-            // REMOVED: The check that blocks if main tasks aren't done. Now just toggle.
-            const wp = localState.weakpoints[p].find(x => x.id === id);
+        window.toggleWeakpoint = function(player, id) {
+            const mainTasks = localState.todos[player];
+            if(mainTasks.length === 0 || !mainTasks.every(t => t.completed)) {
+                alert(`Bro, finish ALL your main tasks for today before doing side quests!`);
+                return;
+            }
+            const wp = localState.weakpoints[player].find(x => x.id === id);
             if(wp) { wp.completed = !wp.completed; set(stateRef, localState); }
         };
 
-        window.deleteWeakpoint = (p, id) => {
-            localState.weakpoints[p] = localState.weakpoints[p].filter(x => x.id !== id);
+        window.deleteWeakpoint = function(player, id) {
+            localState.weakpoints[player] = localState.weakpoints[player].filter(x => x.id !== id);
             set(stateRef, localState);
         };
 
-        window.updateActual = (p, id, val) => {
-            const t = localState.todos[p].find(x => x.id === id);
-            if(t) { t.actual = val; set(stateRef, localState); }
-        };
+        // ================= HALL OF QUESTIONS =================
+        window.uploadQuestion = function() {
+            const qText = document.getElementById('hoq-q-text').value;
+            const aText = document.getElementById('hoq-a-text').value;
+            
+            if(!qText && !pendingImages.q) return alert("Bro, add a question at least.");
 
-        window.uploadQuestion = () => {
-            localState.hoq.unshift({ id: Date.now(), qText: document.getElementById('hoq-q-text').value, aText: document.getElementById('hoq-a-text').value });
-            set(stateRef, localState);
-        };
-
-        window.deleteHoq = (id) => {
-            localState.hoq = localState.hoq.filter(x => x.id !== id);
-            set(stateRef, localState);
-        };
-
-        window.addBookLink = () => {
-            localState.books.unshift({ id: Date.now(), title: document.getElementById('book-title-input').value, url: document.getElementById('book-url-input').value });
-            set(stateRef, localState);
-        };
-
-        window.deleteBook = (id) => {
-            localState.books = localState.books.filter(x => x.id !== id);
-            set(stateRef, localState);
-        };
-
-        window.endTheDay = () => {
-            ['mohamed', 'moaz'].forEach(p => {
-                localState.todos[p].forEach(t => { if(t.completed) localState.scores[p] += (parseInt(t.actual) || 0)/60; });
+            localState.hoq.unshift({
+                id: Date.now(),
+                qText, qImg: pendingImages.q,
+                aText, aImg: pendingImages.a
             });
+
+            document.getElementById('hoq-q-text').value = '';
+            document.getElementById('hoq-a-text').value = '';
+            removeImage('q'); removeImage('a');
+            
+            set(stateRef, localState);
+        };
+
+        window.deleteHoq = function(id) {
+            if(confirm("Delete this question from the Hall?")) {
+                localState.hoq = localState.hoq.filter(q => q.id !== id);
+                set(stateRef, localState);
+            }
+        };
+
+        // ================= BOOKS LIBRARY (URL) =================
+        window.addBookLink = function() {
+            const title = document.getElementById('book-title-input').value.trim();
+            const url = document.getElementById('book-url-input').value.trim();
+
+            if (!title) return alert("Please enter a book title.");
+            if (!url) return alert("Please paste a link.");
+
+            localState.books.unshift({
+                id: Date.now(),
+                title: title,
+                url: url
+            });
+
+            document.getElementById('book-title-input').value = '';
+            document.getElementById('book-url-input').value = '';
+            set(stateRef, localState);
+        };
+
+        window.deleteBook = function(id) {
+            if(confirm("Delete this book link?")) {
+                localState.books = localState.books.filter(b => b.id !== id);
+                set(stateRef, localState);
+            }
+        };
+
+        // ================= END DAY & RESET LOGIC =================
+        window.endTheDay = function() {
+            ['mohamed', 'moaz'].forEach(player => {
+                let pts = 0;
+                localState.todos[player].forEach(t => {
+                    if(t.completed) {
+                        let mins = parseInt(t.actual) || parseInt(t.est) || 0;
+                        pts += (mins / 60); 
+                    }
+                });
+                localState.weakpoints[player].forEach(w => {
+                    if(w.completed) pts += 1; 
+                });
+                localState.scores[player] += Math.round(pts * 10) / 10; 
+            });
+
+            // ONLY wipe tasks. Do NOT wipe HOQ, Books, or QOTD.
             localState.todos = { mohamed: [], moaz: [] };
             localState.weakpoints = { mohamed: [], moaz: [] };
+            localState.lastResetDate = new Date().toDateString();
+            
             set(stateRef, localState);
+            alert("Day Ended! Points calculated and daily tasks cleared. Questions and Books are safe.");
         };
 
+        setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 0 && now.getMinutes() === 0) {
+                if (localState.lastResetDate !== now.toDateString()) {
+                    endTheDay();
+                }
+            }
+        }, 60000); 
+
+        window.resetAllData = () => { 
+            if(confirm("⚠️ WARNING: This will delete EVERYTHING including the Hall of Questions and Books. Are you 100% sure?")) { 
+                if(confirm("Final warning. This cannot be undone.")) {
+                    localState = { 
+                        scores: { mohamed: 0, moaz: 0 }, 
+                        todos: { mohamed: [], moaz: [] }, 
+                        weakpoints: { mohamed: [], moaz: [] }, 
+                        hoq: [], 
+                        books: [], 
+                        qotd: { qText: "No Question of the Day set yet!", qImg: null, aText: "", aImg: null },
+                        lastResetDate: new Date().toDateString() 
+                    }; 
+                    set(stateRef, localState); 
+                }
+            } 
+        };
+
+        // ================= DOM RENDERING =================
         function updateDOM() {
-            if(!localState) return;
-            document.getElementById('score-mohamed').innerText = Math.round(localState.scores.mohamed);
-            document.getElementById('score-moaz').innerText = Math.round(localState.scores.moaz);
+            document.getElementById('score-mohamed').innerText = localState.scores.mohamed;
+            document.getElementById('score-moaz').innerText = localState.scores.moaz;
             
-            // Render Tasks & WPs logic included here (simplified for brevity)
-            renderList('mohamed'); renderList('moaz');
+            // Render QOTD
+            document.getElementById('qotd-text-display').innerText = localState.qotd.qText;
+            if(localState.qotd.qImg) {
+                document.getElementById('qotd-img-display').src = localState.qotd.qImg;
+                document.getElementById('qotd-img-display').style.display = 'block';
+            } else {
+                document.getElementById('qotd-img-display').style.display = 'none';
+            }
+
+            document.getElementById('qotd-atext-display').innerText = localState.qotd.aText;
+            if(localState.qotd.aImg) {
+                document.getElementById('qotd-aimg-display').src = localState.qotd.aImg;
+                document.getElementById('qotd-aimg-display').style.display = 'block';
+            } else {
+                document.getElementById('qotd-aimg-display').style.display = 'none';
+            }
+            document.getElementById('qotd-ans-display').style.display = 'none'; // reset visibility
+
+            // Render Tasks
+            const renderTasks = (player) => localState.todos[player].map(t => `
+                <div class="todo-item ${t.completed ? 'completed' : ''}">
+                    <div class="task-header">
+                        <span>${t.task}</span>
+                        <div class="btn-group">
+                            <button class="icon-btn btn-done" onclick="toggleTask('${player}', ${t.id})">✔</button>
+                            <button class="icon-btn btn-del" onclick="deleteTask('${player}', ${t.id})">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="task-controls">
+                        ⏱️ Est: ${t.est}m | Actual: 
+                        <input type="number" class="actual-input" value="${t.actual}" onchange="updateActual('${player}', ${t.id}, this.value)" onblur="saveActual()"> mins
+                    </div>
+                </div>
+            `).join('');
+
+            const renderWP = (player) => localState.weakpoints[player].map(w => `
+                <div class="todo-item ${w.completed ? 'completed' : ''}" style="border-left-color: #ff3366;">
+                    <div class="task-header">
+                        <span style="font-size:0.9rem; color:#ff3366;">[${w.subj}]</span> ${w.task}
+                        <div class="btn-group">
+                            <button class="icon-btn btn-done" onclick="toggleWeakpoint('${player}', ${w.id})">✔</button>
+                            <button class="icon-btn btn-del" onclick="deleteWeakpoint('${player}', ${w.id})">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('list-mohamed').innerHTML = renderTasks('mohamed');
+            document.getElementById('list-moaz').innerHTML = renderTasks('moaz');
+            document.getElementById('wp-list-mohamed').innerHTML = renderWP('mohamed');
+            document.getElementById('wp-list-moaz').innerHTML = renderWP('moaz');
+
+            // Render HOQ
+            document.getElementById('hoq-grid').innerHTML = localState.hoq.map((q, i) => `
+                <div class="hoq-card">
+                    <button class="delete-btn-corner" onclick="deleteHoq(${q.id})">🗑️</button>
+                    <p style="white-space: pre-wrap;"><b>Q:</b> ${q.qText}</p>
+                    ${q.qImg ? `<img src="${q.qImg}">` : ''}
+                    
+                    <button class="show-ans-btn" onclick="document.getElementById('ans-${i}').style.display='block'">Show Answer</button>
+                    <div class="answer-reveal" id="ans-${i}">
+                        <p style="white-space: pre-wrap;">${q.aText}</p>
+                        ${q.aImg ? `<img src="${q.aImg}">` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Books
+            document.getElementById('book-grid').innerHTML = localState.books.map(b => `
+                <div class="book-card">
+                    <button class="delete-btn-corner" onclick="deleteBook(${b.id})">🗑️</button>
+                    <h3>📑 ${b.title}</h3>
+                    <a href="${b.url}" target="_blank" class="book-btn">Open Link</a>
+                </div>
+            `).join('');
         }
 
-        function renderList(p) {
-            document.getElementById('list-'+p).innerHTML = localState.todos[p].map(t => `<div class="todo-item ${t.completed?'completed':''}"><div class="task-header"><span>${t.task}</span><button onclick="deleteTask('${p}', ${t.id})">🗑️</button></div><input class="actual-input" value="${t.actual}" onchange="updateActual('${p}', ${t.id}, this.value)"></div>`).join('');
-            document.getElementById('wp-list-'+p).innerHTML = localState.weakpoints[p].map(w => `<div class="todo-item ${w.completed?'completed':''}"><div class="task-header"><span style="color:#ff3366">[${w.subj}]</span> <span>${w.task}</span><button onclick="deleteWeakpoint('${p}', ${w.id})">🗑️</button></div></div>`).join('');
+        // ================= NOTEPAD SYNC =================
+        const npText = document.getElementById('notepad-text');
+        npText.value = localStorage.getItem('local_notes') || '';
+        npText.addEventListener('input', () => localStorage.setItem('local_notes', npText.value));
+
+        // ================= PRAYER TIMES API (EGYPT) =================
+        let prayerData = null;
+        async function fetchPrayers() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5');
+                const data = await res.json();
+                const timings = data.data.timings;
+                const required = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+                prayerData = required.map(name => ({ name, time: timings[name] }));
+                
+                document.getElementById('prayer-times-list').innerHTML = prayerData.map(p => `
+                    <div class="prayer-item"><span>${p.name}</span><span>${p.time}</span></div>
+                `).join('');
+                
+                updateNextPrayer();
+            } catch(e) {
+                document.getElementById('prayer-times-list').innerHTML = "Could not load API.";
+            }
         }
+
+        function updateNextPrayer() {
+            if(!prayerData) return;
+            const now = new Date();
+            const currMins = now.getHours() * 60 + now.getMinutes();
+            
+            let next = prayerData.find(p => {
+                const [h, m] = p.time.split(':');
+                return (parseInt(h) * 60 + parseInt(m)) > currMins;
+            });
+            
+            if(!next) {
+                document.getElementById('prayer-next-timer').innerText = `Next: Fajr (Tomorrow)`;
+                return;
+            }
+
+            const [nH, nM] = next.time.split(':');
+            let diffMins = (parseInt(nH) * 60 + parseInt(nM)) - currMins;
+            let hrs = Math.floor(diffMins / 60);
+            let mins = diffMins % 60;
+            
+            document.getElementById('prayer-next-timer').innerText = `Next: ${next.name} in ${hrs}h ${mins}m`;
+        }
+
+        fetchPrayers();
+        setInterval(updateNextPrayer, 60000);
     </script>
 </body>
 </html>
