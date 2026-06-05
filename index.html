@@ -95,7 +95,7 @@
         .prayer-next { color: #00ffcc; font-weight: bold; margin-top: 10px; text-align: center; }
 
         /* STOPWATCH */
-        .stopwatch-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .stopwatch-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; align-items: center; }
         .stopwatch-display { 
             background: linear-gradient(135deg, #ff00ff, #00ffff);
             border: 3px solid #ff00ff;
@@ -111,13 +111,32 @@
             text-align: center;
             animation: pulse-glow 1s ease-in-out infinite;
         }
+        .stopwatch-display.running {
+            animation: pulse-glow 0.6s ease-in-out infinite;
+        }
         @keyframes pulse-glow {
             0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2); }
             50% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.3); }
         }
-        .stopwatch-display.running {
-            animation: pulse-glow 0.6s ease-in-out infinite;
+
+        .stopwatch-controls { display: flex; gap: 8px; }
+        .stopwatch-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            color: white;
         }
+        .stopwatch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .stopwatch-btn.start { background: #2ecc71; }
+        .stopwatch-btn.pause { background: #f39c12; }
+        .stopwatch-btn.reset { background: #e74c3c; }
     </style>
 </head>
 <body>
@@ -262,7 +281,12 @@
 
     <!-- STOPWATCH WIDGET -->
     <div class="stopwatch-widget">
-        <div class="stopwatch-display" id="stopwatch-display" onclick="toggleStopwatch()">00:00:00</div>
+        <div class="stopwatch-display" id="stopwatch-display">00:00:00</div>
+        <div class="stopwatch-controls">
+            <button class="stopwatch-btn start" onclick="startStopwatch()">▶ Start</button>
+            <button class="stopwatch-btn pause" onclick="pauseStopwatch()">⏸ Pause</button>
+            <button class="stopwatch-btn reset" onclick="resetStopwatch()">↻ Reset</button>
+        </div>
     </div>
 
     <script type="module">
@@ -296,14 +320,28 @@
         let stopwatchStartTime = null;
         let stopwatchTotalTime = 0;
 
-        window.toggleStopwatch = function() {
-            stopwatchRunning = !stopwatchRunning;
-            if (stopwatchRunning) {
+        window.startStopwatch = function() {
+            if (!stopwatchRunning) {
+                stopwatchRunning = true;
                 stopwatchStartTime = Date.now() - stopwatchTotalTime * 1000;
                 document.getElementById('stopwatch-display').classList.add('running');
-            } else {
+            }
+        };
+
+        window.pauseStopwatch = function() {
+            if (stopwatchRunning) {
+                stopwatchRunning = false;
+                stopwatchTotalTime = (Date.now() - stopwatchStartTime) / 1000;
                 document.getElementById('stopwatch-display').classList.remove('running');
             }
+        };
+
+        window.resetStopwatch = function() {
+            stopwatchRunning = false;
+            stopwatchStartTime = null;
+            stopwatchTotalTime = 0;
+            document.getElementById('stopwatch-display').classList.remove('running');
+            document.getElementById('stopwatch-display').innerText = '00:00:00';
         };
 
         setInterval(() => {
