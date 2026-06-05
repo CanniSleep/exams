@@ -32,7 +32,8 @@
         .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255,51,102,0.2); }
         .qotd-container h2 { color: var(--qotd-color); font-family: 'Impact'; letter-spacing: 1px; margin-bottom: 15px; }
         .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; }
-        .qotd-edit { display: none; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; }
+        .qotd-edit { display: none; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; transition: all 0.3s ease; }
+        .qotd-edit.open { display: block; }
 
         /* LEADERBOARD */
         .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -118,7 +119,7 @@
                 </div>
             </div>
             
-            <button onclick="document.getElementById('qotd-edit-panel').style.display='block'" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; cursor:pointer; margin-top:10px;">✏️ Edit QOTD</button>
+            <button id="edit-qotd-btn" onclick="toggleQOTDEdit()" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; cursor:pointer; margin-top:10px;">✏️ Edit QOTD</button>
             
             <div class="qotd-edit" id="qotd-edit-panel">
                 <div class="input-box">
@@ -307,6 +308,14 @@
             el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
         };
 
+        // ================= QOTD EDIT TOGGLE =================
+        window.toggleQOTDEdit = function() {
+            const panel = document.getElementById('qotd-edit-panel');
+            const btn = document.getElementById('edit-qotd-btn');
+            panel.classList.toggle('open');
+            btn.textContent = panel.classList.contains('open') ? '✏️ Close' : '✏️ Edit QOTD';
+        };
+
         // ================= IMAGE PASTE HANDLER =================
         function handlePaste(type) {
             return function(e) {
@@ -358,7 +367,10 @@
             document.getElementById('qotd-q-input').value = '';
             document.getElementById('qotd-a-input').value = '';
             removeImage('qotd-q'); removeImage('qotd-a');
-            document.getElementById('qotd-edit-panel').style.display = 'none';
+            
+            // Close the edit panel after updating
+            document.getElementById('qotd-edit-panel').classList.remove('open');
+            document.getElementById('edit-qotd-btn').textContent = '✏️ Edit QOTD';
             
             set(stateRef, localState);
         };
