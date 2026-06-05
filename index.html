@@ -30,13 +30,13 @@
         #view-hoq, #view-books { display: none; }
 
         /* QUESTION OF THE DAY */
-        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
+        .qotd-container { background: var(--card-bg); border: 2px solid var(--qotd-color); border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 0 20px rgba(255,51,102,0.2); }
         .qotd-container h2 { color: var(--qotd-color); font-family: 'Impact'; letter-spacing: 1px; margin-bottom: 15px; }
         .qotd-content img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; }
         .qotd-edit { display: none; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; }
 
         /* LEADERBOARD */
-        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .leaderboard { background: var(--card-bg); border: 2px solid #333; padding: 20px; width: 100%; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .board-flex { display: flex; justify-content: space-around; align-items: center; font-size: 2.5rem; font-family: 'Impact'; margin-top: 15px; }
         .score-box { padding: 15px 30px; border-radius: 10px; min-width: 200px; }
         .score-box.mohamed { color: var(--mohamed-color); border: 2px solid var(--mohamed-color); }
@@ -49,8 +49,11 @@
         .player-column.moaz { border-top-color: var(--moaz-color); }
         
         .todo-form, .wp-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        input, select, textarea { background: #25283d; border: 1px solid #444; color: white; padding: 10px; font-size: 1rem; border-radius: 6px; width: 100%; }
-        button.add-btn { background: #fff; color: #000; border: none; padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 6px; }
+        input, textarea { background: #25283d; border: 1px solid #444; color: white; padding: 10px; font-size: 1rem; border-radius: 6px; width: 100%; }
+        select { background: #25283d; border: 1px solid #444; color: white; padding: 10px; font-size: 1rem; border-radius: 6px; width: 100%; cursor: pointer; }
+        select option { background: #25283d; color: white; padding: 8px; }
+        select option:hover { background: #3a3d54; }
+        button.add-btn { background: #fff; color: #000; border: none; padding: 10px 15px; font-weight: bold; cursor: pointer; border-radius: 6px; flex-shrink: 0; }
         .mohamed .add-btn { background: var(--mohamed-color); }
         .moaz .add-btn { background: var(--moaz-color); }
 
@@ -79,21 +82,21 @@
         .hoq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; width: 100%; }
         .hoq-card { background: #202231; padding: 20px; border-radius: 10px; border: 1px solid #444; position: relative; }
         .hoq-card img { width: 100%; border-radius: 6px; margin-top: 10px; cursor: pointer; }
-        .delete-btn-corner { position: absolute; top: 10px; right: 10px; background: var(--danger-color); border: none; color: white; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; z-index: 10; }
+        .delete-btn-corner { position: absolute; top: 10px; right: 10px; background: var(--danger-color); border: none; color: white; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
         .show-ans-btn { background: #444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
 
         /* BOOKS LIBRARY (URL BASED NOW) */
-        .book-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--book-color); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .book-upload-card { background: var(--card-bg); padding: 25px; border-radius: 12px; width: 100%; border: 2px dashed var(--book-color); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
         .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; width: 100%; }
-        .book-card { background: #25283d; padding: 20px; border-radius: 8px; text-align: center; position: relative; border-bottom: 4px solid var(--book-color); display: flex; flex-direction: column; justify-content: space-between; height: 160px; }
+        .book-card { background: #25283d; padding: 20px; border-radius: 8px; text-align: center; position: relative; border-bottom: 4px solid var(--book-color); display: flex; flex-direction: column; justify-content: space-between; }
         .book-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: white; word-wrap: break-word; }
         .book-btn { background: var(--book-color); color: black; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; display: inline-block; width: 100%; }
 
         /* WIDGETS */
         .widgets-container { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 15px; z-index: 1000; }
-        .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
-        .widget-panel { position: absolute; bottom: 65px; left: 0; background: #fcf3cf; border: 2px solid #d4ac0d; border-radius: 12px; padding: 15px; color: #000; display: none; flex-direction: column; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .widget-btn { width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .widget-panel { position: absolute; bottom: 65px; left: 0; background: #fcf3cf; border: 2px solid #d4ac0d; border-radius: 12px; padding: 15px; color: #000; display: none; flex-direction: column; min-width: 300px; max-width: 400px; max-height: 400px; overflow-y: auto; }
         .prayer-panel { background: #1a252c; border-color: #00ffcc; color: white; }
         .prayer-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
         .prayer-next { color: #00ffcc; font-weight: bold; margin-top: 10px; text-align: center; }
@@ -124,7 +127,7 @@
                 </div>
             </div>
             
-            <button onclick="document.getElementById('qotd-edit-panel').style.display='block'" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; margin-top:15px; cursor:pointer; font-size:0.8rem;">Change QOTD</button>
+            <button onclick="document.getElementById('qotd-edit-panel').style.display='block'" style="background:transparent; color:#aaa; border:1px solid #555; padding:5px 10px; border-radius:4px; cursor:pointer; margin-top:10px;">✏️ Edit QOTD</button>
             
             <div class="qotd-edit" id="qotd-edit-panel">
                 <div class="input-box">
@@ -150,8 +153,8 @@
                 <div class="score-box moaz"><div>MOAZ</div><div id="score-moaz">0</div></div>
             </div>
             <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
-                <button onclick="endTheDay()" style="background: #ffcc00; color: black; font-weight: bold; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">🚨 END DAY MANUALLY</button>
-                <button onclick="resetAllData()" style="color: var(--danger-color); background: transparent; border: 1px solid var(--danger-color); padding: 10px; border-radius: 6px; cursor: pointer;">⚠️ Deep Reset (Wipes Everything)</button>
+                <button onclick="endTheDay()" style="background: #ffcc00; color: black; font-weight: bold; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">🚨 END DAY MAN</button>
+                <button onclick="resetAllData()" style="color: var(--danger-color); background: transparent; border: 1px solid var(--danger-color); padding: 10px; border-radius: 6px; cursor: pointer;">⚠️ RESET ALL</button>
             </div>
         </section>
 
@@ -181,7 +184,7 @@
         <main class="arena">
             <div class="player-column mohamed">
                 <div class="wp-input-group">
-                    <select id="mohamed-wp-subj" style="width: 120px;"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
+                    <select id="mohamed-wp-subj"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
                     <input type="text" id="mohamed-wp-task" placeholder="Weakpoint...">
                     <button class="add-btn" onclick="addWeakpoint('mohamed')">ADD</button>
                 </div>
@@ -189,7 +192,7 @@
             </div>
             <div class="player-column moaz">
                 <div class="wp-input-group">
-                    <select id="moaz-wp-subj" style="width: 120px;"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
+                    <select id="moaz-wp-subj"><option>Physics</option><option>Chem</option><option>Bio</option><option>Arabic</option></select>
                     <input type="text" id="moaz-wp-task" placeholder="Weakpoint...">
                     <button class="add-btn" onclick="addWeakpoint('moaz')">ADD</button>
                 </div>
