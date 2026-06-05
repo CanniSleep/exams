@@ -85,7 +85,6 @@
         .delete-btn-corner { position: absolute; top: 10px; right: 10px; background: var(--danger-color); border: none; color: white; border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
         .answer-reveal { background: #111; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; color: #00ffcc; white-space: pre-wrap; }
         .show-ans-btn { background: #444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
-        .hide-ans-btn { background: #666; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
 
         /* WIDGETS */
         .widgets-container { position: fixed; bottom: 20px; left: 20px; display: flex; gap: 15px; z-index: 1000; }
@@ -161,7 +160,6 @@
                 <div class="answer-reveal" id="qotd-ans-display">
                     <p id="qotd-atext-display"></p>
                     <img id="qotd-aimg-display" style="display:none;">
-                    <button class="hide-ans-btn" style="width: auto; padding: 5px 15px; margin-top: 10px;" onclick="hideQOTDAnswer()">Show Less</button>
                 </div>
             </div>
             
@@ -395,12 +393,15 @@
         // ================= QOTD ANSWER TOGGLE =================
         window.toggleQOTDAnswer = function() {
             const answerDiv = document.getElementById('qotd-ans-display');
-            answerDiv.style.display = 'block';
-        };
-
-        window.hideQOTDAnswer = function() {
-            const answerDiv = document.getElementById('qotd-ans-display');
-            answerDiv.style.display = 'none';
+            const btn = document.getElementById('qotd-reveal-btn');
+            
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+                btn.textContent = 'Show Less';
+            } else {
+                answerDiv.style.display = 'none';
+                btn.textContent = 'Reveal Answer';
+            }
         };
 
         // ================= VIEW & WIDGET TOGGLES =================
@@ -636,6 +637,7 @@
                 document.getElementById('qotd-aimg-display').style.display = 'none';
             }
             document.getElementById('qotd-ans-display').style.display = 'none'; // reset visibility
+            document.getElementById('qotd-reveal-btn').textContent = 'Reveal Answer'; // reset button text
 
             // Render Tasks
             const renderTasks = (player) => localState.todos[player].map(t => `
@@ -678,15 +680,27 @@
                     <p style="white-space: pre-wrap;"><b>Q:</b> ${q.qText}</p>
                     ${q.qImg ? `<img src="${q.qImg}">` : ''}
                     
-                    <button class="show-ans-btn" onclick="document.getElementById('ans-${i}').style.display='block'">Show Answer</button>
-                    <div class="answer-reveal" id="ans-${i}">
+                    <button class="show-ans-btn" id="hoq-btn-${i}" onclick="toggleHOQAnswer(${i})">Show Answer</button>
+                    <div class="answer-reveal" id="hoq-ans-${i}">
                         <p style="white-space: pre-wrap;">${q.aText}</p>
                         ${q.aImg ? `<img src="${q.aImg}">` : ''}
-                        <button class="hide-ans-btn" onclick="document.getElementById('ans-${i}').style.display='none'">Show Less</button>
                     </div>
                 </div>
             `).join('');
         }
+
+        // HOQ toggle function
+        window.toggleHOQAnswer = function(i) {
+            const ansDiv = document.getElementById(`hoq-ans-${i}`);
+            const btn = document.getElementById(`hoq-btn-${i}`);
+            if (ansDiv.style.display === 'none' || ansDiv.style.display === '') {
+                ansDiv.style.display = 'block';
+                btn.textContent = 'Show Less';
+            } else {
+                ansDiv.style.display = 'none';
+                btn.textContent = 'Show Answer';
+            }
+        };
 
         // ================= NOTEPAD SYNC =================
         const npText = document.getElementById('notepad-text');
