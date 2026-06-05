@@ -93,6 +93,31 @@
         .prayer-panel { background: #1a252c; border-color: #00ffcc; color: white; }
         .prayer-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
         .prayer-next { color: #00ffcc; font-weight: bold; margin-top: 10px; text-align: center; }
+
+        /* STOPWATCH */
+        .stopwatch-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .stopwatch-display { 
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border: 3px solid #ff00ff;
+            border-radius: 20px;
+            padding: 15px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: bold;
+            color: #0d0e15;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2);
+            min-width: 180px;
+            text-align: center;
+            animation: pulse-glow 1s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.3); }
+        }
+        .stopwatch-display.running {
+            animation: pulse-glow 0.6s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
@@ -235,6 +260,11 @@
         </div>
     </div>
 
+    <!-- STOPWATCH WIDGET -->
+    <div class="stopwatch-widget">
+        <div class="stopwatch-display" id="stopwatch-display" onclick="toggleStopwatch()">00:00:00</div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref as dbRef, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -260,6 +290,34 @@
         };
 
         let pendingImages = { q: null, a: null, 'qotd-q': null, 'qotd-a': null };
+
+        // ================= STOPWATCH LOGIC =================
+        let stopwatchRunning = false;
+        let stopwatchStartTime = null;
+        let stopwatchTotalTime = 0;
+
+        window.toggleStopwatch = function() {
+            stopwatchRunning = !stopwatchRunning;
+            if (stopwatchRunning) {
+                stopwatchStartTime = Date.now() - stopwatchTotalTime * 1000;
+                document.getElementById('stopwatch-display').classList.add('running');
+            } else {
+                document.getElementById('stopwatch-display').classList.remove('running');
+            }
+        };
+
+        setInterval(() => {
+            if (stopwatchRunning) {
+                stopwatchTotalTime = (Date.now() - stopwatchStartTime) / 1000;
+            }
+            
+            const hours = Math.floor(stopwatchTotalTime / 3600);
+            const minutes = Math.floor((stopwatchTotalTime % 3600) / 60);
+            const seconds = Math.floor(stopwatchTotalTime % 60);
+            
+            const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('stopwatch-display').innerText = display;
+        }, 100);
 
         onValue(stateRef, (snapshot) => {
             const data = snapshot.val();
